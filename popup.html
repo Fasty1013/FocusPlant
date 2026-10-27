@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <canvas id="confetti-canvas"></canvas>
+
+  <div class="header">
+    <div class="header-stats">
+      <div class="stat"><span id="coins-count">0</span> 🪙</div>
+      <div class="stat"><span id="streak-count">0</span> 🔥</div>
+    </div>
+    <select id="lang-select" class="lang-select">
+      <option value="ru">RU</option>
+      <option value="uz">UZ</option>
+      <option value="en">EN</option>
+      <option value="ja">JA</option>
+    </select>
+  </div>
+
+  <nav class="tabs">
+    <button class="tab-btn active" data-tab="focus-tab" id="tab-focus">Фокус</button>
+    <button class="tab-btn" data-tab="garden-tab" id="tab-garden">Сад</button>
+    <button class="tab-btn" data-tab="shop-tab" id="tab-shop">Магазин</button>
+    <button class="tab-btn" data-tab="sites-tab" id="tab-sites">Фильтр</button>
+    <button class="tab-btn" data-tab="stats-tab" id="tab-stats">Отчёт</button>
+  </nav>
+
+  <!-- Вкладка: Таймер & Задачи -->
+  <div id="focus-tab" class="tab-content active">
+    <div class="plant-container" id="plant-box">
+      <div id="plant-avatar" class="plant-stage pulse">🌱</div>
+      <div id="plant-name" class="plant-label">Молодой росток</div>
+    </div>
+
+    <div class="progress-bar-container">
+      <div id="progress-bar" class="progress-bar" style="width: 0%;"></div>
+    </div>
+
+    <div id="timer-display">25:00</div>
+
+    <div class="ambient-control">
+      <label for="ambient-select" id="ambient-label">🔊 Эмбиент:</label>
+      <select id="ambient-select">
+        <option value="none" id="opt-off">Выкл</option>
+        <option value="rain" id="opt-rain">Дождь</option>
+        <option value="noise" id="opt-noise">Белый шум</option>
+      </select>
+    </div>
+
+    <div class="time-selector">
+      <button class="time-btn" data-minutes="15">15м</button>
+      <button class="time-btn active" data-minutes="25">25м</button>
+      <button class="time-btn" data-minutes="45">45м</button>
+      <input type="number" id="custom-minutes" min="1" max="180" placeholder="Свое">
+    </div>
+
+    <button id="start-btn" class="main-btn">Посадить растение</button>
+    <button id="break-btn" class="main-btn break-btn" style="display:none;">Перерыв 5м</button>
+    <button id="stop-btn" class="main-btn cancel-btn" style="display:none; margin-top:6px;">Сдаться</button>
+
+    <!-- Мини Todo List -->
+    <div class="todo-section">
+      <h4 id="todo-title">Задачи на сессию 📝</h4>
+      <div class="todo-input-box">
+        <input type="text" id="todo-input" placeholder="Задачка...">
+        <button id="todo-add-btn">+</button>
+      </div>
+      <ul id="todo-list"></ul>
+    </div>
+  </div>
+
+  <!-- Вкладка: Сад -->
+  <div id="garden-tab" class="tab-content">
+    <h4 id="garden-title">Выращенные деревья 🏡</h4>
+    <div id="garden-grid" class="garden-grid">
+      <p class="empty-msg" id="garden-empty">У вас пока нет выращенных растений.</p>
+    </div>
+  </div>
+
+  <!-- Вкладка: Магазин (Семена и Темы) -->
+  <div id="shop-tab" class="tab-content">
+    <h4 id="shop-title">Магазин семян 🛒</h4>
+    <div id="shop-grid" class="shop-grid"></div>
+
+    <h4 id="theme-shop-title" style="margin-top: 14px;">Темы сада 🎨</h4>
+    <div id="theme-shop-grid" class="shop-grid"></div>
+  </div>
+
+  <!-- Вкладка: Фильтрация сайтов -->
+  <div id="sites-tab" class="tab-content">
+    <div class="mode-toggle">
+      <label id="mode-label">Режим:</label>
+      <select id="mode-select">
+        <option value="blacklist" id="opt-blacklist">Blacklist (Блокировать список)</option>
+        <option value="whitelist" id="opt-whitelist">Whitelist (Разрешить ТОЛЬКО список)</option>
+      </select>
+    </div>
+
+    <div class="add-site-form">
+      <input type="text" id="site-input" placeholder="example.com">
+      <button id="add-btn">+</button>
+    </div>
+    <ul id="site-list"></ul>
+  </div>
+
+  <!-- Вкладка: Статистика, Квесты, Достижения & Бекап -->
+  <div id="stats-tab" class="tab-content">
+    <h4 id="stats-title">Фокус за 7 дней (мин)</h4>
+    <canvas id="stats-chart" width="280" height="90"></canvas>
+    <div id="total-stats" class="total-stats">Всего сфокусировано: 0 мин</div>
+    <div id="rate-stats" class="total-stats" style="color:#2ecc71;">Успешность: 100%</div>
+
+    <!-- Ежедневные Квесты -->
+    <div class="quest-section">
+      <h4 id="quests-title">Ежедневные квесты 🎯</h4>
+      <div id="quests-list"></div>
+    </div>
+
+    <!-- Достижения -->
+    <div class="achieve-section">
+      <h4 id="achievements-title">Достижения 🏆</h4>
+      <div id="achievements-list" class="achieve-grid"></div>
+    </div>
+
+    <!-- Резервное копирование -->
+    <div class="backup-section">
+      <h4 id="backup-title">Резервное копирование 💾</h4>
+      <div class="backup-buttons">
+        <button id="export-btn" class="backup-btn">📥 Скачать бекап</button>
+        <button id="import-btn" class="backup-btn">📤 Загрузить</button>
+        <input type="file" id="import-file" accept=".json" style="display:none;">
+      </div>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
