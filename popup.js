@@ -1,8 +1,8 @@
-// Focus Plant Pro - Cross-Browser Main Popup Controller with Rarities & Custom Timer
+// Focus Plant Pro - Cross-Browser Main Popup Controller with Full Localization
 document.addEventListener("DOMContentLoaded", () => {
   const ext = (typeof browser !== 'undefined' && browser.runtime) ? browser : chrome;
 
-  // Localization Dictionary
+  // Comprehensive Localization Dictionary
   const i18n = {
     ru: {
       timerTab: "⏱ Таймер",
@@ -10,46 +10,68 @@ document.addEventListener("DOMContentLoaded", () => {
       shopTab: "🛒 Скины",
       tasksTab: "✅ Задачи",
       blockerTab: "🛡 Блокировка",
+      userLevel: (lvl) => `Ур. ${lvl} Садовод`,
+      selectTime: "⏱ Время концентрации:",
+      minuteUnit: "мин",
+      chancesTitle: "🎲 Шансы выпадения редкостей:",
+      chancesHint: "Больше время = выше шанс на легендарные!",
       timerStatusIdle: "Выберите время и начните фокус",
       timerStatusRunning: "Режим концентрации: дерево растет!",
       timerStatusPaused: "Фокус приостановлен",
       timerStatusCompleted: "🎉 Поздравляем! Дерево успешно выросло!",
       timerStatusWithered: "🥀 Дерево завяло из-за отвлечения",
+      witherDefaultReason: "Запрещенный сайт",
       startBtn: "▶ Начать фокус",
       pauseBtn: "⏸ Пауза",
       resumeBtn: "▶ Продолжить",
       resetBtn: "🔄 Сдаться",
       plantNewBtn: "🌱 Посадить новое дерево",
+      dropTitle: "Вы вырастили новое дерево!",
+      dropClaim: "Полюбоваться в саду",
+      newTreeUnlocked: "✨ НОВОЕ ДЕРЕВО ОТКРЫТО!",
       ambientLabel: "🔊 Фоновый звук:",
       ambientNone: "Выкл",
       ambientRain: "🌧 Дождь",
+      ambientWaves: "🌊 Морские волны",
+      ambientForest: "🌲 Лесной ветерок",
+      ambientFire: "🔥 Уютный костёр",
+      ambientZen: "🌌 Дзен 432Hz",
       ambientWhite: "⚪ Белый шум",
       grown: "Выращено",
       withered: "Погибло",
       focusTime: "Время фокуса",
       successRate: "Успех",
+      almanacHeader: "📖 Алманах редкостей деревьев",
+      almanacSubdesc: "Ставьте больше времени на таймере, чтобы разблокировать редкие, эпические и мифические виды!",
+      almanacUnlocked: "открыто",
+      almanacLockedHint: "Не открыто!\nСтавьте сессии 45+ мин для выпадения!",
+      almanacClickEquip: "Нажмите, чтобы выбрать!",
       statsHeader: "📊 Фокус за последние 7 дней (мин)",
+      chartDays: ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"],
       forestHeader: "🌲 Мой цифровой лес",
       forestEmpty: "Ваш лес пока пуст. Вырастите свое первое дерево!",
-      almanacHeader: "📖 Алманах редкостей деревьев",
       shopTitle: "Магазин деревьев",
       shopDesc: "Покупайте или открывайте новые деревья длительными сессиями фокуса!",
       equipped: "✓ Выбрано",
       equip: "Выбрать",
       buy: "Купить",
+      notEnoughCoins: "Недостаточно монет для покупки этого скина!",
       questsHeader: "🎯 Ежедневные квесты",
+      quest1: "Завершить 1 сессию фокуса",
+      quest2: "Сфокусироваться на 45 минут",
+      quest3: "Выполнить 2 задачи из списка",
       todoHeader: "📝 Список задач",
       todoPlaceholder: "Новая задача...",
       addBtn: "Добавить",
       claimReward: "Забрать",
+      claimedReward: "✓ Получено",
       blockMode: "Режим блокировки:",
       blacklistOpt: "Черный список (Запрещать сайты из списка)",
       whitelistOpt: "Белый список (Разрешать только эти сайты)",
       modeDesc: "Если зайти на запрещенный сайт во время фокуса, дерево погибнет!",
       quickAdd: "Быстрое добавление:",
       activeSites: "Активный список сайтов:",
-      sitePlaceholder: "например: youtube.com",
-      notEnoughCoins: "Недостаточно монет для покупки этого скина!"
+      sitePlaceholder: "например: youtube.com"
     },
     en: {
       timerTab: "⏱ Timer",
@@ -57,46 +79,68 @@ document.addEventListener("DOMContentLoaded", () => {
       shopTab: "🛒 Skins",
       tasksTab: "✅ Tasks",
       blockerTab: "🛡 Blocker",
+      userLevel: (lvl) => `Lvl. ${lvl} Gardener`,
+      selectTime: "⏱ Focus Duration:",
+      minuteUnit: "min",
+      chancesTitle: "🎲 Rarity Drop Chances:",
+      chancesHint: "Longer focus = higher legendary tree chance!",
       timerStatusIdle: "Choose duration and start focusing",
       timerStatusRunning: "Deep focus mode: tree is growing!",
       timerStatusPaused: "Focus session paused",
       timerStatusCompleted: "🎉 Congratulations! Tree is fully grown!",
       timerStatusWithered: "🥀 The tree withered due to distraction",
+      witherDefaultReason: "Blocked website",
       startBtn: "▶ Start Focus",
       pauseBtn: "⏸ Pause",
       resumeBtn: "▶ Resume",
       resetBtn: "🔄 Give Up",
       plantNewBtn: "🌱 Plant New Tree",
+      dropTitle: "You grew a new tree!",
+      dropClaim: "View in Garden",
+      newTreeUnlocked: "✨ NEW TREE UNLOCKED!",
       ambientLabel: "🔊 Ambient Sound:",
       ambientNone: "Off",
       ambientRain: "🌧 Rain",
+      ambientWaves: "🌊 Ocean Waves",
+      ambientForest: "🌲 Forest Breeze",
+      ambientFire: "🔥 Cozy Campfire",
+      ambientZen: "🌌 Zen 432Hz",
       ambientWhite: "⚪ White Noise",
       grown: "Grown",
       withered: "Withered",
       focusTime: "Focus Time",
       successRate: "Success",
+      almanacHeader: "📖 Tree Rarities Almanac",
+      almanacSubdesc: "Set longer focus sessions to unlock rare, epic, and mythic trees!",
+      almanacUnlocked: "unlocked",
+      almanacLockedHint: "Locked!\nSet 45+ min focus sessions to discover!",
+      almanacClickEquip: "Click to equip!",
       statsHeader: "📊 Focus over last 7 days (min)",
+      chartDays: ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"],
       forestHeader: "🌲 My Digital Forest",
       forestEmpty: "Your forest is empty. Grow your first tree!",
-      almanacHeader: "📖 Tree Rarities Almanac",
       shopTitle: "Tree Nursery & Skins",
       shopDesc: "Unlock exotic trees with coins or long focus sessions!",
       equipped: "✓ Equipped",
       equip: "Equip",
       buy: "Buy",
+      notEnoughCoins: "Not enough coins to unlock this skin!",
       questsHeader: "🎯 Daily Quests",
+      quest1: "Complete 1 focus session",
+      quest2: "Focus for 45 minutes",
+      quest3: "Complete 2 tasks from list",
       todoHeader: "📝 Task List",
       todoPlaceholder: "New task...",
       addBtn: "Add",
       claimReward: "Claim",
+      claimedReward: "✓ Claimed",
       blockMode: "Blocker Mode:",
       blacklistOpt: "Blacklist (Block listed websites)",
       whitelistOpt: "Whitelist (Allow only listed websites)",
       modeDesc: "Visiting a blocked site during focus will wither your tree!",
       quickAdd: "Quick Add:",
       activeSites: "Active Website List:",
-      sitePlaceholder: "e.g. youtube.com",
-      notEnoughCoins: "Not enough coins to unlock this skin!"
+      sitePlaceholder: "e.g. youtube.com"
     },
     uz: {
       timerTab: "⏱ Taymer",
@@ -104,93 +148,137 @@ document.addEventListener("DOMContentLoaded", () => {
       shopTab: "🛒 Daraxtlar",
       tasksTab: "✅ Vazifalar",
       blockerTab: "🛡 Bloklash",
+      userLevel: (lvl) => `${lvl}-daraja Bog'bon`,
+      selectTime: "⏱ Fokus vaqti:",
+      minuteUnit: "daq",
+      chancesTitle: "🎲 Noyoblik ehtimolligi:",
+      chancesHint: "Vaqt ko'p bo'lsa = afsonaviy daraxt chiqish ehtimoli yuqori!",
       timerStatusIdle: "Vaqtni tanlang va fokusni boshlang",
       timerStatusRunning: "Fokus rejimi: daraxt o'smoqda!",
       timerStatusPaused: "Taymer to'xtatildi",
       timerStatusCompleted: "🎉 Tabriklaymiz! Daraxt to'liq o'sdi!",
       timerStatusWithered: "🥀 Chalg'ish tufayli daraxt so'ldi",
+      witherDefaultReason: "Taqiqlangan sayt",
       startBtn: "▶ Fokusni boshlash",
       pauseBtn: "⏸ Pauza",
       resumeBtn: "▶ Davom etish",
       resetBtn: "🔄 Taslim bo'lish",
       plantNewBtn: "🌱 Yangi daraxt ekish",
+      dropTitle: "Yangi daraxt o'stirdingiz!",
+      dropClaim: "Bog'da ko'rish",
+      newTreeUnlocked: "✨ YANGI DARAXT OCHILDI!",
       ambientLabel: "🔊 Fon ovozi:",
       ambientNone: "O'chirilgan",
       ambientRain: "🌧 Yomg'ir",
+      ambientWaves: "🌊 Dengiz to'lqinlari",
+      ambientForest: "🌲 O'rmon shamoli",
+      ambientFire: "🔥 Olov qirsillashi",
+      ambientZen: "🌌 Dzen 432Hz",
       ambientWhite: "⚪ Oq shovqin",
       grown: "O'stirildi",
       withered: "So'ldi",
       focusTime: "Fokus vaqti",
       successRate: "Muvaffaqiyat",
+      almanacHeader: "📖 Daraxtlar Almanaği",
+      almanacSubdesc: "Noyob va afsonaviy daraxtlarni ochish uchun taymerda ko'proq vaqt belgilang!",
+      almanacUnlocked: "ochilgan",
+      almanacLockedHint: "Qulflangan!\n45+ daqiqalik fokus orqali ochiladi!",
+      almanacClickEquip: "Tanlash uchun bosing!",
       statsHeader: "📊 Oxirgi 7 kunlik fokus (daq)",
+      chartDays: ["Du", "Se", "Ch", "Pa", "Ju", "Sh", "Ya"],
       forestHeader: "🌲 Mening o'rmonim",
       forestEmpty: "O'rmon hali bo'sh. Birinchi daraxtingizni o'stiring!",
-      almanacHeader: "📖 Daraxtlar Almanaği",
       shopTitle: "Daraxtlar do'koni",
       shopDesc: "Tangalar yoki uzoq fokus orqali yangi daraxtlarni oching!",
       equipped: "✓ Tanlangan",
       equip: "Tanlash",
       buy: "Sotib olish",
+      notEnoughCoins: "Bu daraxtni sotib olish uchun tanga yetarli emas!",
       questsHeader: "🎯 Kunlik topshiriqlar",
+      quest1: "1 ta fokus sessiyasini yakunlash",
+      quest2: "45 daqiqa fokus qilish",
+      quest3: "Ro'yxatdan 2 ta vazifani bajarish",
       todoHeader: "📝 Vazifalar ro'yxati",
       todoPlaceholder: "Yangi vazifa...",
       addBtn: "Qo'shish",
       claimReward: "Olish",
+      claimedReward: "✓ Qabul qilindi",
       blockMode: "Bloklash rejimi:",
       blacklistOpt: "Qora ro'yxat (Ro'yxatdagi saytlarni to'sish)",
       whitelistOpt: "Oq ro'yxat (Faqat shu saytlarga ruxsat)",
       modeDesc: "Taqiqlangan saytga kirsangiz, daraxtingiz so'ladi!",
       quickAdd: "Tezkor qo'shish:",
       activeSites: "Faol saytlar ro'yxati:",
-      sitePlaceholder: "masalan: youtube.com",
-      notEnoughCoins: "Bu daraxtni sotib olish uchun tanga yetarli emas!"
+      sitePlaceholder: "masalan: youtube.com"
     },
     ja: {
       timerTab: "⏱ タイマー",
-      gardenTab: "🪴 庭 & レア度",
+      gardenTab: "🪴 庭＆レア図鑑",
       shopTab: "🛒 スキン",
       tasksTab: "✅ タスク",
       blockerTab: "🛡 ブロック",
+      userLevel: (lvl) => `Lv.${lvl} 庭師`,
+      selectTime: "⏱ 集中時間:",
+      minuteUnit: "分",
+      chancesTitle: "🎲 レア度排出率:",
+      chancesHint: "集中時間が長いほどレジェンダリーが出現！",
       timerStatusIdle: "時間を選んで集中を開始",
       timerStatusRunning: "集中モード中：木が成長しています！",
       timerStatusPaused: "集中モード一時停止",
       timerStatusCompleted: "🎉 おめでとうございます！木が育ちました！",
       timerStatusWithered: "🥀 誘惑に負けて木が枯れてしまいました",
+      witherDefaultReason: "ブロックされたサイト",
       startBtn: "▶ 集中開始",
       pauseBtn: "⏸ 一時停止",
       resumeBtn: "▶ 再開",
       resetBtn: "🔄 あきらめる",
       plantNewBtn: "🌱 新しい木を植える",
+      dropTitle: "新しい木が育ちました！",
+      dropClaim: "庭で確認する",
+      newTreeUnlocked: "✨ 新しい木を図鑑に登録！",
       ambientLabel: "🔊 BGM音:",
       ambientNone: "オフ",
       ambientRain: "🌧 雨の音",
+      ambientWaves: "🌊 打ち寄せる波",
+      ambientForest: "🌲 森のそよ風",
+      ambientFire: "🔥 焚き火の音",
+      ambientZen: "🌌 宇宙瞑想 (432Hz)",
       ambientWhite: "⚪ ホワイトノイズ",
-      grown: "成長した木",
+      grown: "育成成功",
       withered: "枯れた木",
       focusTime: "集中時間",
       successRate: "成功率",
+      almanacHeader: "📖 ツリーレア図鑑",
+      almanacSubdesc: "集中時間を伸ばすほど、エピックやレジェンダリー、ミシックの木が出現！",
+      almanacUnlocked: "解放済み",
+      almanacLockedHint: "未解放！\n長時間集中すると確率で出現します！",
+      almanacClickEquip: "クリックして装備！",
       statsHeader: "📊 過去7日間の集中時間（分）",
+      chartDays: ["月", "火", "水", "木", "金", "土", "日"],
       forestHeader: "🌲 私のデジタルフォレスト",
       forestEmpty: "まだ木がありません。最初の木を育てましょう！",
-      almanacHeader: "📖 ツリー図鑑とレア度",
       shopTitle: "ツリーショップ",
       shopDesc: "集中時間を伸ばすほどレアな木が育ちやすくなります！",
       equipped: "✓ 選択中",
       equip: "装備する",
       buy: "購入",
+      notEnoughCoins: "コインが足りません！",
       questsHeader: "🎯 デイリークエスト",
+      quest1: "集中セッションを1回完了する",
+      quest2: "合計45分間集中する",
+      quest3: "やることリストのタスクを2つ完了する",
       todoHeader: "📝 やることリスト",
       todoPlaceholder: "新しいタスク...",
       addBtn: "追加",
       claimReward: "受け取る",
+      claimedReward: "✓ 受取済み",
       blockMode: "ブロックモード:",
       blacklistOpt: "ブラックリスト (指定サイトをブロック)",
       whitelistOpt: "ホワイトリスト (指定サイトのみ許可)",
-      modeDesc: "集中中に禁止サイトへアクセスすると木が枯れます！",
+      modeDesc: "集中中に禁止サイトを開くと木が枯れてしまいます！",
       quickAdd: "クイック追加:",
       activeSites: "登録済みサイト一覧:",
-      sitePlaceholder: "例: youtube.com",
-      notEnoughCoins: "コインが足りません！"
+      sitePlaceholder: "例: youtube.com"
     }
   };
 
@@ -255,6 +343,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const almanacGrid = document.getElementById("almanacGrid");
   const almanacCounter = document.getElementById("almanacCounter");
   const statsChart = document.getElementById("statsChart");
+  const chartLabels = document.getElementById("chartLabels");
   const forestGrid = document.getElementById("forestGrid");
 
   // Shop Tab DOM
@@ -296,7 +385,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // Apply Language
+  // Apply Language Everywhere
   function applyLanguage(lang) {
     currentLang = lang;
     const t = i18n[lang] || i18n.ru;
@@ -307,24 +396,42 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("tTasksBtn").textContent = t.tasksTab;
     document.getElementById("tBlockerBtn").textContent = t.blockerTab;
 
+    document.getElementById("lblSelectTime").textContent = t.selectTime;
+    document.getElementById("lblMinuteUnit").textContent = t.minuteUnit;
+    document.getElementById("lblChancesTitle").textContent = t.chancesTitle;
+    document.getElementById("lblChancesHint").textContent = t.chancesHint;
+
     document.getElementById("startBtn").textContent = t.startBtn;
     document.getElementById("pauseBtn").textContent = t.pauseBtn;
     document.getElementById("resumeBtn").textContent = t.resumeBtn;
     document.getElementById("resetBtn").textContent = t.resetBtn;
     document.getElementById("plantNewBtn").textContent = t.plantNewBtn;
 
+    dropTitle.textContent = t.dropTitle;
+    dropClaimBtn.textContent = t.dropClaim;
+
     document.getElementById("lblAmbient").textContent = t.ambientLabel;
     ambientSelect.options[0].textContent = t.ambientNone;
     ambientSelect.options[1].textContent = t.ambientRain;
-    ambientSelect.options[2].textContent = t.ambientWhite;
+    ambientSelect.options[2].textContent = t.ambientWaves;
+    ambientSelect.options[3].textContent = t.ambientForest;
+    ambientSelect.options[4].textContent = t.ambientFire;
+    ambientSelect.options[5].textContent = t.ambientZen;
+    ambientSelect.options[6].textContent = t.ambientWhite;
 
     document.getElementById("lblStatGrown").textContent = t.grown;
     document.getElementById("lblStatWithered").textContent = t.withered;
     document.getElementById("lblStatMins").textContent = t.focusTime;
     document.getElementById("lblStatRate").textContent = t.successRate;
     document.getElementById("lblAlmanacHeader").textContent = t.almanacHeader;
+    document.getElementById("lblAlmanacSubdesc").textContent = t.almanacSubdesc;
     document.getElementById("lblStatsHeader").textContent = t.statsHeader;
     document.getElementById("lblForestHeader").textContent = t.forestHeader;
+
+    // Chart day labels
+    if (chartLabels && t.chartDays) {
+      chartLabels.innerHTML = t.chartDays.map(d => `<span>${d}</span>`).join("");
+    }
 
     document.getElementById("lblShopTitle").textContent = t.shopTitle;
     document.getElementById("lblShopDesc").textContent = t.shopDesc;
@@ -338,13 +445,17 @@ document.addEventListener("DOMContentLoaded", () => {
     blockModeSelect.options[0].textContent = t.blacklistOpt;
     blockModeSelect.options[1].textContent = t.whitelistOpt;
     document.getElementById("lblModeDesc").textContent = t.modeDesc;
+    document.getElementById("lblQuickAddTitle").textContent = t.quickAdd;
     document.getElementById("lblActiveSites").textContent = t.activeSites;
     siteInput.placeholder = t.sitePlaceholder;
     addSiteBtn.textContent = t.addBtn;
 
+    // Refresh active views
+    syncTimerFromStorage();
     if (activeTab === "tabShop") renderShopTab();
     if (activeTab === "tabGarden") renderGardenTab();
     if (activeTab === "tabTasks") renderTasksTab();
+    if (activeTab === "tabBlocker") renderBlockerTab();
   }
 
   langSelect.addEventListener("change", (e) => {
@@ -363,7 +474,6 @@ document.addEventListener("DOMContentLoaded", () => {
     customMinutesInput.value = selectedMinutes;
     updateTimeDisplay(selectedDuration);
 
-    // Update preset pills active state
     timePresets.querySelectorAll(".preset-btn").forEach(btn => {
       if (parseInt(btn.dataset.minutes, 10) === selectedMinutes) {
         btn.classList.add("active");
@@ -372,7 +482,6 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
-    // Update Live Drop Chances preview
     const chances = calculateDropChances(selectedMinutes);
     chanceCommon.textContent = `⚪ ${chances.common}%`;
     chanceUncommon.textContent = `🟢 ${chances.uncommon}%`;
@@ -384,17 +493,14 @@ document.addEventListener("DOMContentLoaded", () => {
     ext.storage.local.set({ sessionDuration: selectedDuration, secondsRemaining: selectedDuration });
   }
 
-  // Slider Event
   timeSlider.addEventListener("input", (e) => {
     updateCustomDuration(e.target.value);
   });
 
-  // Numeric Input Event
   customMinutesInput.addEventListener("change", (e) => {
     updateCustomDuration(e.target.value);
   });
 
-  // Preset Buttons Event
   timePresets.querySelectorAll(".preset-btn").forEach(btn => {
     btn.addEventListener("click", () => {
       const mins = parseInt(btn.dataset.minutes, 10);
@@ -408,7 +514,6 @@ document.addEventListener("DOMContentLoaded", () => {
     timeDisplay.textContent = `${m}:${s}`;
   }
 
-  // Calculate Progress and Stage
   function getGrowthStage(progressPct) {
     if (progressPct >= 95) return 5;
     if (progressPct >= 70) return 4;
@@ -417,14 +522,12 @@ document.addEventListener("DOMContentLoaded", () => {
     return 1;
   }
 
-  // Update Ring and Tree View
   function updateTimerView(remainingSeconds, totalSeconds, skin, state, reason, lastDrop) {
     const t = i18n[currentLang] || i18n.ru;
     const elapsed = Math.max(0, totalSeconds - remainingSeconds);
     const progress = totalSeconds > 0 ? (elapsed / totalSeconds) : 0;
     const progressPct = Math.min(100, Math.round(progress * 100));
 
-    // Progress Ring offset
     const offset = RING_CIRCUMFERENCE - (progress * RING_CIRCUMFERENCE);
     progressRing.style.strokeDashoffset = offset;
 
@@ -439,13 +542,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const skinObj = TREE_SKINS[lastDrop.skin] || TREE_SKINS.oak;
       dropTreeName.textContent = `${skinObj.name[currentLang] || skinObj.name.ru} ${skinObj.emoji}`;
-      dropRewardText.textContent = `+${lastDrop.earnedCoins || 30} 🪙 • +${lastDrop.earnedXp || 50} XP! ${lastDrop.isNew ? "✨ НОВОЕ ДЕРЕВО ОТКРЫТО!" : ""}`;
+      const unlockNote = lastDrop.isNew ? ` ${t.newTreeUnlocked}` : "";
+      dropRewardText.textContent = `+${lastDrop.earnedCoins || 30} 🪙 • +${lastDrop.earnedXp || 50} XP!${unlockNote}`;
     } else {
       dropRevealCard.style.display = "none";
     }
 
     if (state === "withered") {
-      // Tree is dead!
       progressRing.style.stroke = "#ef4444";
       progressRing.style.strokeDashoffset = "0";
       treeAvatar.innerHTML = renderTreeSVG(skin, 1, true);
@@ -453,7 +556,7 @@ document.addEventListener("DOMContentLoaded", () => {
       timerStatus.style.color = "#fca5a5";
       timerStatus.style.background = "rgba(239, 68, 68, 0.15)";
       witherAlert.style.display = "block";
-      witherReasonText.textContent = reason || "Запрещенный сайт";
+      witherReasonText.textContent = reason || t.witherDefaultReason;
 
       timeConfigSection.style.display = "none";
       startBtn.style.display = "none";
@@ -556,10 +659,11 @@ document.addEventListener("DOMContentLoaded", () => {
       const skin = data.selectedSkin || "oak";
       const reason = data.witherReason || "";
       const lastDrop = data.lastDrop || null;
+      const t = i18n[currentLang] || i18n.ru;
 
       coinsCount.textContent = data.coins || 0;
       const lvl = data.level || 1;
-      userLevelBadge.textContent = `Ур. ${lvl} Садовод`;
+      userLevelBadge.textContent = t.userLevel(lvl);
 
       if (state === "running" && data.sessionEndTime) {
         const remainingMs = data.sessionEndTime - Date.now();
@@ -664,6 +768,7 @@ document.addEventListener("DOMContentLoaded", () => {
       };
       const unlocked = Array.isArray(data.unlockedSkins) ? data.unlockedSkins : ["oak"];
       const currentSelected = data.selectedSkin || "oak";
+      const t = i18n[currentLang] || i18n.ru;
 
       const grown = stats.completedSessions || 0;
       const withered = stats.witheredSessions || 0;
@@ -672,20 +777,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
       statGrown.textContent = grown;
       statWithered.textContent = withered;
-      statMinutes.textContent = `${stats.totalFocusMinutes || 0}м`;
+      statMinutes.textContent = `${stats.totalFocusMinutes || 0}m`;
       statRate.textContent = `${rate}%`;
 
       // Render Rarities Almanac
       const allSkins = Object.values(TREE_SKINS);
-      almanacCounter.textContent = `${unlocked.length} / ${allSkins.length} открыто`;
+      almanacCounter.textContent = `${unlocked.length} / ${allSkins.length} ${t.almanacUnlocked}`;
       almanacGrid.innerHTML = "";
 
       allSkins.forEach(skin => {
         const isOwned = unlocked.includes(skin.id);
+        const isEquipped = currentSelected === skin.id;
         const rarityObj = RARITIES[skin.rarity] || RARITIES.common;
 
         const item = document.createElement("div");
-        item.className = `almanac-item ${isOwned ? "" : "locked"}`;
+        item.className = `almanac-item ${isOwned ? "" : "locked"} ${isEquipped ? "equipped" : ""}`;
         item.style.borderColor = isOwned ? rarityObj.border : "var(--border-color)";
 
         item.innerHTML = `
@@ -695,13 +801,14 @@ document.addEventListener("DOMContentLoaded", () => {
         `;
 
         item.title = isOwned
-          ? `${skin.name[currentLang] || skin.name.ru} (${rarityObj.name[currentLang] || rarityObj.name.ru})\n${skin.desc[currentLang] || skin.desc.ru}\nНажмите, чтобы выбрать!`
-          : `Не открыто!\n${rarityObj.name[currentLang] || rarityObj.name.ru}\nСтавьте сессии 45+ мин для выпадения!`;
+          ? `${skin.name[currentLang] || skin.name.ru} (${rarityObj.name[currentLang] || rarityObj.name.ru})\n${skin.desc[currentLang] || skin.desc.ru}\n${t.almanacClickEquip}`
+          : `${t.almanacLockedHint}\n[${rarityObj.name[currentLang] || rarityObj.name.ru}]`;
 
         if (isOwned) {
           item.addEventListener("click", () => {
             ext.storage.local.set({ selectedSkin: skin.id }, () => {
               soundManager.playCompleteChime();
+              renderGardenTab();
               syncTimerFromStorage();
             });
           });
@@ -720,14 +827,13 @@ document.addEventListener("DOMContentLoaded", () => {
         col.className = "bar-column";
         const heightPct = Math.min(100, Math.max(6, Math.round((val / maxVal) * 100)));
         col.style.height = `${heightPct}%`;
-        col.title = `${val} мин`;
+        col.title = `${val} ${t.minuteUnit}`;
         statsChart.appendChild(col);
       });
 
       // Render Forest Gallery
       forestGrid.innerHTML = "";
       if (forest.length === 0) {
-        const t = i18n[currentLang] || i18n.ru;
         forestGrid.innerHTML = `<div class="empty-state">${t.forestEmpty}</div>`;
       } else {
         const recent = [...forest].reverse().slice(0, 36);
@@ -741,10 +847,10 @@ document.addEventListener("DOMContentLoaded", () => {
           cell.textContent = icon;
 
           const dateStr = tree.date ? new Date(tree.date).toLocaleDateString() : "";
-          const durStr = `${tree.duration || 0} мин`;
-          const reasonStr = isWithered ? `\nПричина: ${tree.reason}` : "";
-          const rarityName = tree.rarity ? ` [${RARITIES[tree.rarity]?.name.ru || ""}]` : "";
-          cell.title = `${isWithered ? "Погибло" : "Выращено"}: ${skinObj.name[currentLang] || skinObj.name.ru}${rarityName}\nДлительность: ${durStr}\nДата: ${dateStr}${reasonStr}`;
+          const durStr = `${tree.duration || 0} ${t.minuteUnit}`;
+          const reasonStr = isWithered ? `\n${tree.reason}` : "";
+          const rarityName = tree.rarity ? ` [${RARITIES[tree.rarity]?.name[currentLang] || ""}]` : "";
+          cell.title = `${isWithered ? t.withered : t.grown}: ${skinObj.name[currentLang] || skinObj.name.ru}${rarityName}\n${durStr} • ${dateStr}${reasonStr}`;
 
           forestGrid.appendChild(cell);
         });
@@ -772,7 +878,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const card = document.createElement("div");
         card.className = `skin-card ${isEquipped ? "selected" : ""}`;
 
-        // SVG Preview of Stage 5 tree
         const previewSvg = renderTreeSVG(skin.id, 5, false);
 
         card.innerHTML = `
@@ -798,7 +903,6 @@ document.addEventListener("DOMContentLoaded", () => {
         skinsGrid.appendChild(card);
       });
 
-      // Equip Button Listener
       skinsGrid.querySelectorAll(".equip-btn").forEach(btn => {
         btn.addEventListener("click", () => {
           const skinId = btn.dataset.skin;
@@ -809,7 +913,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
       });
 
-      // Buy Button Listener
       skinsGrid.querySelectorAll(".buy-btn").forEach(btn => {
         btn.addEventListener("click", () => {
           const skinId = btn.dataset.skin;
@@ -854,9 +957,14 @@ document.addEventListener("DOMContentLoaded", () => {
         item.className = "quest-item";
         const progressPct = Math.min(100, Math.round((q.current / q.target) * 100));
 
+        let questDesc = q.desc;
+        if (q.id === 1) questDesc = t.quest1;
+        if (q.id === 2) questDesc = t.quest2;
+        if (q.id === 3) questDesc = t.quest3;
+
         item.innerHTML = `
           <div class="quest-item-header">
-            <span>${q.desc} (${q.current}/${q.target})</span>
+            <span>${questDesc} (${q.current}/${q.target})</span>
             <span class="quest-reward">+${q.reward} 🪙</span>
           </div>
           <div class="quest-progress-bg">
@@ -866,7 +974,7 @@ document.addEventListener("DOMContentLoaded", () => {
             q.done && !q.claimed
               ? `<button class="quest-claim-btn" data-qid="${q.id}">${t.claimReward} +${q.reward} 🪙</button>`
               : q.claimed
-                ? `<span style="font-size: 0.7rem; color: #a6e3a1; align-self: flex-end;">✓ Получено</span>`
+                ? `<span style="font-size: 0.7rem; color: #a6e3a1; align-self: flex-end;">${t.claimedReward}</span>`
                 : ""
           }
         `;
@@ -900,7 +1008,7 @@ document.addEventListener("DOMContentLoaded", () => {
             <input type="checkbox" class="todo-checkbox" ${todo.done ? "checked" : ""}>
             <span>${todo.text}</span>
           </div>
-          <button class="todo-del-btn" title="Удалить">✖</button>
+          <button class="todo-del-btn" title="Delete">✖</button>
         `;
 
         li.querySelector(".todo-checkbox").addEventListener("change", (e) => {
@@ -930,7 +1038,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Add Todo Item
   function handleAddTodo() {
     const text = todoInput.value.trim();
     if (!text) return;
@@ -968,7 +1075,7 @@ document.addEventListener("DOMContentLoaded", () => {
         li.className = "site-item";
         li.innerHTML = `
           <span>${site}</span>
-          <button class="site-del-btn" title="Удалить">✖</button>
+          <button class="site-del-btn" title="Delete">✖</button>
         `;
 
         li.querySelector(".site-del-btn").addEventListener("click", () => {

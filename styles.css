@@ -6,7 +6,7 @@
   --bg-input: #11111b;
   --border-color: #313244;
   --border-hover: #45475a;
-  
+
   --accent-green: #10b981;
   --accent-green-hover: #059669;
   --accent-mint: #94e2d5;
@@ -59,13 +59,16 @@ body {
 ::-webkit-scrollbar {
   width: 6px;
 }
+
 ::-webkit-scrollbar-track {
   background: var(--bg-primary);
 }
+
 ::-webkit-scrollbar-thumb {
   background: var(--border-color);
   border-radius: 4px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
   background: var(--border-hover);
 }
@@ -199,8 +202,15 @@ body {
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(4px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Celebration Drop Reveal Card */
@@ -219,8 +229,15 @@ body {
 }
 
 @keyframes dropPop {
-  0% { transform: scale(0.85); opacity: 0; }
-  100% { transform: scale(1); opacity: 1; }
+  0% {
+    transform: scale(0.85);
+    opacity: 0;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 .drop-sparkles {
@@ -246,7 +263,7 @@ body {
   font-size: 1.3rem;
   font-weight: 800;
   color: var(--accent-yellow);
-  text-shadow: 0 2px 6px rgba(0,0,0,0.4);
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
 }
 
 .drop-reward-text {
@@ -312,17 +329,41 @@ body {
 }
 
 @keyframes gentleBreathe {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.025) translateY(-2px); }
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.025) translateY(-2px);
+  }
 }
 
 @keyframes witheredShake {
-  0% { transform: rotate(0deg); }
-  20% { transform: rotate(-3deg); }
-  40% { transform: rotate(3deg); }
-  60% { transform: rotate(-2deg); }
-  80% { transform: rotate(1deg); }
-  100% { transform: rotate(0deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  20% {
+    transform: rotate(-3deg);
+  }
+
+  40% {
+    transform: rotate(3deg);
+  }
+
+  60% {
+    transform: rotate(-2deg);
+  }
+
+  80% {
+    transform: rotate(1deg);
+  }
+
+  100% {
+    transform: rotate(0deg);
+  }
 }
 
 .timer-info {
@@ -526,12 +567,36 @@ body {
   white-space: nowrap;
 }
 
-.chance-tag.common { background: rgba(166, 173, 200, 0.12); color: var(--rarity-common); }
-.chance-tag.uncommon { background: rgba(166, 227, 161, 0.12); color: var(--rarity-uncommon); }
-.chance-tag.rare { background: rgba(137, 220, 235, 0.12); color: var(--rarity-rare); }
-.chance-tag.epic { background: rgba(203, 166, 247, 0.12); color: var(--rarity-epic); }
-.chance-tag.legendary { background: rgba(249, 226, 175, 0.15); color: var(--rarity-legendary); }
-.chance-tag.mythic { background: rgba(243, 139, 168, 0.18); color: var(--rarity-mythic); font-weight: 800; }
+.chance-tag.common {
+  background: rgba(166, 173, 200, 0.12);
+  color: var(--rarity-common);
+}
+
+.chance-tag.uncommon {
+  background: rgba(166, 227, 161, 0.12);
+  color: var(--rarity-uncommon);
+}
+
+.chance-tag.rare {
+  background: rgba(137, 220, 235, 0.12);
+  color: var(--rarity-rare);
+}
+
+.chance-tag.epic {
+  background: rgba(203, 166, 247, 0.12);
+  color: var(--rarity-epic);
+}
+
+.chance-tag.legendary {
+  background: rgba(249, 226, 175, 0.15);
+  color: var(--rarity-legendary);
+}
+
+.chance-tag.mythic {
+  background: rgba(243, 139, 168, 0.18);
+  color: var(--rarity-mythic);
+  font-weight: 800;
+}
 
 /* Buttons */
 .btn {

@@ -82,7 +82,7 @@
           <span class="control-label" id="lblSelectTime">⏱ Время концентрации:</span>
           <div class="custom-time-input-wrap">
             <input type="number" id="customMinutesInput" min="5" max="180" step="5" value="25">
-            <span>мин</span>
+            <span id="lblMinuteUnit">мин</span>
           </div>
         </div>
 
@@ -106,8 +106,8 @@
         <!-- Live Drop Chances Bar -->
         <div class="chances-preview-box">
           <div class="chances-header">
-            <span>🎲 Шансы выпадения редкостей:</span>
-            <small class="chances-hint">Больше время = выше шанс на легендарные!</small>
+            <span id="lblChancesTitle">🎲 Шансы выпадения редкостей:</span>
+            <small class="chances-hint" id="lblChancesHint">Больше время = выше шанс на легендарные!</small>
           </div>
           <div class="chances-bar-row">
             <span class="chance-tag common" id="chanceCommon" title="Обычное">⚪ 55%</span>
@@ -129,13 +129,17 @@
         <button id="plantNewBtn" class="btn btn-primary" style="display: none;">🌱 Посадить новое дерево</button>
       </div>
 
-      <!-- Ambient Audio Sound -->
+      <!-- Ambient Audio Sound with 6 Profiles -->
       <div class="ambient-control-card">
         <div class="ambient-header">
           <span class="ambient-label" id="lblAmbient">🔊 Фоновый звук:</span>
           <select id="ambientSelect" class="ambient-select">
             <option value="none">Выкл</option>
             <option value="rain">🌧 Дождь</option>
+            <option value="waves">🌊 Морские волны</option>
+            <option value="forest">🌲 Лесной ветерок</option>
+            <option value="fire">🔥 Уютный костёр</option>
+            <option value="zen">🌌 Дзен 432Hz</option>
             <option value="white">⚪ Белый шум</option>
           </select>
         </div>
@@ -174,7 +178,7 @@
           <h4 id="lblAlmanacHeader">📖 Алманах редкостей деревьев</h4>
           <span class="almanac-counter" id="almanacCounter">0 / 12 открыто</span>
         </div>
-        <p class="almanac-subdesc">Ставьте больше времени на таймере, чтобы разблокировать редкие, эпические и мифические виды!</p>
+        <p class="almanac-subdesc" id="lblAlmanacSubdesc">Ставьте больше времени на таймере, чтобы разблокировать редкие, эпические и мифические виды!</p>
         <div class="almanac-grid" id="almanacGrid">
           <!-- Injected dynamically by popup.js -->
         </div>
@@ -184,7 +188,7 @@
       <div class="garden-section-card">
         <h4 id="lblStatsHeader">📊 Фокус за последние 7 дней (мин)</h4>
         <div class="stats-bar-chart" id="statsChart"></div>
-        <div class="chart-labels">
+        <div class="chart-labels" id="chartLabels">
           <span>Пн</span><span>Вт</span><span>Ср</span><span>Чт</span><span>Пт</span><span>Сб</span><span>Вс</span>
         </div>
       </div>
@@ -193,7 +197,7 @@
       <div class="garden-section-card">
         <h4 id="lblForestHeader">🌲 Мой цифровой лес</h4>
         <div class="forest-grid" id="forestGrid">
-          <div class="empty-state">Ваш лес пока пуст. Вырастите свое первое дерево!</div>
+          <div class="empty-state" id="lblForestEmpty">Ваш лес пока пуст. Вырастите свое первое дерево!</div>
         </div>
       </div>
     </section>
@@ -239,7 +243,7 @@
 
       <!-- Quick Add Pills -->
       <div class="quick-add-section">
-        <span class="quick-add-title">Быстрое добавление:</span>
+        <span class="quick-add-title" id="lblQuickAddTitle">Быстрое добавление:</span>
         <div class="quick-add-chips">
           <button class="chip-btn" data-site="youtube.com">+ YouTube</button>
           <button class="chip-btn" data-site="instagram.com">+ Instagram</button>

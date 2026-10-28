@@ -2,7 +2,45 @@
 (function() {
   const ext = (typeof browser !== 'undefined' && browser.runtime) ? browser : chrome;
 
-  // Domain cleaner and matcher
+  const I18N_OVERLAY = {
+    ru: {
+      badge: "⚠️ Фокус нарушен",
+      title: "Ваше дерево завяло! 🥀",
+      openedSite: "Вы открыли сайт",
+      duringFocus: "во время активной сессии фокуса.",
+      quote: "«Каждое секундное отвлечение губит плоды сосредоточенности. Примите этот урок и посадите новое дерево!»",
+      closeTab: "✖ Закрыть эту вкладку",
+      goBack: "↩ Назад"
+    },
+    en: {
+      badge: "⚠️ Focus Broken",
+      title: "Your tree has withered! 🥀",
+      openedSite: "You opened",
+      duringFocus: "during an active focus session.",
+      quote: "“Every momentary distraction steals your focus. Accept the lesson and plant a new tree!”",
+      closeTab: "✖ Close this tab",
+      goBack: "↩ Go back"
+    },
+    uz: {
+      badge: "⚠️ Fokus buzildi",
+      title: "Sizning daraxtingiz so'ldi! 🥀",
+      openedSite: "Siz",
+      duringFocus: "saytiga fokus vaqtida kirdingiz.",
+      quote: "«Har bir chalg'ish diqqat mevasini nobud qiladi. Saboq oling va yangi daraxt eking!»",
+      closeTab: "✖ Ushbu tabni yopish",
+      goBack: "↩ Orqaga"
+    },
+    ja: {
+      badge: "⚠️ 集中が途切れました",
+      title: "あなたの木が枯れてしまいました！🥀",
+      openedSite: "集中モード中にサイト",
+      duringFocus: "を開いてしまいました。",
+      quote: "「一瞬の誘惑が集中を奪います。気持ちを切り替えて新しい木を育てましょう！」",
+      closeTab: "✖ このタブを閉じる",
+      goBack: "↩ 戻る"
+    }
+  };
+
   function checkDomainMatch(currentUrl, siteList) {
     if (!Array.isArray(siteList) || siteList.length === 0) return false;
     try {
@@ -27,7 +65,7 @@
 
   let hasBlockedCurrentPage = false;
 
-  function renderWitheredOverlay(blockedDomain) {
+  function renderWitheredOverlay(blockedDomain, lang = "ru") {
     if (hasBlockedCurrentPage) return;
     hasBlockedCurrentPage = true;
 
@@ -35,8 +73,9 @@
       if (window.stop) window.stop();
     } catch (e) {}
 
+    const t = I18N_OVERLAY[lang] || I18N_OVERLAY.ru;
+
     const displayBlockedScreen = () => {
-      // Remove any existing document styles or elements to prevent flashes
       document.documentElement.style.overflow = "hidden";
       document.body.innerHTML = `
         <div id="focusplant-overlay" style="
@@ -77,31 +116,20 @@
             <!-- Withered Tree SVG Illustration -->
             <div style="margin-bottom: 24px; filter: drop-shadow(0 8px 16px rgba(0,0,0,0.4));">
               <svg width="150" height="150" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <!-- Cracked Ground -->
                 <ellipse cx="100" cy="180" rx="70" ry="12" fill="#313244"/>
                 <path d="M70 180L85 178M115 182L130 179M95 181L105 183" stroke="#45475a" stroke-width="2"/>
-                
-                <!-- Crooked Dead Trunk -->
                 <path d="M96 180 C95 150 85 130 92 105 C96 90 98 75 100 65" stroke="#6c7086" stroke-width="14" stroke-linecap="round"/>
                 <path d="M104 180 C103 150 93 130 100 105 C104 90 106 75 108 65" stroke="#585b70" stroke-width="6" stroke-linecap="round"/>
-                
-                <!-- Bare Dead Branches -->
                 <path d="M92 105 C80 95 65 96 55 85" stroke="#6c7086" stroke-width="6" stroke-linecap="round"/>
                 <path d="M65 96 C62 82 50 78 45 70" stroke="#6c7086" stroke-width="4" stroke-linecap="round"/>
                 <path d="M100 95 C115 88 135 92 145 80" stroke="#6c7086" stroke-width="6" stroke-linecap="round"/>
                 <path d="M125 90 C135 80 148 76 155 65" stroke="#6c7086" stroke-width="4" stroke-linecap="round"/>
                 <path d="M98 75 C90 60 92 48 88 38" stroke="#6c7086" stroke-width="4" stroke-linecap="round"/>
                 <path d="M100 65 C108 52 115 45 120 35" stroke="#6c7086" stroke-width="4" stroke-linecap="round"/>
-                
-                <!-- Fallen Faded Leaves / Ash -->
                 <circle cx="60" cy="176" r="3" fill="#a6adc8"/>
                 <circle cx="138" cy="178" r="4" fill="#a6adc8"/>
                 <circle cx="118" cy="184" r="2.5" fill="#f38ba8"/>
                 <circle cx="80" cy="182" r="3.5" fill="#f38ba8"/>
-                
-                <!-- Ghostly smoke/mist -->
-                <path d="M85 60 C80 50 82 40 86 30" stroke="rgba(243, 139, 168, 0.4)" stroke-width="2" stroke-dasharray="3,3"/>
-                <path d="M110 55 C115 45 112 35 116 25" stroke="rgba(243, 139, 168, 0.4)" stroke-width="2" stroke-dasharray="3,3"/>
               </svg>
             </div>
 
@@ -121,7 +149,7 @@
               letter-spacing: 0.5px;
               margin-bottom: 16px;
             ">
-              <span>⚠️</span> Фокус нарушен
+              <span>⚠️</span> ${t.badge}
             </div>
 
             <!-- Main Title -->
@@ -132,7 +160,7 @@
               font-weight: 800;
               line-height: 1.2;
             ">
-              Ваше дерево завяло! 🥀
+              ${t.title}
             </h1>
 
             <!-- Description -->
@@ -142,7 +170,7 @@
               color: #bac2de;
               line-height: 1.5;
             ">
-              Вы открыли сайт <span style="color: #f38ba8; font-weight: 700; background: rgba(243, 139, 168, 0.12); padding: 2px 6px; border-radius: 4px;">${blockedDomain || location.hostname}</span> во время активной сессии фокуса.
+              ${t.openedSite} <span style="color: #f38ba8; font-weight: 700; background: rgba(243, 139, 168, 0.12); padding: 2px 6px; border-radius: 4px;">${blockedDomain || location.hostname}</span> ${t.duringFocus}
             </p>
 
             <!-- Focus Quote -->
@@ -159,7 +187,7 @@
               width: 100%;
               box-sizing: border-box;
             ">
-              «Каждое секундное отвлечение губит плоды сосредоточенности. Примите этот урок и посадите новое дерево!»
+              ${t.quote}
             </div>
 
             <!-- Buttons -->
@@ -174,10 +202,9 @@
                 font-weight: 700;
                 font-size: 0.95rem;
                 cursor: pointer;
-                transition: transform 0.15s, opacity 0.15s;
                 box-shadow: 0 4px 12px rgba(243, 139, 168, 0.3);
               ">
-                ✖ Закрыть эту вкладку
+                ${t.closeTab}
               </button>
 
               <button id="fp-back-btn" style="
@@ -190,9 +217,8 @@
                 font-weight: 600;
                 font-size: 0.95rem;
                 cursor: pointer;
-                transition: background 0.15s;
               ">
-                ↩ Назад
+                ${t.goBack}
               </button>
             </div>
 
@@ -200,7 +226,6 @@
         </div>
       `;
 
-      // Attach button events
       const closeBtn = document.getElementById("fp-close-tab-btn");
       if (closeBtn) {
         closeBtn.addEventListener("click", () => {
@@ -227,13 +252,12 @@
     }
   }
 
-  // Check storage and apply blocking
   function applyBlockingLogic() {
-    ext.storage.local.get(["timerState", "isTimerRunning", "blockedSites", "whiteListSites", "blockMode"], (data) => {
+    ext.storage.local.get(["timerState", "isTimerRunning", "blockedSites", "whiteListSites", "blockMode", "lang"], (data) => {
       const isRunning = data.timerState === "running" || data.isTimerRunning === true;
       if (!isRunning) return;
 
-      const { blockedSites = [], whiteListSites = [], blockMode = "blacklist" } = data;
+      const { blockedSites = [], whiteListSites = [], blockMode = "blacklist", lang = "ru" } = data;
       const currentUrl = window.location.href;
       let shouldBlock = false;
 
@@ -245,18 +269,14 @@
 
       if (shouldBlock) {
         const domain = window.location.hostname;
-        // Inform background script that the tree withered
         ext.runtime.sendMessage({ action: "TREE_WITHERED", domain: domain, url: currentUrl });
-        // Display full-screen overlay
-        renderWitheredOverlay(domain);
+        renderWitheredOverlay(domain, lang);
       }
     });
   }
 
-  // Run on start
   applyBlockingLogic();
 
-  // Watch for dynamic Single Page Application (SPA) navigation e.g. YouTube
   let lastUrl = location.href;
   const observer = new MutationObserver(() => {
     if (location.href !== lastUrl) {
@@ -270,7 +290,6 @@
     observer.observe(document.documentElement, { subtree: true, childList: true });
   }
 
-  // Also listen for storage changes (e.g. user starts timer while tab is already open)
   ext.storage.onChanged.addListener((changes) => {
     if (changes.timerState || changes.isTimerRunning || changes.blockedSites || changes.blockMode) {
       applyBlockingLogic();
