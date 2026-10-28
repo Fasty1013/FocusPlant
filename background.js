@@ -254,11 +254,22 @@ ext.runtime.onInstalled.addListener(() => {
         toSet[key] = defaults[key];
       }
     }
+    // Migrate any legacy "banner" to "fullscreen"
+    if (data.alertStyle === "banner") {
+      toSet.alertStyle = "fullscreen";
+    }
 
     if (Object.keys(toSet).length > 0) {
       ext.storage.local.set(toSet);
     }
   });
+});
+
+// Auto-migrate legacy alertStyle to fullscreen on every load
+ext.storage.local.get(["alertStyle"], (d) => {
+  if (!d.alertStyle || d.alertStyle === "banner") {
+    ext.storage.local.set({ alertStyle: "fullscreen" });
+  }
 });
 
 // Resume background sound on browser startup if session is still running

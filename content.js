@@ -382,12 +382,12 @@
       align-items: center !important;
       justify-content: center !important;
       z-index: 2147483647 !important;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
       -webkit-font-smoothing: antialiased !important;
       -moz-osx-font-smoothing: grayscale !important;
       text-rendering: optimizeLegibility !important;
       text-align: center !important;
-      padding: 24px !important;
+      padding: 30px 20px !important;
       box-sizing: border-box !important;
       overflow-y: auto !important;
     `;
@@ -414,14 +414,14 @@
           transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
         }
         .fp-btn-primary:hover {
-          transform: translateY(-2px) scale(1.01) !important;
+          transform: translateY(-2px) scale(1.02) !important;
           box-shadow: 0 8px 28px rgba(16, 185, 129, 0.45) !important;
         }
         .fp-btn-danger {
           transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
         }
         .fp-btn-danger:hover {
-          transform: translateY(-2px) scale(1.01) !important;
+          transform: translateY(-2px) scale(1.02) !important;
           box-shadow: 0 8px 28px rgba(243, 139, 168, 0.45) !important;
         }
         .fp-btn-secondary {
@@ -442,15 +442,15 @@
       overlay.innerHTML = `
         ${commonStyles}
         <div style="
-          background: rgba(24, 24, 37, 0.82);
+          background: rgba(24, 24, 37, 0.94);
           backdrop-filter: blur(32px) saturate(180%);
           -webkit-backdrop-filter: blur(32px) saturate(180%);
-          border: 1px solid rgba(243, 139, 168, 0.3);
+          border: 1.5px solid rgba(243, 139, 168, 0.45);
           border-radius: 32px;
           padding: 44px 38px;
-          max-width: 640px;
+          max-width: 680px;
           width: 92%;
-          box-shadow: 0 30px 90px rgba(0, 0, 0, 0.8), 0 0 50px rgba(243, 139, 168, 0.15);
+          box-shadow: 0 30px 90px rgba(0, 0, 0, 0.85), 0 0 50px rgba(243, 139, 168, 0.2);
           display: flex;
           flex-direction: column;
           align-items: center;
@@ -458,25 +458,25 @@
           box-sizing: border-box;
         ">
           <!-- Withered Tree with Soft Float Animation -->
-          <div style="margin-bottom: 18px; animation: fpFloatTree 5s ease-in-out infinite;">
-            ${getWitheredSvg(175)}
+          <div style="margin-bottom: 20px; animation: fpFloatTree 5s ease-in-out infinite;">
+            ${getWitheredSvg(185)}
           </div>
 
           <!-- Strict Badge Capsule -->
           <div style="
             display: inline-flex;
             align-items: center;
-            gap: 7px;
-            padding: 6px 18px;
-            background: rgba(243, 139, 168, 0.15);
-            border: 1.5px solid rgba(243, 139, 168, 0.45);
+            gap: 8px;
+            padding: 8px 22px;
+            background: rgba(243, 139, 168, 0.18);
+            border: 1.5px solid rgba(243, 139, 168, 0.5);
             border-radius: 30px;
             color: #f38ba8;
-            font-size: 0.82rem;
+            font-size: 0.95rem;
             font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 1.2px;
-            margin-bottom: 14px;
+            letter-spacing: 1.5px;
+            margin-bottom: 16px;
             box-shadow: 0 0 20px rgba(243, 139, 168, 0.25);
           ">
             <span>🔒</span> ${t.strictBadge}
@@ -484,33 +484,35 @@
 
           <!-- Title with Gradient Glow -->
           <h1 style="
-            font-size: 2.2rem;
-            margin: 0 0 12px 0;
+            font-size: 2.5rem;
+            margin: 0 0 14px 0;
             font-weight: 900;
             letter-spacing: -0.5px;
-            line-height: 1.2;
-            background: linear-gradient(135deg, #ffffff 10%, #f5c2e7 55%, #f38ba8 100%);
+            line-height: 1.25;
+            background: linear-gradient(135deg, #ffffff 15%, #f5c2e7 60%, #f38ba8 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            text-shadow: 0 4px 20px rgba(243, 139, 168, 0.25);
           ">
             ${t.strictTitle}
           </h1>
 
           <!-- Description & Blocked Site Pill -->
           <p style="
-            font-size: 1.02rem;
-            margin: 0 0 20px 0;
-            color: #bac2de;
-            line-height: 1.55;
-            max-width: 520px;
+            font-size: 1.2rem;
+            margin: 0 0 22px 0;
+            color: #cdd6f4;
+            line-height: 1.6;
+            max-width: 560px;
+            font-weight: 500;
           ">
             ${t.openedSite} <span style="
               color: #f5c2e7;
-              font-weight: 700;
-              background: rgba(243, 139, 168, 0.18);
-              border: 1px solid rgba(243, 139, 168, 0.4);
-              padding: 3px 10px;
-              border-radius: 8px;
+              font-weight: 800;
+              background: rgba(243, 139, 168, 0.22);
+              border: 1.5px solid rgba(243, 139, 168, 0.5);
+              padding: 4px 14px;
+              border-radius: 10px;
               font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
             ">${blockedDomain || location.hostname}</span>.<br>
             ${t.strictDesc}
@@ -519,33 +521,33 @@
           <!-- Live Chronometer HUD Box -->
           <div id="fp-strict-timer-box" style="
             background: linear-gradient(180deg, rgba(20, 20, 32, 0.95) 0%, rgba(14, 14, 23, 0.95) 100%);
-            border: 1px solid rgba(243, 139, 168, 0.32);
-            border-radius: 20px;
-            padding: 18px 28px;
+            border: 1.5px solid rgba(243, 139, 168, 0.35);
+            border-radius: 22px;
+            padding: 20px 32px;
             width: 100%;
-            max-width: 460px;
-            margin-bottom: 16px;
+            max-width: 520px;
+            margin-bottom: 20px;
             box-sizing: border-box;
-            box-shadow: inset 0 2px 12px rgba(0,0,0,0.5), 0 8px 30px rgba(243, 139, 168, 0.12);
+            box-shadow: inset 0 2px 12px rgba(0,0,0,0.5), 0 8px 30px rgba(243, 139, 168, 0.15);
           ">
             <span style="
-              font-size: 0.8rem;
+              font-size: 0.9rem;
               color: #a6adc8;
               display: block;
-              margin-bottom: 6px;
+              margin-bottom: 8px;
               text-transform: uppercase;
-              letter-spacing: 1.2px;
+              letter-spacing: 1.5px;
               font-weight: 700;
             ">${t.strictTimerLabel}</span>
             <div id="fp-strict-timer" style="
-              font-size: 3.3rem;
+              font-size: 4.2rem;
               font-weight: 900;
-              font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'SF Pro Display', sans-serif !important;
+              font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
               font-variant-numeric: tabular-nums;
               font-feature-settings: 'tnum' 1;
               color: #f38ba8;
-              letter-spacing: 5px;
-              text-shadow: 0 0 24px rgba(243, 139, 168, 0.65), 0 0 45px rgba(243, 139, 168, 0.3);
+              letter-spacing: 6px;
+              text-shadow: 0 0 28px rgba(243, 139, 168, 0.7), 0 0 50px rgba(243, 139, 168, 0.35);
             ">--:--</div>
           </div>
 
@@ -554,33 +556,33 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-            background: rgba(243, 139, 168, 0.08);
-            border: 1px solid rgba(243, 139, 168, 0.25);
-            padding: 10px 16px;
-            border-radius: 12px;
+            gap: 10px;
+            background: rgba(243, 139, 168, 0.1);
+            border: 1.5px solid rgba(243, 139, 168, 0.3);
+            padding: 12px 20px;
+            border-radius: 14px;
             color: #f9e2af;
-            font-size: 0.82rem;
-            font-weight: 500;
-            margin-bottom: 24px;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 26px;
             width: 100%;
-            max-width: 460px;
+            max-width: 520px;
             box-sizing: border-box;
           ">
-            <span>🚫</span> ${t.strictNoOkNotice}
+            <span style="font-size: 1.15rem;">🚫</span> ${t.strictNoOkNotice}
           </div>
 
           <!-- Actions: Only Close Tab or Go Back -->
-          <div style="display: flex; gap: 12px; width: 100%; max-width: 460px;">
+          <div style="display: flex; gap: 14px; width: 100%; max-width: 520px;">
             <button id="fp-fs-close-tab" class="fp-btn-danger" style="
               flex: 1;
-              padding: 14px 20px;
+              padding: 15px 22px;
               background: linear-gradient(135deg, #f38ba8 0%, #e06c88 100%);
               color: #11111b;
               border: none;
-              border-radius: 14px;
+              border-radius: 16px;
               font-weight: 800;
-              font-size: 0.95rem;
+              font-size: 1.05rem;
               cursor: pointer;
               box-shadow: 0 4px 18px rgba(243, 139, 168, 0.35);
               font-family: inherit;
@@ -590,13 +592,13 @@
 
             <button id="fp-fs-back" class="fp-btn-secondary" style="
               flex: 1;
-              padding: 14px 20px;
-              background: rgba(49, 50, 68, 0.8);
+              padding: 15px 22px;
+              background: rgba(49, 50, 68, 0.85);
               color: #cdd6f4;
-              border: 1px solid rgba(69, 71, 90, 0.8);
-              border-radius: 14px;
+              border: 1.5px solid rgba(69, 71, 90, 0.85);
+              border-radius: 16px;
               font-weight: 700;
-              font-size: 0.95rem;
+              font-size: 1.05rem;
               cursor: pointer;
               font-family: inherit;
             ">
@@ -612,15 +614,15 @@
       overlay.innerHTML = `
         ${commonStyles}
         <div style="
-          background: rgba(24, 24, 37, 0.82);
+          background: rgba(24, 24, 37, 0.94);
           backdrop-filter: blur(32px) saturate(180%);
           -webkit-backdrop-filter: blur(32px) saturate(180%);
-          border: 1px solid rgba(243, 139, 168, 0.3);
+          border: 1.5px solid rgba(243, 139, 168, 0.45);
           border-radius: 32px;
           padding: 44px 38px;
-          max-width: 640px;
+          max-width: 680px;
           width: 92%;
-          box-shadow: 0 30px 90px rgba(0, 0, 0, 0.8), 0 0 50px rgba(243, 139, 168, 0.15);
+          box-shadow: 0 30px 90px rgba(0, 0, 0, 0.85), 0 0 50px rgba(243, 139, 168, 0.2);
           display: flex;
           flex-direction: column;
           align-items: center;
@@ -629,57 +631,59 @@
         ">
           <!-- Withered Tree with Soft Float Animation -->
           <div style="margin-bottom: 20px; animation: fpFloatTree 5s ease-in-out infinite;">
-            ${getWitheredSvg(180)}
+            ${getWitheredSvg(190)}
           </div>
 
           <!-- Alert Badge -->
           <div style="
             display: inline-flex;
             align-items: center;
-            gap: 7px;
-            padding: 6px 18px;
-            background: rgba(243, 139, 168, 0.15);
-            border: 1.5px solid rgba(243, 139, 168, 0.45);
+            gap: 8px;
+            padding: 8px 22px;
+            background: rgba(243, 139, 168, 0.18);
+            border: 1.5px solid rgba(243, 139, 168, 0.5);
             border-radius: 30px;
             color: #f38ba8;
-            font-size: 0.82rem;
+            font-size: 0.95rem;
             font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 14px;
+            letter-spacing: 1.5px;
+            margin-bottom: 16px;
           ">
             <span>⚠️</span> ${t.badge}
           </div>
 
           <!-- Title with Gradient Glow -->
           <h1 style="
-            font-size: 2.25rem;
-            margin: 0 0 12px 0;
+            font-size: 2.6rem;
+            margin: 0 0 14px 0;
             font-weight: 900;
             letter-spacing: -0.5px;
-            line-height: 1.2;
-            background: linear-gradient(135deg, #ffffff 10%, #f5c2e7 55%, #f38ba8 100%);
+            line-height: 1.25;
+            background: linear-gradient(135deg, #ffffff 15%, #f5c2e7 60%, #f38ba8 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            text-shadow: 0 4px 20px rgba(243, 139, 168, 0.25);
           ">
             ${t.title}
           </h1>
 
           <!-- Info text -->
           <p style="
-            font-size: 1.02rem;
-            margin: 0 0 18px 0;
-            color: #bac2de;
-            line-height: 1.55;
-            max-width: 520px;
+            font-size: 1.25rem;
+            margin: 0 0 20px 0;
+            color: #cdd6f4;
+            line-height: 1.6;
+            max-width: 560px;
+            font-weight: 500;
           ">
             ${t.openedSite} <span style="
               color: #f5c2e7;
-              font-weight: 700;
-              background: rgba(243, 139, 168, 0.18);
-              border: 1px solid rgba(243, 139, 168, 0.4);
-              padding: 3px 10px;
-              border-radius: 8px;
+              font-weight: 800;
+              background: rgba(243, 139, 168, 0.22);
+              border: 1.5px solid rgba(243, 139, 168, 0.5);
+              padding: 4px 14px;
+              border-radius: 10px;
               font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
             ">${blockedDomain || location.hostname}</span> ${t.duringFocus}
           </p>
@@ -687,35 +691,36 @@
           <!-- Philosophical quote -->
           <div style="
             font-style: italic;
-            font-size: 0.9rem;
-            color: #a6adc8;
+            font-size: 1.05rem;
+            color: #bac2de;
             background: #181825;
-            border-left: 3px solid #f38ba8;
-            padding: 12px 18px;
-            border-radius: 0 12px 12px 0;
-            margin-bottom: 26px;
+            border-left: 4px solid #f38ba8;
+            padding: 16px 22px;
+            border-radius: 0 14px 14px 0;
+            margin-bottom: 28px;
             text-align: left;
             width: 100%;
-            max-width: 480px;
+            max-width: 520px;
             box-sizing: border-box;
-            line-height: 1.5;
+            line-height: 1.6;
           ">
             ${t.quote}
           </div>
 
           <!-- PRIMARY ACTION: PROMINENT "OK" BUTTON TO REMOVE NOTIFICATION -->
-          <div style="width: 100%; max-width: 480px; margin-bottom: 12px;">
+          <div style="width: 100%; max-width: 520px; margin-bottom: 14px;">
             <button id="fp-fs-dismiss-ok" class="fp-btn-primary" style="
               width: 100%;
-              padding: 15px 24px;
+              padding: 16px 28px;
               background: linear-gradient(135deg, #a6e3a1 0%, #10b981 100%);
               color: #11111b;
               border: none;
-              border-radius: 16px;
+              border-radius: 18px;
               font-weight: 800;
-              font-size: 1.05rem;
+              font-size: 1.2rem;
+              letter-spacing: 0.5px;
               cursor: pointer;
-              box-shadow: 0 6px 24px rgba(16, 185, 129, 0.35);
+              box-shadow: 0 6px 24px rgba(16, 185, 129, 0.4);
               font-family: inherit;
             ">
               ${t.okBtn}
@@ -723,16 +728,16 @@
           </div>
 
           <!-- SECONDARY ACTIONS: Close Tab or Go Back -->
-          <div style="display: flex; gap: 12px; width: 100%; max-width: 480px;">
+          <div style="display: flex; gap: 14px; width: 100%; max-width: 520px;">
             <button id="fp-fs-close-tab" class="fp-btn-danger" style="
               flex: 1;
-              padding: 12px 18px;
-              background: rgba(49, 50, 68, 0.8);
+              padding: 14px 20px;
+              background: rgba(49, 50, 68, 0.85);
               color: #f38ba8;
-              border: 1px solid rgba(243, 139, 168, 0.4);
-              border-radius: 14px;
+              border: 1.5px solid rgba(243, 139, 168, 0.45);
+              border-radius: 16px;
               font-weight: 700;
-              font-size: 0.9rem;
+              font-size: 1.05rem;
               cursor: pointer;
               font-family: inherit;
             ">
@@ -741,13 +746,13 @@
 
             <button id="fp-fs-back" class="fp-btn-secondary" style="
               flex: 1;
-              padding: 12px 18px;
-              background: rgba(49, 50, 68, 0.8);
+              padding: 14px 20px;
+              background: rgba(49, 50, 68, 0.85);
               color: #cdd6f4;
-              border: 1px solid rgba(69, 71, 90, 0.8);
-              border-radius: 14px;
-              font-weight: 600;
-              font-size: 0.9rem;
+              border: 1.5px solid rgba(69, 71, 90, 0.85);
+              border-radius: 16px;
+              font-weight: 700;
+              font-size: 1.05rem;
               cursor: pointer;
               font-family: inherit;
             ">
@@ -840,17 +845,18 @@
     }
   }
 
-  // Choose renderer based on user preference
+  // Choose renderer based on user preference: Always show fullscreen blocker immediately
   function showWarning(domain, style = "fullscreen", lang = "ru", isStrict = false, sessionEndTime = 0) {
     if (hasBlockedCurrentPage && activeElementContainer) return;
     hasBlockedCurrentPage = true;
 
-    // In Strict mode, ALWAYS show the impenetrable fullscreen overlay without OK button!
-    if (isStrict || style === "fullscreen") {
-      renderFullscreenOverlay(domain, lang, isStrict, sessionEndTime);
-    } else {
-      renderCompactBanner(domain, lang);
+    if (activeElementContainer) {
+      activeElementContainer.remove();
+      activeElementContainer = null;
     }
+
+    // ALWAYS show the prominent fullscreen overlay immediately on blocked sites
+    renderFullscreenOverlay(domain, lang, isStrict, sessionEndTime);
   }
 
   function applyBlockingLogic() {

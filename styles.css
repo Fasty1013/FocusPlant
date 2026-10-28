@@ -215,6 +215,7 @@ body {
 
 /* Celebration Drop Reveal Card */
 .drop-reveal-card {
+  position: relative;
   background: linear-gradient(135deg, rgba(203, 166, 247, 0.2) 0%, rgba(249, 226, 175, 0.2) 100%);
   border: 2px solid var(--accent-yellow);
   border-radius: var(--radius-lg);
@@ -226,6 +227,30 @@ body {
   gap: 6px;
   animation: dropPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   box-shadow: 0 8px 30px rgba(249, 226, 175, 0.25);
+}
+
+.drop-close-btn {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  background: rgba(255, 255, 255, 0.12);
+  border: none;
+  color: var(--text-sub);
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.82rem;
+  transition: all 0.2s ease;
+}
+
+.drop-close-btn:hover {
+  background: rgba(243, 139, 168, 0.35);
+  color: #fff;
+  transform: scale(1.1);
 }
 
 @keyframes dropPop {

@@ -732,8 +732,15 @@ document.addEventListener("DOMContentLoaded", () => {
     plantNewBtn.style.display = "none";
   }
 
-  // Claim Drop button
+  // Dismiss/Claim Drop celebration card
+  function dismissDropCard() {
+    dropRevealCard.style.display = "none";
+    ext.storage.local.set({ lastDrop: null });
+  }
+
+  // Claim Drop button: dismiss reveal card immediately and view tree in garden!
   dropClaimBtn.addEventListener("click", () => {
+    dismissDropCard();
     tabBtns.forEach(b => b.classList.remove("active"));
     tabContents.forEach(c => c.classList.remove("active"));
     const gBtn = document.getElementById("tGardenBtn");
@@ -743,6 +750,13 @@ document.addEventListener("DOMContentLoaded", () => {
     activeTab = "tabGarden";
     renderGardenTab();
   });
+
+  const dropCloseBtn = document.getElementById("dropCloseBtn");
+  if (dropCloseBtn) {
+    dropCloseBtn.addEventListener("click", () => {
+      dismissDropCard();
+    });
+  }
 
   // Synchronize Timer from Storage
   function syncTimerFromStorage() {
@@ -858,6 +872,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   plantNewBtn.addEventListener("click", () => {
+    dismissDropCard();
     ext.runtime.sendMessage({ action: "RESET_TIMER" }, () => {
       syncTimerFromStorage();
     });
@@ -1191,7 +1206,7 @@ document.addEventListener("DOMContentLoaded", () => {
       blockModeSelect.value = mode;
 
       if (alertStyleSelect) {
-        alertStyleSelect.value = data.alertStyle || "banner";
+        alertStyleSelect.value = data.alertStyle || "fullscreen";
       }
 
       const list = mode === "blacklist" ? (data.blockedSites || []) : (data.whiteListSites || []);
