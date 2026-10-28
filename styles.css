@@ -18,6 +18,13 @@
   --accent-blue: #89b4fa;
   --accent-purple: #cba6f7;
 
+  --rarity-common: #a6adc8;
+  --rarity-uncommon: #a6e3a1;
+  --rarity-rare: #89dceb;
+  --rarity-epic: #cba6f7;
+  --rarity-legendary: #f9e2af;
+  --rarity-mythic: #f38ba8;
+
   --text-main: #cdd6f4;
   --text-sub: #bac2de;
   --text-muted: #6c7086;
@@ -38,9 +45,9 @@
 }
 
 body {
-  width: 390px;
-  min-height: 560px;
-  max-height: 600px;
+  width: 400px;
+  min-height: 580px;
+  max-height: 620px;
   background-color: var(--bg-primary);
   color: var(--text-main);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
@@ -160,7 +167,7 @@ body {
   color: var(--text-muted);
   border: none;
   border-radius: var(--radius-sm);
-  font-size: 0.74rem;
+  font-size: 0.72rem;
   font-weight: 700;
   cursor: pointer;
   white-space: nowrap;
@@ -196,6 +203,59 @@ body {
   to { opacity: 1; transform: translateY(0); }
 }
 
+/* Celebration Drop Reveal Card */
+.drop-reveal-card {
+  background: linear-gradient(135deg, rgba(203, 166, 247, 0.2) 0%, rgba(249, 226, 175, 0.2) 100%);
+  border: 2px solid var(--accent-yellow);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  animation: dropPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 8px 30px rgba(249, 226, 175, 0.25);
+}
+
+@keyframes dropPop {
+  0% { transform: scale(0.85); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.drop-sparkles {
+  font-size: 1.2rem;
+}
+
+.drop-rarity-badge {
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 3px 12px;
+  border-radius: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.drop-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #fff;
+}
+
+.drop-tree-name {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--accent-yellow);
+  text-shadow: 0 2px 6px rgba(0,0,0,0.4);
+}
+
+.drop-reward-text {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--accent-mint);
+  margin-bottom: 6px;
+}
+
 /* TAB 1: Focus Timer Centerpiece */
 .timer-centerpiece {
   display: flex;
@@ -204,7 +264,7 @@ body {
   background: var(--bg-secondary);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
-  padding: 18px 12px;
+  padding: 16px 12px;
   position: relative;
   box-shadow: var(--shadow-sm);
 }
@@ -304,23 +364,113 @@ body {
   animation: fadeIn 0.3s;
 }
 
-/* Time Presets */
+/* Custom Time Controls & Slider */
+.time-control-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.time-control-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.control-label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.custom-time-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--bg-input);
+  border: 1px solid var(--border-color);
+  padding: 3px 8px;
+  border-radius: var(--radius-sm);
+}
+
+.custom-time-input-wrap input {
+  width: 48px;
+  background: transparent;
+  border: none;
+  color: var(--accent-green);
+  font-size: 0.95rem;
+  font-weight: 800;
+  text-align: right;
+  outline: none;
+}
+
+.custom-time-input-wrap span {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+/* Slider */
+.slider-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.custom-slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--bg-input);
+  border: 1px solid var(--border-color);
+  outline: none;
+}
+
+.custom-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--accent-green);
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.6);
+  transition: transform 0.15s;
+}
+
+.custom-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+.slider-marks {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  padding: 0 2px;
+}
+
+/* Preset Buttons */
 .time-presets {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 8px;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
 }
 
 .preset-btn {
-  background: var(--bg-secondary);
+  background: var(--bg-input);
   border: 1px solid var(--border-color);
   color: var(--text-sub);
-  padding: 8px 0;
+  padding: 6px 0;
   border-radius: var(--radius-sm);
-  font-size: 0.85rem;
+  font-size: 0.78rem;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.2s;
+  text-align: center;
 }
 
 .preset-btn:hover {
@@ -333,6 +483,55 @@ body {
   border-color: var(--accent-green);
   color: var(--accent-green);
 }
+
+/* Chances Preview Box */
+.chances-preview-box {
+  background: var(--bg-input);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.chances-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-sub);
+}
+
+.chances-hint {
+  font-size: 0.65rem;
+  color: var(--accent-mint);
+  font-weight: 500;
+}
+
+.chances-bar-row {
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+}
+
+.chance-tag {
+  flex: 1;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-align: center;
+  padding: 3px 2px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.chance-tag.common { background: rgba(166, 173, 200, 0.12); color: var(--rarity-common); }
+.chance-tag.uncommon { background: rgba(166, 227, 161, 0.12); color: var(--rarity-uncommon); }
+.chance-tag.rare { background: rgba(137, 220, 235, 0.12); color: var(--rarity-rare); }
+.chance-tag.epic { background: rgba(203, 166, 247, 0.12); color: var(--rarity-epic); }
+.chance-tag.legendary { background: rgba(249, 226, 175, 0.15); color: var(--rarity-legendary); }
+.chance-tag.mythic { background: rgba(243, 139, 168, 0.18); color: var(--rarity-mythic); font-weight: 800; }
 
 /* Buttons */
 .btn {
@@ -473,6 +672,81 @@ body {
   font-weight: 700;
 }
 
+/* Almanac */
+.almanac-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.almanac-counter {
+  font-size: 0.72rem;
+  font-weight: 700;
+  background: rgba(16, 185, 129, 0.15);
+  color: var(--accent-green);
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+.almanac-subdesc {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  line-height: 1.3;
+}
+
+.almanac-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  max-height: 200px;
+  overflow-y: auto;
+  padding: 2px;
+}
+
+.almanac-item {
+  background: var(--bg-input);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 8px 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.15s, border-color 0.15s;
+}
+
+.almanac-item:hover {
+  transform: translateY(-2px);
+}
+
+.almanac-item.locked {
+  opacity: 0.45;
+  filter: grayscale(0.8);
+}
+
+.almanac-icon {
+  font-size: 1.4rem;
+}
+
+.almanac-name {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 75px;
+}
+
+.almanac-rarity {
+  font-size: 0.6rem;
+  font-weight: 700;
+  padding: 1px 4px;
+  border-radius: 3px;
+}
+
 .stats-bar-chart {
   display: flex;
   align-items: flex-end;
@@ -503,7 +777,7 @@ body {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   gap: 6px;
-  max-height: 150px;
+  max-height: 140px;
   overflow-y: auto;
   padding: 4px;
 }
@@ -611,10 +885,23 @@ body {
   gap: 2px;
 }
 
+.skin-name-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
 .skin-name {
   font-size: 0.88rem;
   font-weight: 700;
   color: #fff;
+}
+
+.skin-rarity-pill {
+  font-size: 0.62rem;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 4px;
 }
 
 .skin-desc {

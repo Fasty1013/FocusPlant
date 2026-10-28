@@ -1,4 +1,4 @@
-// Focus Plant Pro - Cross-Browser Main Popup Controller
+// Focus Plant Pro - Cross-Browser Main Popup Controller with Rarities & Custom Timer
 document.addEventListener("DOMContentLoaded", () => {
   const ext = (typeof browser !== 'undefined' && browser.runtime) ? browser : chrome;
 
@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const i18n = {
     ru: {
       timerTab: "⏱ Таймер",
-      gardenTab: "🪴 Сад",
+      gardenTab: "🪴 Сад & Редкости",
       shopTab: "🛒 Скины",
       tasksTab: "✅ Задачи",
       blockerTab: "🛡 Блокировка",
@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
       startBtn: "▶ Начать фокус",
       pauseBtn: "⏸ Пауза",
       resumeBtn: "▶ Продолжить",
-      resetBtn: "🔄 Сброс",
+      resetBtn: "🔄 Сдаться",
       plantNewBtn: "🌱 Посадить новое дерево",
       ambientLabel: "🔊 Фоновый звук:",
       ambientNone: "Выкл",
@@ -31,8 +31,9 @@ document.addEventListener("DOMContentLoaded", () => {
       statsHeader: "📊 Фокус за последние 7 дней (мин)",
       forestHeader: "🌲 Мой цифровой лес",
       forestEmpty: "Ваш лес пока пуст. Вырастите свое первое дерево!",
+      almanacHeader: "📖 Алманах редкостей деревьев",
       shopTitle: "Магазин деревьев",
-      shopDesc: "Открывайте новые виды деревьев за заработанные монеты!",
+      shopDesc: "Покупайте или открывайте новые деревья длительными сессиями фокуса!",
       equipped: "✓ Выбрано",
       equip: "Выбрать",
       buy: "Купить",
@@ -52,7 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
     },
     en: {
       timerTab: "⏱ Timer",
-      gardenTab: "🪴 Garden",
+      gardenTab: "🪴 Garden & Rarities",
       shopTab: "🛒 Skins",
       tasksTab: "✅ Tasks",
       blockerTab: "🛡 Blocker",
@@ -64,7 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
       startBtn: "▶ Start Focus",
       pauseBtn: "⏸ Pause",
       resumeBtn: "▶ Resume",
-      resetBtn: "🔄 Reset",
+      resetBtn: "🔄 Give Up",
       plantNewBtn: "🌱 Plant New Tree",
       ambientLabel: "🔊 Ambient Sound:",
       ambientNone: "Off",
@@ -77,8 +78,9 @@ document.addEventListener("DOMContentLoaded", () => {
       statsHeader: "📊 Focus over last 7 days (min)",
       forestHeader: "🌲 My Digital Forest",
       forestEmpty: "Your forest is empty. Grow your first tree!",
+      almanacHeader: "📖 Tree Rarities Almanac",
       shopTitle: "Tree Nursery & Skins",
-      shopDesc: "Unlock exotic trees using your hard-earned coins!",
+      shopDesc: "Unlock exotic trees with coins or long focus sessions!",
       equipped: "✓ Equipped",
       equip: "Equip",
       buy: "Buy",
@@ -98,7 +100,7 @@ document.addEventListener("DOMContentLoaded", () => {
     },
     uz: {
       timerTab: "⏱ Taymer",
-      gardenTab: "🪴 Bog'",
+      gardenTab: "🪴 Bog' & Noyoblik",
       shopTab: "🛒 Daraxtlar",
       tasksTab: "✅ Vazifalar",
       blockerTab: "🛡 Bloklash",
@@ -110,7 +112,7 @@ document.addEventListener("DOMContentLoaded", () => {
       startBtn: "▶ Fokusni boshlash",
       pauseBtn: "⏸ Pauza",
       resumeBtn: "▶ Davom etish",
-      resetBtn: "🔄 Qayta o'rnatish",
+      resetBtn: "🔄 Taslim bo'lish",
       plantNewBtn: "🌱 Yangi daraxt ekish",
       ambientLabel: "🔊 Fon ovozi:",
       ambientNone: "O'chirilgan",
@@ -123,8 +125,9 @@ document.addEventListener("DOMContentLoaded", () => {
       statsHeader: "📊 Oxirgi 7 kunlik fokus (daq)",
       forestHeader: "🌲 Mening o'rmonim",
       forestEmpty: "O'rmon hali bo'sh. Birinchi daraxtingizni o'stiring!",
+      almanacHeader: "📖 Daraxtlar Almanaği",
       shopTitle: "Daraxtlar do'koni",
-      shopDesc: "Tangalar evaziga yangi daraxtlarni oching!",
+      shopDesc: "Tangalar yoki uzoq fokus orqali yangi daraxtlarni oching!",
       equipped: "✓ Tanlangan",
       equip: "Tanlash",
       buy: "Sotib olish",
@@ -144,7 +147,7 @@ document.addEventListener("DOMContentLoaded", () => {
     },
     ja: {
       timerTab: "⏱ タイマー",
-      gardenTab: "🪴 庭",
+      gardenTab: "🪴 庭 & レア度",
       shopTab: "🛒 スキン",
       tasksTab: "✅ タスク",
       blockerTab: "🛡 ブロック",
@@ -156,7 +159,7 @@ document.addEventListener("DOMContentLoaded", () => {
       startBtn: "▶ 集中開始",
       pauseBtn: "⏸ 一時停止",
       resumeBtn: "▶ 再開",
-      resetBtn: "🔄 リセット",
+      resetBtn: "🔄 あきらめる",
       plantNewBtn: "🌱 新しい木を植える",
       ambientLabel: "🔊 BGM音:",
       ambientNone: "オフ",
@@ -169,8 +172,9 @@ document.addEventListener("DOMContentLoaded", () => {
       statsHeader: "📊 過去7日間の集中時間（分）",
       forestHeader: "🌲 私のデジタルフォレスト",
       forestEmpty: "まだ木がありません。最初の木を育てましょう！",
+      almanacHeader: "📖 ツリー図鑑とレア度",
       shopTitle: "ツリーショップ",
-      shopDesc: "コインを使って新しい木のスキンを解放しよう！",
+      shopDesc: "集中時間を伸ばすほどレアな木が育ちやすくなります！",
       equipped: "✓ 選択中",
       equip: "装備する",
       buy: "購入",
@@ -193,9 +197,10 @@ document.addEventListener("DOMContentLoaded", () => {
   // State Variables
   let currentLang = "ru";
   let activeTab = "tabTimer";
-  let selectedDuration = 25 * 60; // 25 min default
+  let selectedMinutes = 25;
+  let selectedDuration = 25 * 60;
   let timerTicker = null;
-  const RING_CIRCUMFERENCE = 2 * Math.PI * 96; // r = 96
+  const RING_CIRCUMFERENCE = 2 * Math.PI * 96;
 
   // DOM Elements
   const langSelect = document.getElementById("langSelect");
@@ -213,7 +218,28 @@ document.addEventListener("DOMContentLoaded", () => {
   const witherReasonText = document.getElementById("witherReasonText");
   const treeAvatar = document.getElementById("treeAvatar");
   const progressRing = document.getElementById("progressRing");
+  const timeConfigSection = document.getElementById("timeConfigSection");
+  const timeSlider = document.getElementById("timeSlider");
+  const customMinutesInput = document.getElementById("customMinutesInput");
   const timePresets = document.getElementById("timePresets");
+
+  // Drop Chances DOM
+  const chanceCommon = document.getElementById("chanceCommon");
+  const chanceUncommon = document.getElementById("chanceUncommon");
+  const chanceRare = document.getElementById("chanceRare");
+  const chanceEpic = document.getElementById("chanceEpic");
+  const chanceLegendary = document.getElementById("chanceLegendary");
+  const chanceMythic = document.getElementById("chanceMythic");
+
+  // Drop Reveal Card DOM
+  const dropRevealCard = document.getElementById("dropRevealCard");
+  const dropRarityBadge = document.getElementById("dropRarityBadge");
+  const dropTitle = document.getElementById("dropTitle");
+  const dropTreeName = document.getElementById("dropTreeName");
+  const dropRewardText = document.getElementById("dropRewardText");
+  const dropClaimBtn = document.getElementById("dropClaimBtn");
+
+  // Buttons
   const startBtn = document.getElementById("startBtn");
   const pauseBtn = document.getElementById("pauseBtn");
   const resumeBtn = document.getElementById("resumeBtn");
@@ -226,6 +252,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const statWithered = document.getElementById("statWithered");
   const statMinutes = document.getElementById("statMinutes");
   const statRate = document.getElementById("statRate");
+  const almanacGrid = document.getElementById("almanacGrid");
+  const almanacCounter = document.getElementById("almanacCounter");
   const statsChart = document.getElementById("statsChart");
   const forestGrid = document.getElementById("forestGrid");
 
@@ -294,6 +322,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("lblStatWithered").textContent = t.withered;
     document.getElementById("lblStatMins").textContent = t.focusTime;
     document.getElementById("lblStatRate").textContent = t.successRate;
+    document.getElementById("lblAlmanacHeader").textContent = t.almanacHeader;
     document.getElementById("lblStatsHeader").textContent = t.statsHeader;
     document.getElementById("lblForestHeader").textContent = t.forestHeader;
 
@@ -325,16 +354,51 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // Time Preset Buttons
-  const presetBtns = timePresets.querySelectorAll(".preset-btn");
-  presetBtns.forEach(btn => {
+  // Time & Chances Synchronizer
+  function updateCustomDuration(mins) {
+    selectedMinutes = Math.max(5, Math.min(180, Number(mins) || 25));
+    selectedDuration = selectedMinutes * 60;
+
+    timeSlider.value = selectedMinutes;
+    customMinutesInput.value = selectedMinutes;
+    updateTimeDisplay(selectedDuration);
+
+    // Update preset pills active state
+    timePresets.querySelectorAll(".preset-btn").forEach(btn => {
+      if (parseInt(btn.dataset.minutes, 10) === selectedMinutes) {
+        btn.classList.add("active");
+      } else {
+        btn.classList.remove("active");
+      }
+    });
+
+    // Update Live Drop Chances preview
+    const chances = calculateDropChances(selectedMinutes);
+    chanceCommon.textContent = `⚪ ${chances.common}%`;
+    chanceUncommon.textContent = `🟢 ${chances.uncommon}%`;
+    chanceRare.textContent = `🔵 ${chances.rare}%`;
+    chanceEpic.textContent = `🟣 ${chances.epic}%`;
+    chanceLegendary.textContent = `🟡 ${chances.legendary}%`;
+    chanceMythic.textContent = `✦ ${chances.mythic}%`;
+
+    ext.storage.local.set({ sessionDuration: selectedDuration, secondsRemaining: selectedDuration });
+  }
+
+  // Slider Event
+  timeSlider.addEventListener("input", (e) => {
+    updateCustomDuration(e.target.value);
+  });
+
+  // Numeric Input Event
+  customMinutesInput.addEventListener("change", (e) => {
+    updateCustomDuration(e.target.value);
+  });
+
+  // Preset Buttons Event
+  timePresets.querySelectorAll(".preset-btn").forEach(btn => {
     btn.addEventListener("click", () => {
-      presetBtns.forEach(b => b.classList.remove("active"));
-      btn.classList.add("active");
       const mins = parseInt(btn.dataset.minutes, 10);
-      selectedDuration = mins * 60;
-      updateTimeDisplay(selectedDuration);
-      ext.storage.local.set({ sessionDuration: selectedDuration, secondsRemaining: selectedDuration });
+      updateCustomDuration(mins);
     });
   });
 
@@ -354,7 +418,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Update Ring and Tree View
-  function updateTimerView(remainingSeconds, totalSeconds, skin, state, reason) {
+  function updateTimerView(remainingSeconds, totalSeconds, skin, state, reason, lastDrop) {
     const t = i18n[currentLang] || i18n.ru;
     const elapsed = Math.max(0, totalSeconds - remainingSeconds);
     const progress = totalSeconds > 0 ? (elapsed / totalSeconds) : 0;
@@ -363,6 +427,22 @@ document.addEventListener("DOMContentLoaded", () => {
     // Progress Ring offset
     const offset = RING_CIRCUMFERENCE - (progress * RING_CIRCUMFERENCE);
     progressRing.style.strokeDashoffset = offset;
+
+    // Check Drop Celebration
+    if (state === "completed" && lastDrop) {
+      dropRevealCard.style.display = "flex";
+      const rarityObj = RARITIES[lastDrop.rarity] || RARITIES.common;
+      dropRarityBadge.textContent = rarityObj.stars + " " + (rarityObj.name[currentLang] || rarityObj.name.ru).toUpperCase();
+      dropRarityBadge.style.background = rarityObj.bg;
+      dropRarityBadge.style.color = rarityObj.color;
+      dropRarityBadge.style.border = `1px solid ${rarityObj.border}`;
+
+      const skinObj = TREE_SKINS[lastDrop.skin] || TREE_SKINS.oak;
+      dropTreeName.textContent = `${skinObj.name[currentLang] || skinObj.name.ru} ${skinObj.emoji}`;
+      dropRewardText.textContent = `+${lastDrop.earnedCoins || 30} 🪙 • +${lastDrop.earnedXp || 50} XP! ${lastDrop.isNew ? "✨ НОВОЕ ДЕРЕВО ОТКРЫТО!" : ""}`;
+    } else {
+      dropRevealCard.style.display = "none";
+    }
 
     if (state === "withered") {
       // Tree is dead!
@@ -375,7 +455,7 @@ document.addEventListener("DOMContentLoaded", () => {
       witherAlert.style.display = "block";
       witherReasonText.textContent = reason || "Запрещенный сайт";
 
-      timePresets.style.display = "none";
+      timeConfigSection.style.display = "none";
       startBtn.style.display = "none";
       pauseBtn.style.display = "none";
       resumeBtn.style.display = "none";
@@ -394,7 +474,7 @@ document.addEventListener("DOMContentLoaded", () => {
       timerStatus.style.color = "#a6e3a1";
       timerStatus.style.background = "rgba(166, 227, 161, 0.15)";
 
-      timePresets.style.display = "none";
+      timeConfigSection.style.display = "none";
       startBtn.style.display = "none";
       pauseBtn.style.display = "none";
       resumeBtn.style.display = "none";
@@ -411,7 +491,7 @@ document.addEventListener("DOMContentLoaded", () => {
       timerStatus.style.color = "#94e2d5";
       timerStatus.style.background = "rgba(148, 226, 213, 0.12)";
 
-      timePresets.style.display = "none";
+      timeConfigSection.style.display = "none";
       startBtn.style.display = "none";
       pauseBtn.style.display = "flex";
       resumeBtn.style.display = "none";
@@ -428,7 +508,7 @@ document.addEventListener("DOMContentLoaded", () => {
       timerStatus.style.color = "#f9e2af";
       timerStatus.style.background = "rgba(249, 226, 175, 0.15)";
 
-      timePresets.style.display = "none";
+      timeConfigSection.style.display = "none";
       startBtn.style.display = "none";
       pauseBtn.style.display = "none";
       resumeBtn.style.display = "flex";
@@ -445,7 +525,7 @@ document.addEventListener("DOMContentLoaded", () => {
     timerStatus.style.color = "#bac2de";
     timerStatus.style.background = "rgba(255, 255, 255, 0.05)";
 
-    timePresets.style.display = "grid";
+    timeConfigSection.style.display = "flex";
     startBtn.style.display = "flex";
     pauseBtn.style.display = "none";
     resumeBtn.style.display = "none";
@@ -453,18 +533,30 @@ document.addEventListener("DOMContentLoaded", () => {
     plantNewBtn.style.display = "none";
   }
 
+  // Claim Drop button
+  dropClaimBtn.addEventListener("click", () => {
+    tabBtns.forEach(b => b.classList.remove("active"));
+    tabContents.forEach(c => c.classList.remove("active"));
+    const gBtn = document.getElementById("tGardenBtn");
+    if (gBtn) gBtn.classList.add("active");
+    const gTab = document.getElementById("tabGarden");
+    if (gTab) gTab.classList.add("active");
+    activeTab = "tabGarden";
+    renderGardenTab();
+  });
+
   // Synchronize Timer from Storage
   function syncTimerFromStorage() {
     ext.storage.local.get([
       "timerState", "sessionStartTime", "sessionDuration", "sessionEndTime",
-      "secondsRemaining", "selectedSkin", "witherReason", "coins", "level"
+      "secondsRemaining", "selectedSkin", "witherReason", "coins", "level", "lastDrop"
     ], (data) => {
       const state = data.timerState || "idle";
       const totalSec = data.sessionDuration || selectedDuration;
       const skin = data.selectedSkin || "oak";
       const reason = data.witherReason || "";
+      const lastDrop = data.lastDrop || null;
 
-      // Coins & Level
       coinsCount.textContent = data.coins || 0;
       const lvl = data.level || 1;
       userLevelBadge.textContent = `Ур. ${lvl} Садовод`;
@@ -472,36 +564,37 @@ document.addEventListener("DOMContentLoaded", () => {
       if (state === "running" && data.sessionEndTime) {
         const remainingMs = data.sessionEndTime - Date.now();
         if (remainingMs <= 0) {
-          // Completed
           updateTimeDisplay(0);
-          updateTimerView(0, totalSec, skin, "completed", "");
+          updateTimerView(0, totalSec, skin, "completed", "", lastDrop);
         } else {
           const remainingSec = Math.round(remainingMs / 1000);
           updateTimeDisplay(remainingSec);
-          updateTimerView(remainingSec, totalSec, skin, "running", "");
+          updateTimerView(remainingSec, totalSec, skin, "running", "", null);
         }
       } else if (state === "paused") {
         const rem = data.secondsRemaining || totalSec;
         updateTimeDisplay(rem);
-        updateTimerView(rem, totalSec, skin, "paused", "");
+        updateTimerView(rem, totalSec, skin, "paused", "", null);
       } else if (state === "withered") {
         updateTimeDisplay(0);
-        updateTimerView(0, totalSec, skin, "withered", reason);
+        updateTimerView(0, totalSec, skin, "withered", reason, null);
       } else if (state === "completed") {
         updateTimeDisplay(0);
-        updateTimerView(0, totalSec, skin, "completed", "");
+        updateTimerView(0, totalSec, skin, "completed", "", lastDrop);
       } else {
         // Idle
         updateTimeDisplay(totalSec);
-        updateTimerView(totalSec, totalSec, skin, "idle", "");
+        updateTimerView(totalSec, totalSec, skin, "idle", "", null);
+        const mins = Math.round(totalSec / 60);
+        updateCustomDuration(mins);
       }
     });
   }
 
-  // Start continuous 1s ticker for smooth countdown
+  // Start continuous 1s ticker for countdown
   if (timerTicker) clearInterval(timerTicker);
   timerTicker = setInterval(() => {
-    ext.storage.local.get(["timerState", "sessionEndTime", "sessionDuration", "selectedSkin"], (data) => {
+    ext.storage.local.get(["timerState", "sessionEndTime", "sessionDuration", "selectedSkin", "lastDrop"], (data) => {
       if (data.timerState === "running" && data.sessionEndTime) {
         const remainingMs = data.sessionEndTime - Date.now();
         const totalSec = data.sessionDuration || 1500;
@@ -509,11 +602,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (remainingMs <= 0) {
           updateTimeDisplay(0);
-          updateTimerView(0, totalSec, skin, "completed", "");
+          updateTimerView(0, totalSec, skin, "completed", "", data.lastDrop);
         } else {
           const remainingSec = Math.round(remainingMs / 1000);
           updateTimeDisplay(remainingSec);
-          updateTimerView(remainingSec, totalSec, skin, "running", "");
+          updateTimerView(remainingSec, totalSec, skin, "running", "", null);
         }
       }
     });
@@ -557,10 +650,10 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // -------------------------------------------------------------
-  // TAB 2: VIRTUAL GARDEN & STATS
+  // TAB 2: VIRTUAL GARDEN & RARITIES ALMANAC
   // -------------------------------------------------------------
   function renderGardenTab() {
-    ext.storage.local.get(["forest", "stats"], (data) => {
+    ext.storage.local.get(["forest", "stats", "unlockedSkins", "selectedSkin"], (data) => {
       const forest = Array.isArray(data.forest) ? data.forest : [];
       const stats = data.stats || {
         totalSessions: 0,
@@ -569,6 +662,8 @@ document.addEventListener("DOMContentLoaded", () => {
         totalFocusMinutes: 0,
         dailyStats: [0, 0, 0, 0, 0, 0, 0]
       };
+      const unlocked = Array.isArray(data.unlockedSkins) ? data.unlockedSkins : ["oak"];
+      const currentSelected = data.selectedSkin || "oak";
 
       const grown = stats.completedSessions || 0;
       const withered = stats.witheredSessions || 0;
@@ -579,6 +674,41 @@ document.addEventListener("DOMContentLoaded", () => {
       statWithered.textContent = withered;
       statMinutes.textContent = `${stats.totalFocusMinutes || 0}м`;
       statRate.textContent = `${rate}%`;
+
+      // Render Rarities Almanac
+      const allSkins = Object.values(TREE_SKINS);
+      almanacCounter.textContent = `${unlocked.length} / ${allSkins.length} открыто`;
+      almanacGrid.innerHTML = "";
+
+      allSkins.forEach(skin => {
+        const isOwned = unlocked.includes(skin.id);
+        const rarityObj = RARITIES[skin.rarity] || RARITIES.common;
+
+        const item = document.createElement("div");
+        item.className = `almanac-item ${isOwned ? "" : "locked"}`;
+        item.style.borderColor = isOwned ? rarityObj.border : "var(--border-color)";
+
+        item.innerHTML = `
+          <div class="almanac-icon">${isOwned ? skin.emoji : "🔒"}</div>
+          <div class="almanac-name">${skin.name[currentLang] || skin.name.ru}</div>
+          <span class="almanac-rarity" style="background:${rarityObj.bg};color:${rarityObj.color};">${rarityObj.stars}</span>
+        `;
+
+        item.title = isOwned
+          ? `${skin.name[currentLang] || skin.name.ru} (${rarityObj.name[currentLang] || rarityObj.name.ru})\n${skin.desc[currentLang] || skin.desc.ru}\nНажмите, чтобы выбрать!`
+          : `Не открыто!\n${rarityObj.name[currentLang] || rarityObj.name.ru}\nСтавьте сессии 45+ мин для выпадения!`;
+
+        if (isOwned) {
+          item.addEventListener("click", () => {
+            ext.storage.local.set({ selectedSkin: skin.id }, () => {
+              soundManager.playCompleteChime();
+              syncTimerFromStorage();
+            });
+          });
+        }
+
+        almanacGrid.appendChild(item);
+      });
 
       // Render 7-day Bar Chart
       statsChart.innerHTML = "";
@@ -600,8 +730,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const t = i18n[currentLang] || i18n.ru;
         forestGrid.innerHTML = `<div class="empty-state">${t.forestEmpty}</div>`;
       } else {
-        // Show recent 30 trees (newest first)
-        const recent = [...forest].reverse().slice(0, 30);
+        const recent = [...forest].reverse().slice(0, 36);
         recent.forEach(tree => {
           const cell = document.createElement("div");
           const isWithered = tree.status === "withered";
@@ -614,7 +743,8 @@ document.addEventListener("DOMContentLoaded", () => {
           const dateStr = tree.date ? new Date(tree.date).toLocaleDateString() : "";
           const durStr = `${tree.duration || 0} мин`;
           const reasonStr = isWithered ? `\nПричина: ${tree.reason}` : "";
-          cell.title = `${isWithered ? "Погибло" : "Выращено"}: ${skinObj.name[currentLang] || skinObj.name.ru}\nДлительность: ${durStr}\nДата: ${dateStr}${reasonStr}`;
+          const rarityName = tree.rarity ? ` [${RARITIES[tree.rarity]?.name.ru || ""}]` : "";
+          cell.title = `${isWithered ? "Погибло" : "Выращено"}: ${skinObj.name[currentLang] || skinObj.name.ru}${rarityName}\nДлительность: ${durStr}\nДата: ${dateStr}${reasonStr}`;
 
           forestGrid.appendChild(cell);
         });
@@ -637,6 +767,7 @@ document.addEventListener("DOMContentLoaded", () => {
       Object.values(TREE_SKINS).forEach(skin => {
         const isOwned = unlocked.includes(skin.id);
         const isEquipped = currentSelected === skin.id;
+        const rarityObj = RARITIES[skin.rarity] || RARITIES.common;
 
         const card = document.createElement("div");
         card.className = `skin-card ${isEquipped ? "selected" : ""}`;
@@ -647,7 +778,10 @@ document.addEventListener("DOMContentLoaded", () => {
         card.innerHTML = `
           <div class="skin-preview-box">${previewSvg}</div>
           <div class="skin-details">
-            <div class="skin-name">${skin.name[currentLang] || skin.name.ru} ${skin.emoji}</div>
+            <div class="skin-name-row">
+              <span class="skin-name">${skin.name[currentLang] || skin.name.ru} ${skin.emoji}</span>
+              <span class="skin-rarity-pill" style="background:${rarityObj.bg};color:${rarityObj.color};">${rarityObj.stars}</span>
+            </div>
             <div class="skin-desc">${skin.desc[currentLang] || skin.desc.ru}</div>
           </div>
           <div class="skin-action">
@@ -714,12 +848,10 @@ document.addEventListener("DOMContentLoaded", () => {
       const coins = data.coins || 0;
       const t = i18n[currentLang] || i18n.ru;
 
-      // Render Quests
       questList.innerHTML = "";
       quests.forEach(q => {
         const item = document.createElement("div");
         item.className = "quest-item";
-
         const progressPct = Math.min(100, Math.round((q.current / q.target) * 100));
 
         item.innerHTML = `
@@ -741,7 +873,6 @@ document.addEventListener("DOMContentLoaded", () => {
         questList.appendChild(item);
       });
 
-      // Claim Button Listeners
       questList.querySelectorAll(".quest-claim-btn").forEach(btn => {
         btn.addEventListener("click", () => {
           const qid = parseInt(btn.dataset.qid, 10);
@@ -759,7 +890,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
       });
 
-      // Render Todos
+      // Todos
       todoList.innerHTML = "";
       todos.forEach((todo, idx) => {
         const li = document.createElement("li");
@@ -772,12 +903,10 @@ document.addEventListener("DOMContentLoaded", () => {
           <button class="todo-del-btn" title="Удалить">✖</button>
         `;
 
-        // Checkbox Toggle
         li.querySelector(".todo-checkbox").addEventListener("change", (e) => {
           const checked = e.target.checked;
           todo.done = checked;
 
-          // Reward 5 coins on first completion
           let updatedCoins = coins;
           if (checked && !todo.rewarded) {
             todo.rewarded = true;
@@ -791,7 +920,6 @@ document.addEventListener("DOMContentLoaded", () => {
           });
         });
 
-        // Delete Todo
         li.querySelector(".todo-del-btn").addEventListener("click", () => {
           todos.splice(idx, 1);
           ext.storage.local.set({ todos: todos }, () => renderTasksTab());
@@ -854,13 +982,11 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Block Mode Change
   blockModeSelect.addEventListener("change", (e) => {
     const mode = e.target.value;
     ext.storage.local.set({ blockMode: mode }, () => renderBlockerTab());
   });
 
-  // Add Site to List
   function addSiteToList(rawDomain) {
     if (!rawDomain) return;
     const clean = rawDomain.toLowerCase()
@@ -891,7 +1017,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if (e.key === "Enter") addSiteToList(siteInput.value);
   });
 
-  // Quick-Add Chips
   chipBtns.forEach(btn => {
     btn.addEventListener("click", () => {
       addSiteToList(btn.dataset.site);
@@ -900,7 +1025,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Storage Change Listener for live sync
   ext.storage.onChanged.addListener((changes) => {
-    if (changes.timerState || changes.sessionEndTime || changes.treeState || changes.coins) {
+    if (changes.timerState || changes.sessionEndTime || changes.treeState || changes.coins || changes.lastDrop) {
       syncTimerFromStorage();
       if (activeTab === "tabGarden") renderGardenTab();
       if (activeTab === "tabShop") renderShopTab();

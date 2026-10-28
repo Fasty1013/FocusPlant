@@ -35,7 +35,7 @@
     <!-- Navigation Tabs -->
     <nav class="nav-tabs">
       <button class="tab-btn active" data-tab="tabTimer" id="tTimerBtn">⏱ Таймер</button>
-      <button class="tab-btn" data-tab="tabGarden" id="tGardenBtn">🪴 Сад</button>
+      <button class="tab-btn" data-tab="tabGarden" id="tGardenBtn">🪴 Сад & Редкости</button>
       <button class="tab-btn" data-tab="tabShop" id="tShopBtn">🛒 Скины</button>
       <button class="tab-btn" data-tab="tabTasks" id="tTasksBtn">✅ Задачи</button>
       <button class="tab-btn" data-tab="tabBlocker" id="tBlockerBtn">🛡 Черный список</button>
@@ -43,6 +43,17 @@
 
     <!-- TAB 1: Focus Timer -->
     <section id="tabTimer" class="tab-content active">
+      
+      <!-- New Tree Drop Celebration Card -->
+      <div class="drop-reveal-card" id="dropRevealCard" style="display: none;">
+        <div class="drop-sparkles">✨ 🎉 ✨</div>
+        <div class="drop-rarity-badge" id="dropRarityBadge">ЛЕГЕНДАРНОЕ</div>
+        <h3 class="drop-title" id="dropTitle">Вы вырастили новое дерево!</h3>
+        <div class="drop-tree-name" id="dropTreeName">Древо Жизни</div>
+        <div class="drop-reward-text" id="dropRewardText">+60 🪙 • +80 XP</div>
+        <button class="btn btn-sm btn-primary" id="dropClaimBtn">Полюбоваться в саду</button>
+      </div>
+
       <div class="timer-centerpiece">
         <!-- SVG Circular Ring & Tree -->
         <div class="tree-display-container">
@@ -65,12 +76,48 @@
         </div>
       </div>
 
-      <!-- Preset Minutes Selection (Idle Mode) -->
-      <div class="time-presets" id="timePresets">
-        <button class="preset-btn" data-minutes="15">15м</button>
-        <button class="preset-btn active" data-minutes="25">25м</button>
-        <button class="preset-btn" data-minutes="45">45м</button>
-        <button class="preset-btn" data-minutes="60">60м</button>
+      <!-- Custom Time Controls & Presets (Visible when idle) -->
+      <div class="time-control-card" id="timeConfigSection">
+        <div class="time-control-header">
+          <span class="control-label" id="lblSelectTime">⏱ Время концентрации:</span>
+          <div class="custom-time-input-wrap">
+            <input type="number" id="customMinutesInput" min="5" max="180" step="5" value="25">
+            <span>мин</span>
+          </div>
+        </div>
+
+        <!-- Slider -->
+        <div class="slider-wrap">
+          <input type="range" id="timeSlider" min="5" max="180" step="5" value="25" class="custom-slider">
+          <div class="slider-marks">
+            <span>15м</span><span>30м</span><span>60м</span><span>90м</span><span>120м</span><span>180м</span>
+          </div>
+        </div>
+
+        <!-- Quick Preset Pills -->
+        <div class="time-presets" id="timePresets">
+          <button class="preset-btn" data-minutes="15">15м</button>
+          <button class="preset-btn active" data-minutes="25">25м</button>
+          <button class="preset-btn" data-minutes="45">45м</button>
+          <button class="preset-btn" data-minutes="60">60м</button>
+          <button class="preset-btn" data-minutes="90">90м 🔥</button>
+        </div>
+
+        <!-- Live Drop Chances Bar -->
+        <div class="chances-preview-box">
+          <div class="chances-header">
+            <span>🎲 Шансы выпадения редкостей:</span>
+            <small class="chances-hint">Больше время = выше шанс на легендарные!</small>
+          </div>
+          <div class="chances-bar-row">
+            <span class="chance-tag common" id="chanceCommon" title="Обычное">⚪ 55%</span>
+            <span class="chance-tag uncommon" id="chanceUncommon" title="Необычное">🟢 30%</span>
+            <span class="chance-tag rare" id="chanceRare" title="Редкое">🔵 12%</span>
+            <span class="chance-tag epic" id="chanceEpic" title="Эпическое">🟣 3%</span>
+            <span class="chance-tag legendary" id="chanceLegendary" title="Легендарное">🟡 0%</span>
+            <span class="chance-tag mythic" id="chanceMythic" title="Мифическое">✦ 0%</span>
+          </div>
+        </div>
       </div>
 
       <!-- Controls -->
@@ -78,7 +125,7 @@
         <button id="startBtn" class="btn btn-primary">▶ Начать фокус</button>
         <button id="pauseBtn" class="btn btn-warning" style="display: none;">⏸ Пауза</button>
         <button id="resumeBtn" class="btn btn-primary" style="display: none;">▶ Продолжить</button>
-        <button id="resetBtn" class="btn btn-danger" style="display: none;">🔄 Сброс</button>
+        <button id="resetBtn" class="btn btn-danger" style="display: none;">🔄 Сдаться</button>
         <button id="plantNewBtn" class="btn btn-primary" style="display: none;">🌱 Посадить новое дерево</button>
       </div>
 
@@ -95,8 +142,9 @@
       </div>
     </section>
 
-    <!-- TAB 2: Virtual Garden & Stats -->
+    <!-- TAB 2: Virtual Garden & Rarities Almanac -->
     <section id="tabGarden" class="tab-content">
+      <!-- Stats Summary -->
       <div class="stats-overview-grid">
         <div class="stat-card">
           <div class="stat-icon">🌳</div>
@@ -117,6 +165,18 @@
           <div class="stat-icon">🎯</div>
           <div class="stat-num" id="statRate">100%</div>
           <div class="stat-label" id="lblStatRate">Успех</div>
+        </div>
+      </div>
+
+      <!-- Tree Rarities Almanac (Коллекция деревьев) -->
+      <div class="garden-section-card">
+        <div class="almanac-header">
+          <h4 id="lblAlmanacHeader">📖 Алманах редкостей деревьев</h4>
+          <span class="almanac-counter" id="almanacCounter">0 / 12 открыто</span>
+        </div>
+        <p class="almanac-subdesc">Ставьте больше времени на таймере, чтобы разблокировать редкие, эпические и мифические виды!</p>
+        <div class="almanac-grid" id="almanacGrid">
+          <!-- Injected dynamically by popup.js -->
         </div>
       </div>
 
@@ -142,7 +202,7 @@
     <section id="tabShop" class="tab-content">
       <div class="shop-header-banner">
         <h3 id="lblShopTitle">Магазин деревьев</h3>
-        <p id="lblShopDesc">Открывайте новые виды деревьев за заработанные монеты!</p>
+        <p id="lblShopDesc">Покупайте или открывайте новые деревья длительными сессиями фокуса!</p>
       </div>
       <div class="skins-grid" id="skinsGrid">
         <!-- Injected dynamically by popup.js -->
@@ -151,13 +211,11 @@
 
     <!-- TAB 4: Tasks & Daily Quests -->
     <section id="tabTasks" class="tab-content">
-      <!-- Quests -->
       <div class="tasks-card">
         <h4 id="lblQuestsHeader">🎯 Ежедневные квесты</h4>
         <div id="questList" class="quest-list"></div>
       </div>
 
-      <!-- Todo List -->
       <div class="tasks-card">
         <h4 id="lblTodoHeader">📝 Список задач</h4>
         <div class="input-row">
