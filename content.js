@@ -118,24 +118,59 @@
   let hasBlockedCurrentPage = false;
   let activeElementContainer = null;
 
-  // Withered SVG Tree HTML String
-  function getWitheredSvg(size = 140) {
+  // Withered SVG Tree HTML String (High Detail Botanical with Glowing Embers)
+  function getWitheredSvg(size = 180) {
     return `
-      <svg width="${size}" height="${size}" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <ellipse cx="100" cy="180" rx="70" ry="12" fill="#313244"/>
-        <path d="M70 180L85 178M115 182L130 179M95 181L105 183" stroke="#45475a" stroke-width="2"/>
-        <path d="M96 180 C95 150 85 130 92 105 C96 90 98 75 100 65" stroke="#6c7086" stroke-width="14" stroke-linecap="round"/>
-        <path d="M104 180 C103 150 93 130 100 105 C104 90 106 75 108 65" stroke="#585b70" stroke-width="6" stroke-linecap="round"/>
-        <path d="M92 105 C80 95 65 96 55 85" stroke="#6c7086" stroke-width="6" stroke-linecap="round"/>
-        <path d="M65 96 C62 82 50 78 45 70" stroke="#6c7086" stroke-width="4" stroke-linecap="round"/>
-        <path d="M100 95 C115 88 135 92 145 80" stroke="#6c7086" stroke-width="6" stroke-linecap="round"/>
-        <path d="M125 90 C135 80 148 76 155 65" stroke="#6c7086" stroke-width="4" stroke-linecap="round"/>
-        <path d="M98 75 C90 60 92 48 88 38" stroke="#6c7086" stroke-width="4" stroke-linecap="round"/>
-        <path d="M100 65 C108 52 115 45 120 35" stroke="#6c7086" stroke-width="4" stroke-linecap="round"/>
-        <circle cx="60" cy="176" r="3" fill="#a6adc8"/>
-        <circle cx="138" cy="178" r="4" fill="#a6adc8"/>
-        <circle cx="118" cy="184" r="2.5" fill="#f38ba8"/>
-        <circle cx="80" cy="182" r="3.5" fill="#f38ba8"/>
+      <svg width="${size}" height="${size}" viewBox="0 0 240 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="fpWitherGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#f38ba8" stop-opacity="0.3"/>
+            <stop offset="70%" stop-color="#f38ba8" stop-opacity="0.08"/>
+            <stop offset="100%" stop-color="#f38ba8" stop-opacity="0"/>
+          </radialGradient>
+          <linearGradient id="fpTrunkGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#9399b2"/>
+            <stop offset="40%" stop-color="#6c7086"/>
+            <stop offset="80%" stop-color="#45475a"/>
+            <stop offset="100%" stop-color="#313244"/>
+          </linearGradient>
+          <linearGradient id="fpMoundGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#45475a"/>
+            <stop offset="100%" stop-color="#181825"/>
+          </linearGradient>
+        </defs>
+        <!-- Atmospheric Aura -->
+        <circle cx="120" cy="120" r="100" fill="url(#fpWitherGlow)"/>
+
+        <!-- Ground Mound with Stone Details -->
+        <ellipse cx="120" cy="206" rx="85" ry="15" fill="url(#fpMoundGrad)"/>
+        <ellipse cx="120" cy="206" rx="70" ry="9" fill="#11111b" opacity="0.8"/>
+        <path d="M72 206L94 203M146 208L168 205M108 207L126 209" stroke="#585b70" stroke-width="2.5" stroke-linecap="round"/>
+
+        <!-- Trunk & Bare Branches -->
+        <path d="M116 206 C114 172 102 146 110 118 C115 98 117 78 120 68" stroke="url(#fpTrunkGrad)" stroke-width="16" stroke-linecap="round"/>
+        <path d="M124 206 C122 172 110 146 118 118 C123 98 125 78 128 68" stroke="#45475a" stroke-width="7" stroke-linecap="round"/>
+
+        <!-- Left Main Branch -->
+        <path d="M110 118 C95 106 78 108 65 94 C58 86 54 74 48 64" stroke="url(#fpTrunkGrad)" stroke-width="8" stroke-linecap="round"/>
+        <path d="M78 108 C74 92 60 88 52 78" stroke="url(#fpTrunkGrad)" stroke-width="5" stroke-linecap="round"/>
+
+        <!-- Right Main Branch -->
+        <path d="M120 106 C138 98 162 103 174 88 C182 78 186 66 192 54" stroke="url(#fpTrunkGrad)" stroke-width="8" stroke-linecap="round"/>
+        <path d="M150 100 C162 88 178 83 186 70" stroke="url(#fpTrunkGrad)" stroke-width="5" stroke-linecap="round"/>
+
+        <!-- Snapped Top Twigs -->
+        <path d="M118 84 C108 67 110 51 105 39" stroke="url(#fpTrunkGrad)" stroke-width="5" stroke-linecap="round"/>
+        <path d="M120 68 C130 52 138 43 144 30" stroke="url(#fpTrunkGrad)" stroke-width="5" stroke-linecap="round"/>
+
+        <!-- Fallen Leaves & Glowing Embers on Ground -->
+        <circle cx="65" cy="202" r="3.5" fill="#a6adc8"/>
+        <circle cx="172" cy="204" r="4.5" fill="#a6adc8"/>
+        <path d="M88 203 C90 199 96 200 94 204 C92 206 86 205 88 203Z" fill="#f38ba8" opacity="0.9"/>
+        <path d="M142 207 C144 203 150 204 148 208 C146 210 140 209 142 207Z" fill="#f38ba8" opacity="0.9"/>
+        <path d="M112 210 C114 207 118 208 117 211 C115 213 110 212 112 210Z" fill="#fab387" opacity="0.9"/>
+        <circle cx="152" cy="176" r="2.2" fill="#f38ba8" opacity="0.75"/>
+        <circle cx="82" cy="156" r="1.8" fill="#fab387" opacity="0.85"/>
       </svg>
     `;
   }
@@ -317,7 +352,7 @@
 
   let strictTimerInterval = null;
 
-  // 2. RENDER FULLSCREEN OVERLAY
+  // 2. RENDER FULLSCREEN OVERLAY (Crisp, High-Quality Aesthetic Presentation)
   function renderFullscreenOverlay(blockedDomain, lang = "ru", isStrict = false, sessionEndTime = 0) {
     if (activeElementContainer) activeElementContainer.remove();
     if (strictTimerInterval) {
@@ -327,6 +362,7 @@
 
     try {
       if (window.stop) window.stop();
+      document.querySelectorAll('video, audio').forEach(el => { try { el.pause(); } catch(e){} });
     } catch (e) {}
 
     const t = I18N_OVERLAY[lang] || I18N_OVERLAY.ru;
@@ -339,148 +375,230 @@
       left: 0 !important;
       width: 100vw !important;
       height: 100vh !important;
-      background: radial-gradient(circle at center, #1e1e2e 0%, #11111b 100%) !important;
+      background: radial-gradient(ellipse at 50% 25%, #252438 0%, #161622 55%, #0d0d15 100%) !important;
       color: #cdd6f4 !important;
       display: flex !important;
       flex-direction: column !important;
       align-items: center !important;
       justify-content: center !important;
       z-index: 2147483647 !important;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+      -webkit-font-smoothing: antialiased !important;
+      -moz-osx-font-smoothing: grayscale !important;
+      text-rendering: optimizeLegibility !important;
       text-align: center !important;
       padding: 24px !important;
       box-sizing: border-box !important;
       overflow-y: auto !important;
     `;
 
+    document.documentElement.style.background = "#0d0d15";
     document.documentElement.style.overflow = "hidden";
     if (document.body) document.body.style.overflow = "hidden";
+
+    const commonStyles = `
+      <style>
+        @keyframes fpFadeIn {
+          from { opacity: 0; transform: scale(0.96) translateY(12px); }
+          to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        @keyframes fpFloatTree {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-8px); }
+        }
+        @keyframes fpGlowPulse {
+          0%, 100% { filter: drop-shadow(0 8px 24px rgba(243, 139, 168, 0.35)); }
+          50% { filter: drop-shadow(0 12px 36px rgba(243, 139, 168, 0.65)); }
+        }
+        .fp-btn-primary {
+          transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        }
+        .fp-btn-primary:hover {
+          transform: translateY(-2px) scale(1.01) !important;
+          box-shadow: 0 8px 28px rgba(16, 185, 129, 0.45) !important;
+        }
+        .fp-btn-danger {
+          transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        }
+        .fp-btn-danger:hover {
+          transform: translateY(-2px) scale(1.01) !important;
+          box-shadow: 0 8px 28px rgba(243, 139, 168, 0.45) !important;
+        }
+        .fp-btn-secondary {
+          transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        }
+        .fp-btn-secondary:hover {
+          background: rgba(69, 71, 90, 0.95) !important;
+          transform: translateY(-2px) !important;
+          color: #ffffff !important;
+        }
+      </style>
+    `;
 
     if (isStrict) {
       // -------------------------------------------------------------
       // STRICT MODE: NO "OK" BUTTON, IMPENETRABLE LOCK WITH COUNTDOWN
       // -------------------------------------------------------------
       overlay.innerHTML = `
+        ${commonStyles}
         <div style="
-          background: rgba(30, 30, 46, 0.95);
-          backdrop-filter: blur(20px);
-          -webkit-backdrop-filter: blur(20px);
-          border: 2px solid #f38ba8;
-          border-radius: 24px;
-          padding: 36px 30px;
-          max-width: 520px;
-          width: 100%;
-          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 35px rgba(243, 139, 168, 0.35);
+          background: rgba(24, 24, 37, 0.82);
+          backdrop-filter: blur(32px) saturate(180%);
+          -webkit-backdrop-filter: blur(32px) saturate(180%);
+          border: 1px solid rgba(243, 139, 168, 0.3);
+          border-radius: 32px;
+          padding: 44px 38px;
+          max-width: 640px;
+          width: 92%;
+          box-shadow: 0 30px 90px rgba(0, 0, 0, 0.8), 0 0 50px rgba(243, 139, 168, 0.15);
           display: flex;
           flex-direction: column;
           align-items: center;
-          animation: fpFadeIn 0.35s ease-out;
+          animation: fpFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+          box-sizing: border-box;
         ">
-          <div style="margin-bottom: 16px; filter: drop-shadow(0 8px 16px rgba(0,0,0,0.5));">
-            ${getWitheredSvg(130)}
+          <!-- Withered Tree with Soft Float Animation -->
+          <div style="margin-bottom: 18px; animation: fpFloatTree 5s ease-in-out infinite;">
+            ${getWitheredSvg(175)}
           </div>
 
+          <!-- Strict Badge Capsule -->
           <div style="
             display: inline-flex;
             align-items: center;
-            gap: 6px;
-            padding: 6px 14px;
-            background: rgba(243, 139, 168, 0.2);
-            border: 1.5px solid #f38ba8;
-            border-radius: 20px;
+            gap: 7px;
+            padding: 6px 18px;
+            background: rgba(243, 139, 168, 0.15);
+            border: 1.5px solid rgba(243, 139, 168, 0.45);
+            border-radius: 30px;
             color: #f38ba8;
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 0.8px;
+            letter-spacing: 1.2px;
             margin-bottom: 14px;
-            box-shadow: 0 0 15px rgba(243, 139, 168, 0.3);
+            box-shadow: 0 0 20px rgba(243, 139, 168, 0.25);
           ">
-            ${t.strictBadge}
+            <span>🔒</span> ${t.strictBadge}
           </div>
 
+          <!-- Title with Gradient Glow -->
           <h1 style="
-            font-size: 1.8rem;
-            margin: 0 0 10px 0;
-            color: #f38ba8;
-            font-weight: 800;
+            font-size: 2.2rem;
+            margin: 0 0 12px 0;
+            font-weight: 900;
+            letter-spacing: -0.5px;
             line-height: 1.2;
+            background: linear-gradient(135deg, #ffffff 10%, #f5c2e7 55%, #f38ba8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
           ">
             ${t.strictTitle}
           </h1>
 
+          <!-- Description & Blocked Site Pill -->
           <p style="
-            font-size: 0.95rem;
-            margin: 0 0 16px 0;
+            font-size: 1.02rem;
+            margin: 0 0 20px 0;
             color: #bac2de;
-            line-height: 1.45;
+            line-height: 1.55;
+            max-width: 520px;
           ">
-            ${t.openedSite} <span style="color: #f38ba8; font-weight: 700; background: rgba(243, 139, 168, 0.15); padding: 2px 6px; border-radius: 4px;">${blockedDomain || location.hostname}</span>.<br>
+            ${t.openedSite} <span style="
+              color: #f5c2e7;
+              font-weight: 700;
+              background: rgba(243, 139, 168, 0.18);
+              border: 1px solid rgba(243, 139, 168, 0.4);
+              padding: 3px 10px;
+              border-radius: 8px;
+              font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            ">${blockedDomain || location.hostname}</span>.<br>
             ${t.strictDesc}
           </p>
 
-          <!-- Live Countdown Box -->
+          <!-- Live Chronometer HUD Box -->
           <div id="fp-strict-timer-box" style="
-            background: #181825;
-            border: 1px solid rgba(243, 139, 168, 0.4);
-            border-radius: 14px;
-            padding: 12px 20px;
+            background: linear-gradient(180deg, rgba(20, 20, 32, 0.95) 0%, rgba(14, 14, 23, 0.95) 100%);
+            border: 1px solid rgba(243, 139, 168, 0.32);
+            border-radius: 20px;
+            padding: 18px 28px;
             width: 100%;
+            max-width: 460px;
             margin-bottom: 16px;
             box-sizing: border-box;
+            box-shadow: inset 0 2px 12px rgba(0,0,0,0.5), 0 8px 30px rgba(243, 139, 168, 0.12);
           ">
-            <span style="font-size: 0.8rem; color: #a6adc8; display: block; margin-bottom: 4px;">${t.strictTimerLabel}</span>
+            <span style="
+              font-size: 0.8rem;
+              color: #a6adc8;
+              display: block;
+              margin-bottom: 6px;
+              text-transform: uppercase;
+              letter-spacing: 1.2px;
+              font-weight: 700;
+            ">${t.strictTimerLabel}</span>
             <div id="fp-strict-timer" style="
-              font-size: 2.2rem;
-              font-weight: 800;
-              font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+              font-size: 3.3rem;
+              font-weight: 900;
+              font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'SF Pro Display', sans-serif !important;
+              font-variant-numeric: tabular-nums;
+              font-feature-settings: 'tnum' 1;
               color: #f38ba8;
-              letter-spacing: 2px;
+              letter-spacing: 5px;
+              text-shadow: 0 0 24px rgba(243, 139, 168, 0.65), 0 0 45px rgba(243, 139, 168, 0.3);
             ">--:--</div>
           </div>
 
-          <!-- Strict Notice (NO OK BUTTON) -->
+          <!-- Strict Notice Pill (No OK Button) -->
           <div style="
-            background: rgba(243, 139, 168, 0.1);
-            border: 1px dashed rgba(243, 139, 168, 0.5);
-            padding: 8px 12px;
-            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: rgba(243, 139, 168, 0.08);
+            border: 1px solid rgba(243, 139, 168, 0.25);
+            padding: 10px 16px;
+            border-radius: 12px;
             color: #f9e2af;
-            font-size: 0.78rem;
-            margin-bottom: 20px;
+            font-size: 0.82rem;
+            font-weight: 500;
+            margin-bottom: 24px;
             width: 100%;
+            max-width: 460px;
             box-sizing: border-box;
           ">
-            🚫 ${t.strictNoOkNotice}
+            <span>🚫</span> ${t.strictNoOkNotice}
           </div>
 
           <!-- Actions: Only Close Tab or Go Back -->
-          <div style="display: flex; gap: 10px; width: 100%;">
-            <button id="fp-fs-close-tab" style="
+          <div style="display: flex; gap: 12px; width: 100%; max-width: 460px;">
+            <button id="fp-fs-close-tab" class="fp-btn-danger" style="
               flex: 1;
-              padding: 12px 18px;
-              background: linear-gradient(135deg, #f38ba8 0%, #eba0ac 100%);
+              padding: 14px 20px;
+              background: linear-gradient(135deg, #f38ba8 0%, #e06c88 100%);
               color: #11111b;
               border: none;
-              border-radius: 12px;
+              border-radius: 14px;
               font-weight: 800;
-              font-size: 0.92rem;
+              font-size: 0.95rem;
               cursor: pointer;
-              box-shadow: 0 4px 14px rgba(243, 139, 168, 0.35);
+              box-shadow: 0 4px 18px rgba(243, 139, 168, 0.35);
+              font-family: inherit;
             ">
               ${t.closeTab}
             </button>
 
-            <button id="fp-fs-back" style="
+            <button id="fp-fs-back" class="fp-btn-secondary" style="
               flex: 1;
-              padding: 12px 18px;
-              background: #313244;
+              padding: 14px 20px;
+              background: rgba(49, 50, 68, 0.8);
               color: #cdd6f4;
-              border: 1px solid #45475a;
-              border-radius: 12px;
+              border: 1px solid rgba(69, 71, 90, 0.8);
+              border-radius: 14px;
               font-weight: 700;
-              font-size: 0.92rem;
+              font-size: 0.95rem;
               cursor: pointer;
+              font-family: inherit;
             ">
               ${t.goBack}
             </button>
@@ -492,123 +610,146 @@
       // REGULAR MODE: WITH "OK" BUTTON TO DISMISS NOTIFICATION
       // -------------------------------------------------------------
       overlay.innerHTML = `
+        ${commonStyles}
         <div style="
-          background: rgba(30, 30, 46, 0.92);
-          backdrop-filter: blur(18px);
-          -webkit-backdrop-filter: blur(18px);
-          border: 1px solid rgba(243, 139, 168, 0.35);
-          border-radius: 24px;
-          padding: 36px 30px;
-          max-width: 520px;
-          width: 100%;
-          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7), 0 0 30px rgba(243, 139, 168, 0.2);
+          background: rgba(24, 24, 37, 0.82);
+          backdrop-filter: blur(32px) saturate(180%);
+          -webkit-backdrop-filter: blur(32px) saturate(180%);
+          border: 1px solid rgba(243, 139, 168, 0.3);
+          border-radius: 32px;
+          padding: 44px 38px;
+          max-width: 640px;
+          width: 92%;
+          box-shadow: 0 30px 90px rgba(0, 0, 0, 0.8), 0 0 50px rgba(243, 139, 168, 0.15);
           display: flex;
           flex-direction: column;
           align-items: center;
-          animation: fpFadeIn 0.35s ease-out;
+          animation: fpFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+          box-sizing: border-box;
         ">
-          <div style="margin-bottom: 20px; filter: drop-shadow(0 8px 16px rgba(0,0,0,0.4));">
-            ${getWitheredSvg(135)}
+          <!-- Withered Tree with Soft Float Animation -->
+          <div style="margin-bottom: 20px; animation: fpFloatTree 5s ease-in-out infinite;">
+            ${getWitheredSvg(180)}
           </div>
 
+          <!-- Alert Badge -->
           <div style="
             display: inline-flex;
             align-items: center;
-            gap: 6px;
-            padding: 6px 14px;
+            gap: 7px;
+            padding: 6px 18px;
             background: rgba(243, 139, 168, 0.15);
-            border: 1px solid #f38ba8;
-            border-radius: 20px;
+            border: 1.5px solid rgba(243, 139, 168, 0.45);
+            border-radius: 30px;
             color: #f38ba8;
-            font-size: 0.85rem;
-            font-weight: 700;
+            font-size: 0.82rem;
+            font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
             margin-bottom: 14px;
           ">
             <span>⚠️</span> ${t.badge}
           </div>
 
+          <!-- Title with Gradient Glow -->
           <h1 style="
-            font-size: 1.85rem;
-            margin: 0 0 10px 0;
-            color: #f38ba8;
-            font-weight: 800;
+            font-size: 2.25rem;
+            margin: 0 0 12px 0;
+            font-weight: 900;
+            letter-spacing: -0.5px;
             line-height: 1.2;
+            background: linear-gradient(135deg, #ffffff 10%, #f5c2e7 55%, #f38ba8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
           ">
             ${t.title}
           </h1>
 
+          <!-- Info text -->
           <p style="
-            font-size: 0.95rem;
-            margin: 0 0 16px 0;
+            font-size: 1.02rem;
+            margin: 0 0 18px 0;
             color: #bac2de;
-            line-height: 1.45;
+            line-height: 1.55;
+            max-width: 520px;
           ">
-            ${t.openedSite} <span style="color: #f38ba8; font-weight: 700; background: rgba(243, 139, 168, 0.12); padding: 2px 6px; border-radius: 4px;">${blockedDomain || location.hostname}</span> ${t.duringFocus}
+            ${t.openedSite} <span style="
+              color: #f5c2e7;
+              font-weight: 700;
+              background: rgba(243, 139, 168, 0.18);
+              border: 1px solid rgba(243, 139, 168, 0.4);
+              padding: 3px 10px;
+              border-radius: 8px;
+              font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            ">${blockedDomain || location.hostname}</span> ${t.duringFocus}
           </p>
 
+          <!-- Philosophical quote -->
           <div style="
             font-style: italic;
-            font-size: 0.88rem;
+            font-size: 0.9rem;
             color: #a6adc8;
             background: #181825;
             border-left: 3px solid #f38ba8;
-            padding: 10px 14px;
-            border-radius: 0 8px 8px 0;
-            margin-bottom: 22px;
+            padding: 12px 18px;
+            border-radius: 0 12px 12px 0;
+            margin-bottom: 26px;
             text-align: left;
             width: 100%;
+            max-width: 480px;
             box-sizing: border-box;
+            line-height: 1.5;
           ">
             ${t.quote}
           </div>
 
-          <!-- PRIMARY ACTION: "OK" BUTTON TO REMOVE NOTIFICATION -->
-          <div style="width: 100%; margin-bottom: 12px;">
-            <button id="fp-fs-dismiss-ok" style="
+          <!-- PRIMARY ACTION: PROMINENT "OK" BUTTON TO REMOVE NOTIFICATION -->
+          <div style="width: 100%; max-width: 480px; margin-bottom: 12px;">
+            <button id="fp-fs-dismiss-ok" class="fp-btn-primary" style="
               width: 100%;
-              padding: 13px 20px;
-              background: linear-gradient(135deg, #a6e3a1 0%, #94e2d5 100%);
+              padding: 15px 24px;
+              background: linear-gradient(135deg, #a6e3a1 0%, #10b981 100%);
               color: #11111b;
               border: none;
-              border-radius: 12px;
+              border-radius: 16px;
               font-weight: 800;
-              font-size: 1rem;
+              font-size: 1.05rem;
               cursor: pointer;
-              box-shadow: 0 4px 14px rgba(166, 227, 161, 0.35);
-              transition: transform 0.15s ease;
+              box-shadow: 0 6px 24px rgba(16, 185, 129, 0.35);
+              font-family: inherit;
             ">
               ${t.okBtn}
             </button>
           </div>
 
           <!-- SECONDARY ACTIONS: Close Tab or Go Back -->
-          <div style="display: flex; gap: 10px; width: 100%;">
-            <button id="fp-fs-close-tab" style="
+          <div style="display: flex; gap: 12px; width: 100%; max-width: 480px;">
+            <button id="fp-fs-close-tab" class="fp-btn-danger" style="
               flex: 1;
-              padding: 10px 14px;
-              background: #313244;
+              padding: 12px 18px;
+              background: rgba(49, 50, 68, 0.8);
               color: #f38ba8;
               border: 1px solid rgba(243, 139, 168, 0.4);
-              border-radius: 10px;
+              border-radius: 14px;
               font-weight: 700;
-              font-size: 0.85rem;
+              font-size: 0.9rem;
               cursor: pointer;
+              font-family: inherit;
             ">
               ${t.closeTab}
             </button>
 
-            <button id="fp-fs-back" style="
+            <button id="fp-fs-back" class="fp-btn-secondary" style="
               flex: 1;
-              padding: 10px 14px;
-              background: #313244;
+              padding: 12px 18px;
+              background: rgba(49, 50, 68, 0.8);
               color: #cdd6f4;
-              border: 1px solid #45475a;
-              border-radius: 10px;
+              border: 1px solid rgba(69, 71, 90, 0.8);
+              border-radius: 14px;
               font-weight: 600;
-              font-size: 0.85rem;
+              font-size: 0.9rem;
               cursor: pointer;
+              font-family: inherit;
             ">
               ${t.goBack}
             </button>
@@ -668,15 +809,17 @@
           const box = document.getElementById("fp-strict-timer-box");
           if (box) {
             box.innerHTML = `
-              <div style="color: #a6e3a1; font-weight: 700; font-size: 0.95rem; margin-bottom: 8px;">${t.strictUnlocked}</div>
-              <button id="fp-strict-unblock-btn" style="
-                background: linear-gradient(135deg, #a6e3a1 0%, #94e2d5 100%);
+              <div style="color: #a6e3a1; font-weight: 700; font-size: 1rem; margin-bottom: 10px;">${t.strictUnlocked}</div>
+              <button id="fp-strict-unblock-btn" class="fp-btn-primary" style="
+                background: linear-gradient(135deg, #a6e3a1 0%, #10b981 100%);
                 color: #11111b;
                 border: none;
-                border-radius: 10px;
-                padding: 10px 16px;
-                font-weight: 700;
+                border-radius: 14px;
+                padding: 12px 22px;
+                font-weight: 800;
+                font-size: 0.95rem;
                 cursor: pointer;
+                box-shadow: 0 4px 16px rgba(16, 185, 129, 0.35);
               ">${t.unblockBtn}</button>
             `;
             const unblockBtn = document.getElementById("fp-strict-unblock-btn");
@@ -747,6 +890,19 @@
       }
 
       if (shouldBlock) {
+        try {
+          if (window.stop) window.stop();
+          document.querySelectorAll('video, audio').forEach(el => { try { el.pause(); } catch(e){} });
+        } catch(e) {}
+
+        if (document.documentElement) {
+          document.documentElement.style.background = "#0d0d15";
+          document.documentElement.style.overflow = "hidden";
+        }
+        if (document.body) {
+          document.body.style.overflow = "hidden";
+        }
+
         const domain = window.location.hostname;
         ext.runtime.sendMessage({ action: "TREE_WITHERED", domain: domain, url: currentUrl });
         showWarning(domain, alertStyle, lang, strictMode, sessionEndTime);
