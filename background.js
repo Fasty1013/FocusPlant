@@ -243,8 +243,9 @@ ext.runtime.onInstalled.addListener(() => {
         dailyStats: [0, 0, 0, 0, 0, 0, 0]
       },
       lang: "ru",
-      alertStyle: "banner",
-      ambientSound: "none"
+      alertStyle: "fullscreen",
+      ambientSound: "none",
+      strictMode: false
     };
 
     const toSet = {};
@@ -282,14 +283,15 @@ ext.alarms.onAlarm.addListener((alarm) => {
 
 // Update badge display while timer is running
 function updateRunningBadge() {
-  ext.storage.local.get(["timerState", "sessionEndTime"], (data) => {
+  ext.storage.local.get(["timerState", "sessionEndTime", "strictMode"], (data) => {
     if (data.timerState === "running" && data.sessionEndTime) {
       const remainingMs = data.sessionEndTime - Date.now();
       if (remainingMs <= 0) {
         handleSessionComplete();
       } else {
         const mins = Math.ceil(remainingMs / 60000);
-        setBadge(`${mins}m`, "#10b981");
+        const color = data.strictMode ? "#f38ba8" : "#10b981";
+        setBadge(data.strictMode ? `🔒${mins}m` : `${mins}m`, color);
       }
     }
   });
@@ -299,13 +301,16 @@ function updateRunningBadge() {
 function handleTreeWithered(domain) {
   ext.storage.local.get([
     "timerState", "sessionStartTime", "sessionDuration", "selectedSkin",
-    "forest", "stats"
+    "forest", "stats", "strictMode", "treeState"
   ], (data) => {
     if (data.timerState !== "running") return;
+    const isStrict = data.strictMode === true;
 
-    // Clear session alarm
-    ext.alarms.clear("FOCUS_SESSION_END");
-    ext.alarms.clear("BADGE_TICK");
+    // In Strict mode, session continues running! In Normal mode, alarms are cleared.
+    if (!isStrict) {
+      ext.alarms.clear("FOCUS_SESSION_END");
+      ext.alarms.clear("BADGE_TICK");
+    }
 
     const elapsedSeconds = data.sessionStartTime ? Math.floor((Date.now() - data.sessionStartTime) / 1000) : 0;
     const skin = data.selectedSkin || "oak";
@@ -331,20 +336,27 @@ function handleTreeWithered(domain) {
     stats.totalSessions = (stats.totalSessions || 0) + 1;
     stats.witheredSessions = (stats.witheredSessions || 0) + 1;
 
+    const targetTimerState = isStrict ? "running" : "withered";
+    const targetIsRunning = isStrict ? true : false;
+
     ext.storage.local.set({
-      timerState: "withered",
-      isTimerRunning: false,
+      timerState: targetTimerState,
+      isTimerRunning: targetIsRunning,
       treeState: "withered",
       witherReason: domain || "Запрещенный сайт",
       forest: forest,
       stats: stats
     }, () => {
-      setBadge("🥀", "#ef4444");
-      setAmbientAudio("none");
+      setBadge(isStrict ? "🔒" : "🥀", "#ef4444");
+      if (!isStrict) {
+        setAmbientAudio("none");
+      }
       playBackgroundWilt();
       showNotification(
-        "🥀 Дерево завяло!",
-        `Вы зашли на сайт "${domain}" во время фокуса. Ваше дерево погибло. Не сдавайтесь, попробуйте снова!`
+        isStrict ? "🔒 Доступ заблокирован (Строгий режим)!" : "🥀 Дерево завяло!",
+        isStrict 
+          ? `Вы зашли на сайт "${domain}". В строгом режиме фокус продолжается до конца таймера, доступ заблокирован!`
+          : `Вы зашли на сайт "${domain}" во время фокуса. Ваше дерево погибло. Не сдавайтесь, попробуйте снова!`
       );
     });
   });
@@ -501,6 +513,7 @@ ext.runtime.onMessage.addListener((msg, sender, sendResponse) => {
       const duration = Number(msg.duration) || 1500;
       const now = Date.now();
       const endTime = now + (duration * 1000);
+      const isStrict = msg.strictMode !== undefined ? !!msg.strictMode : false;
 
       ext.alarms.clear("FOCUS_SESSION_END");
       ext.alarms.clear("BADGE_TICK");
@@ -517,20 +530,27 @@ ext.runtime.onMessage.addListener((msg, sender, sendResponse) => {
         secondsRemaining: duration,
         treeState: "healthy",
         witherReason: null,
-        lastDrop: null
+        lastDrop: null,
+        strictMode: isStrict
       }, () => {
         const mins = Math.ceil(duration / 60);
-        setBadge(`${mins}m`, "#10b981");
+        setBadge(isStrict ? `🔒${mins}m` : `${mins}m`, isStrict ? "#f38ba8" : "#10b981");
         sendResponse({ success: true, endTime });
       });
       return true;
     }
 
     case "PAUSE_TIMER": {
-      ext.alarms.clear("FOCUS_SESSION_END");
-      ext.alarms.clear("BADGE_TICK");
+      ext.storage.local.get(["sessionEndTime", "sessionDuration", "strictMode", "timerState"], (data) => {
+        // STRICT MODE: PAUSE IS FORBIDDEN
+        if (data.strictMode && data.timerState === "running") {
+          sendResponse({ success: false, error: "STRICT_MODE_ACTIVE" });
+          return;
+        }
 
-      ext.storage.local.get(["sessionEndTime", "sessionDuration"], (data) => {
+        ext.alarms.clear("FOCUS_SESSION_END");
+        ext.alarms.clear("BADGE_TICK");
+
         const remaining = data.sessionEndTime ? Math.max(0, Math.round((data.sessionEndTime - Date.now()) / 1000)) : (data.sessionDuration || 1500);
         ext.storage.local.set({
           timerState: "paused",
@@ -569,11 +589,17 @@ ext.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     }
 
     case "RESET_TIMER": {
-      ext.alarms.clear("FOCUS_SESSION_END");
-      ext.alarms.clear("BADGE_TICK");
-      setAmbientAudio("none");
+      ext.storage.local.get(["sessionDuration", "strictMode", "timerState"], (data) => {
+        // STRICT MODE: GIVING UP IS FORBIDDEN WHILE RUNNING
+        if (data.strictMode && data.timerState === "running") {
+          sendResponse({ success: false, error: "STRICT_MODE_ACTIVE" });
+          return;
+        }
 
-      ext.storage.local.get(["sessionDuration"], (data) => {
+        ext.alarms.clear("FOCUS_SESSION_END");
+        ext.alarms.clear("BADGE_TICK");
+        setAmbientAudio("none");
+
         const dur = data.sessionDuration || 1500;
         ext.storage.local.set({
           timerState: "idle",

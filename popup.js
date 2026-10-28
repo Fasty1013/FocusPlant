@@ -12,7 +12,8 @@ document.addEventListener("DOMContentLoaded", () => {
       blockerTab: "🛡 Блокировка",
       userLevel: (lvl) => `Ур. ${lvl} Садовод`,
       selectTime: "⏱ Время концентрации:",
-      minuteUnit: "мин",
+      minuteUnit: "м",
+      secondUnit: "с",
       chancesTitle: "🎲 Шансы выпадения редкостей:",
       chancesHint: "Больше время = выше шанс на легендарные!",
       timerStatusIdle: "Выберите время и начните фокус",
@@ -69,10 +70,14 @@ document.addEventListener("DOMContentLoaded", () => {
       blacklistOpt: "Черный список (Запрещать сайты из списка)",
       whitelistOpt: "Белый список (Разрешать только эти сайты)",
       modeDesc: "Если зайти на запрещенный сайт во время фокуса, дерево погибнет!",
+      strictTitle: "Строгий режим",
+      strictPill: "Хардкор",
+      strictDesc: "Нельзя поставить паузу или сдаться. Блокировка без кнопки «ОК»!",
+      strictStatusRunning: "Строгий фокус: нельзя прервать!",
       lblAlertStyle: "Формат предупреждения:",
-      alertStyleBanner: "🪟 Компактный плавающий баннер (не мешает)",
-      alertStyleFullscreen: "📺 На весь экран (полная блокировка)",
-      lblAlertStyleDesc: "Баннер аккуратно появляется сверху и виден сразу, не перекрывая сайт.",
+      alertStyleFullscreen: "📺 На весь экран (окно с кнопкой «ОК»)",
+      alertStyleBanner: "🪟 Компактный плавающий баннер",
+      lblAlertStyleDesc: "На весь экран показывает окно с кнопкой «ОК» (а в строгом режиме — без кнопки «ОК»).",
       quickAdd: "Быстрое добавление:",
       activeSites: "Активный список сайтов:",
       sitePlaceholder: "например: youtube.com"
@@ -85,7 +90,8 @@ document.addEventListener("DOMContentLoaded", () => {
       blockerTab: "🛡 Blocker",
       userLevel: (lvl) => `Lvl. ${lvl} Gardener`,
       selectTime: "⏱ Focus Duration:",
-      minuteUnit: "min",
+      minuteUnit: "m",
+      secondUnit: "s",
       chancesTitle: "🎲 Rarity Drop Chances:",
       chancesHint: "Longer focus = higher legendary tree chance!",
       timerStatusIdle: "Choose duration and start focusing",
@@ -142,10 +148,14 @@ document.addEventListener("DOMContentLoaded", () => {
       blacklistOpt: "Blacklist (Block listed websites)",
       whitelistOpt: "Whitelist (Allow only listed websites)",
       modeDesc: "Visiting a blocked site during focus will wither your tree!",
+      strictTitle: "Strict Mode",
+      strictPill: "Hardcore",
+      strictDesc: "No pause, no giving up. Blocked sites have no 'OK' button!",
+      strictStatusRunning: "Strict Focus: cannot give up!",
       lblAlertStyle: "Warning Style:",
-      alertStyleBanner: "🪟 Compact Floating Banner (recommended)",
-      alertStyleFullscreen: "📺 Full Screen (strict blocking)",
-      lblAlertStyleDesc: "The banner appears neatly at the top without hiding the webpage.",
+      alertStyleFullscreen: "📺 Full Screen (window with 'OK' button)",
+      alertStyleBanner: "🪟 Compact Floating Banner",
+      lblAlertStyleDesc: "Full screen displays notification with 'OK' button (in strict mode without 'OK').",
       quickAdd: "Quick Add:",
       activeSites: "Active Website List:",
       sitePlaceholder: "e.g. youtube.com"
@@ -158,7 +168,8 @@ document.addEventListener("DOMContentLoaded", () => {
       blockerTab: "🛡 Bloklash",
       userLevel: (lvl) => `${lvl}-daraja Bog'bon`,
       selectTime: "⏱ Fokus vaqti:",
-      minuteUnit: "daq",
+      minuteUnit: "d",
+      secondUnit: "s",
       chancesTitle: "🎲 Noyoblik ehtimolligi:",
       chancesHint: "Vaqt ko'p bo'lsa = afsonaviy daraxt chiqish ehtimoli yuqori!",
       timerStatusIdle: "Vaqtni tanlang va fokusni boshlang",
@@ -215,10 +226,14 @@ document.addEventListener("DOMContentLoaded", () => {
       blacklistOpt: "Qora ro'yxat (Ro'yxatdagi saytlarni to'sish)",
       whitelistOpt: "Oq ro'yxat (Faqat shu saytlarga ruxsat)",
       modeDesc: "Taqiqlangan saytga kirsangiz, daraxtingiz so'ladi!",
+      strictTitle: "Qat'iy rejim",
+      strictPill: "Hardkor",
+      strictDesc: "Pauza yoki taslim bo'lish mumkin emas. 'OK' tugmasisiz bloklanadi!",
+      strictStatusRunning: "Qat'iy fokus: to'xtatib bo'lmaydi!",
       lblAlertStyle: "Ogohlantirish ko'rinishi:",
-      alertStyleBanner: "🪟 Ixcham suzuvchi banner (xalaqit bermaydi)",
-      alertStyleFullscreen: "📺 To'liq ekran (qat'iy bloklash)",
-      lblAlertStyleDesc: "Banner sahifani to'sib qo'ymasdan tepadan chiroyli chiqadi.",
+      alertStyleFullscreen: "📺 To'liq ekran ('OK' tugmali oyna)",
+      alertStyleBanner: "🪟 Ixcham suzuvchi banner",
+      lblAlertStyleDesc: "To'liq ekran 'OK' tugmali oynani ko'rsatadi (qat'iy rejimda 'OK'siz).",
       quickAdd: "Tezkor qo'shish:",
       activeSites: "Faol saytlar ro'yxati:",
       sitePlaceholder: "masalan: youtube.com"
@@ -232,6 +247,7 @@ document.addEventListener("DOMContentLoaded", () => {
       userLevel: (lvl) => `Lv.${lvl} 庭師`,
       selectTime: "⏱ 集中時間:",
       minuteUnit: "分",
+      secondUnit: "秒",
       chancesTitle: "🎲 レア度排出率:",
       chancesHint: "集中時間が長いほどレジェンダリーが出現！",
       timerStatusIdle: "時間を選んで集中を開始",
@@ -288,10 +304,14 @@ document.addEventListener("DOMContentLoaded", () => {
       blacklistOpt: "ブラックリスト (指定サイトをブロック)",
       whitelistOpt: "ホワイトリスト (指定サイトのみ許可)",
       modeDesc: "集中中に禁止サイトを開くと木が枯れてしまいます！",
+      strictTitle: "厳格モード",
+      strictPill: "ハードコア",
+      strictDesc: "一時停止・降伏不可。禁止サイトは「了解」ボタンなしで完全遮断！",
+      strictStatusRunning: "厳格集中：中断不可！",
       lblAlertStyle: "警告の表示形式:",
-      alertStyleBanner: "🪟 コンパクトバナー（邪魔にならない）",
-      alertStyleFullscreen: "📺 全画面表示（完全ブロック）",
-      lblAlertStyleDesc: "バナーはWebページを崩さず画面上部にスマートに表示されます。",
+      alertStyleFullscreen: "📺 全画面表示（「了解」ボタン付き）",
+      alertStyleBanner: "🪟 コンパクトバナー",
+      lblAlertStyleDesc: "全画面で「了解」ボタン付き警告を表示（厳格モードでは「了解」なし）。",
       quickAdd: "クイック追加:",
       activeSites: "登録済みサイト一覧:",
       sitePlaceholder: "例: youtube.com"
@@ -302,6 +322,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let currentLang = "ru";
   let activeTab = "tabTimer";
   let selectedMinutes = 25;
+  let selectedSeconds = 0;
   let selectedDuration = 25 * 60;
   let timerTicker = null;
   const RING_CIRCUMFERENCE = 2 * Math.PI * 96;
@@ -325,7 +346,17 @@ document.addEventListener("DOMContentLoaded", () => {
   const timeConfigSection = document.getElementById("timeConfigSection");
   const timeSlider = document.getElementById("timeSlider");
   const customMinutesInput = document.getElementById("customMinutesInput");
+  const customSecondsInput = document.getElementById("customSecondsInput");
+  const lblMinuteUnit = document.getElementById("lblMinuteUnit");
+  const lblSecondUnit = document.getElementById("lblSecondUnit");
   const timePresets = document.getElementById("timePresets");
+
+  // Strict Mode DOM
+  const strictModeCard = document.getElementById("strictModeCard");
+  const strictModeToggle = document.getElementById("strictModeToggle");
+  const lblStrictTitle = document.getElementById("lblStrictTitle");
+  const lblStrictPill = document.getElementById("lblStrictPill");
+  const lblStrictDesc = document.getElementById("lblStrictDesc");
 
   // Drop Chances DOM
   const chanceCommon = document.getElementById("chanceCommon");
@@ -413,7 +444,11 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("tBlockerBtn").textContent = t.blockerTab;
 
     document.getElementById("lblSelectTime").textContent = t.selectTime;
-    document.getElementById("lblMinuteUnit").textContent = t.minuteUnit;
+    if (lblMinuteUnit && t.minuteUnit) lblMinuteUnit.textContent = t.minuteUnit;
+    if (lblSecondUnit && t.secondUnit) lblSecondUnit.textContent = t.secondUnit;
+    if (lblStrictTitle && t.strictTitle) lblStrictTitle.textContent = t.strictTitle;
+    if (lblStrictPill && t.strictPill) lblStrictPill.textContent = t.strictPill;
+    if (lblStrictDesc && t.strictDesc) lblStrictDesc.textContent = t.strictDesc;
     document.getElementById("lblChancesTitle").textContent = t.chancesTitle;
     document.getElementById("lblChancesHint").textContent = t.chancesHint;
 
@@ -490,24 +525,30 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // Time & Chances Synchronizer
-  function updateCustomDuration(mins) {
-    selectedMinutes = Math.max(5, Math.min(180, Number(mins) || 25));
-    selectedDuration = selectedMinutes * 60;
+  // Time & Chances Synchronizer (Minutes + Seconds)
+  function updateCustomDuration(totalSec) {
+    selectedDuration = Math.max(10, Math.min(180 * 60, Math.round(Number(totalSec) || 1500)));
+    selectedMinutes = Math.floor(selectedDuration / 60);
+    selectedSeconds = selectedDuration % 60;
 
     timeSlider.value = selectedMinutes;
     customMinutesInput.value = selectedMinutes;
+    if (customSecondsInput) {
+      customSecondsInput.value = selectedSeconds.toString().padStart(2, '0');
+    }
     updateTimeDisplay(selectedDuration);
 
     timePresets.querySelectorAll(".preset-btn").forEach(btn => {
-      if (parseInt(btn.dataset.minutes, 10) === selectedMinutes) {
+      const btnMins = parseInt(btn.dataset.minutes, 10);
+      if (btnMins === selectedMinutes && selectedSeconds === 0) {
         btn.classList.add("active");
       } else {
         btn.classList.remove("active");
       }
     });
 
-    const chances = calculateDropChances(selectedMinutes);
+    const minsForDrop = Math.max(0.5, selectedDuration / 60);
+    const chances = calculateDropChances(minsForDrop);
     chanceCommon.textContent = `⚪ ${chances.common}%`;
     chanceUncommon.textContent = `🟢 ${chances.uncommon}%`;
     chanceRare.textContent = `🔵 ${chances.rare}%`;
@@ -519,19 +560,39 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   timeSlider.addEventListener("input", (e) => {
-    updateCustomDuration(e.target.value);
+    const mins = Number(e.target.value) || 0;
+    updateCustomDuration(mins * 60 + selectedSeconds);
   });
 
-  customMinutesInput.addEventListener("change", (e) => {
-    updateCustomDuration(e.target.value);
-  });
+  if (customMinutesInput) {
+    customMinutesInput.addEventListener("input", (e) => {
+      const mins = Math.max(0, Math.min(180, Number(e.target.value) || 0));
+      updateCustomDuration(mins * 60 + selectedSeconds);
+    });
+  }
+
+  if (customSecondsInput) {
+    customSecondsInput.addEventListener("input", (e) => {
+      const secs = Math.max(0, Math.min(59, Number(e.target.value) || 0));
+      updateCustomDuration(selectedMinutes * 60 + secs);
+    });
+  }
 
   timePresets.querySelectorAll(".preset-btn").forEach(btn => {
     btn.addEventListener("click", () => {
       const mins = parseInt(btn.dataset.minutes, 10);
-      updateCustomDuration(mins);
+      updateCustomDuration(mins * 60);
     });
   });
+
+  // Strict Mode Switch Controller
+  if (strictModeToggle) {
+    strictModeToggle.addEventListener("change", (e) => {
+      const isStrict = e.target.checked;
+      strictModeCard.classList.toggle("active", isStrict);
+      ext.storage.local.set({ strictMode: isStrict });
+    });
+  }
 
   function updateTimeDisplay(totalSeconds) {
     const m = Math.floor(totalSeconds / 60).toString().padStart(2, '0');
@@ -547,7 +608,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return 1;
   }
 
-  function updateTimerView(remainingSeconds, totalSeconds, skin, state, reason, lastDrop) {
+  function updateTimerView(remainingSeconds, totalSeconds, skin, state, reason, lastDrop, isStrict = false, treeState = "healthy") {
     const t = i18n[currentLang] || i18n.ru;
     const elapsed = Math.max(0, totalSeconds - remainingSeconds);
     const progress = totalSeconds > 0 ? (elapsed / totalSeconds) : 0;
@@ -612,19 +673,29 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (state === "running") {
-      progressRing.style.stroke = "#10b981";
+      progressRing.style.stroke = isStrict ? "#f38ba8" : "#10b981";
       const stage = getGrowthStage(progressPct);
-      treeAvatar.innerHTML = renderTreeSVG(skin, stage, false);
-      timerStatus.textContent = `${t.timerStatusRunning} (${progressPct}%)`;
-      timerStatus.style.color = "#94e2d5";
-      timerStatus.style.background = "rgba(148, 226, 213, 0.12)";
+      const isWitheredVisual = treeState === "withered";
+      treeAvatar.innerHTML = renderTreeSVG(skin, isWitheredVisual ? 1 : stage, isWitheredVisual);
 
       timeConfigSection.style.display = "none";
       startBtn.style.display = "none";
-      pauseBtn.style.display = "flex";
       resumeBtn.style.display = "none";
-      resetBtn.style.display = "flex";
       plantNewBtn.style.display = "none";
+
+      if (isStrict) {
+        timerStatus.textContent = `🔒 ${t.strictStatusRunning} (${progressPct}%)`;
+        timerStatus.style.color = "#f38ba8";
+        timerStatus.style.background = "rgba(243, 139, 168, 0.15)";
+        pauseBtn.style.display = "none";
+        resetBtn.style.display = "none";
+      } else {
+        timerStatus.textContent = `${t.timerStatusRunning} (${progressPct}%)`;
+        timerStatus.style.color = "#94e2d5";
+        timerStatus.style.background = "rgba(148, 226, 213, 0.12)";
+        pauseBtn.style.display = "flex";
+        resetBtn.style.display = "flex";
+      }
       return;
     }
 
@@ -677,14 +748,25 @@ document.addEventListener("DOMContentLoaded", () => {
   function syncTimerFromStorage() {
     ext.storage.local.get([
       "timerState", "sessionStartTime", "sessionDuration", "sessionEndTime",
-      "secondsRemaining", "selectedSkin", "witherReason", "coins", "level", "lastDrop"
+      "secondsRemaining", "selectedSkin", "witherReason", "coins", "level", "lastDrop",
+      "strictMode", "treeState"
     ], (data) => {
       const state = data.timerState || "idle";
       const totalSec = data.sessionDuration || selectedDuration;
       const skin = data.selectedSkin || "oak";
       const reason = data.witherReason || "";
       const lastDrop = data.lastDrop || null;
+      const isStrict = !!data.strictMode;
+      const treeState = data.treeState || "healthy";
       const t = i18n[currentLang] || i18n.ru;
+
+      if (strictModeToggle) {
+        strictModeToggle.checked = isStrict;
+        strictModeToggle.disabled = (state === "running");
+      }
+      if (strictModeCard) {
+        strictModeCard.classList.toggle("active", isStrict);
+      }
 
       coinsCount.textContent = data.coins || 0;
       const lvl = data.level || 1;
@@ -694,28 +776,27 @@ document.addEventListener("DOMContentLoaded", () => {
         const remainingMs = data.sessionEndTime - Date.now();
         if (remainingMs <= 0) {
           updateTimeDisplay(0);
-          updateTimerView(0, totalSec, skin, "completed", "", lastDrop);
+          updateTimerView(0, totalSec, skin, "completed", "", lastDrop, isStrict, treeState);
         } else {
           const remainingSec = Math.round(remainingMs / 1000);
           updateTimeDisplay(remainingSec);
-          updateTimerView(remainingSec, totalSec, skin, "running", "", null);
+          updateTimerView(remainingSec, totalSec, skin, "running", "", null, isStrict, treeState);
         }
       } else if (state === "paused") {
         const rem = data.secondsRemaining || totalSec;
         updateTimeDisplay(rem);
-        updateTimerView(rem, totalSec, skin, "paused", "", null);
+        updateTimerView(rem, totalSec, skin, "paused", "", null, isStrict, treeState);
       } else if (state === "withered") {
         updateTimeDisplay(0);
-        updateTimerView(0, totalSec, skin, "withered", reason, null);
+        updateTimerView(0, totalSec, skin, "withered", reason, null, isStrict, treeState);
       } else if (state === "completed") {
         updateTimeDisplay(0);
-        updateTimerView(0, totalSec, skin, "completed", "", lastDrop);
+        updateTimerView(0, totalSec, skin, "completed", "", lastDrop, isStrict, treeState);
       } else {
         // Idle
         updateTimeDisplay(totalSec);
-        updateTimerView(totalSec, totalSec, skin, "idle", "", null);
-        const mins = Math.round(totalSec / 60);
-        updateCustomDuration(mins);
+        updateTimerView(totalSec, totalSec, skin, "idle", "", null, isStrict, treeState);
+        updateCustomDuration(totalSec);
       }
     });
   }
@@ -723,19 +804,24 @@ document.addEventListener("DOMContentLoaded", () => {
   // Start continuous 1s ticker for countdown
   if (timerTicker) clearInterval(timerTicker);
   timerTicker = setInterval(() => {
-    ext.storage.local.get(["timerState", "sessionEndTime", "sessionDuration", "selectedSkin", "lastDrop"], (data) => {
+    ext.storage.local.get([
+      "timerState", "sessionEndTime", "sessionDuration", "selectedSkin",
+      "lastDrop", "strictMode", "treeState"
+    ], (data) => {
       if (data.timerState === "running" && data.sessionEndTime) {
         const remainingMs = data.sessionEndTime - Date.now();
         const totalSec = data.sessionDuration || 1500;
         const skin = data.selectedSkin || "oak";
+        const isStrict = !!data.strictMode;
+        const treeState = data.treeState || "healthy";
 
         if (remainingMs <= 0) {
           updateTimeDisplay(0);
-          updateTimerView(0, totalSec, skin, "completed", "", data.lastDrop);
+          updateTimerView(0, totalSec, skin, "completed", "", data.lastDrop, isStrict, treeState);
         } else {
           const remainingSec = Math.round(remainingMs / 1000);
           updateTimeDisplay(remainingSec);
-          updateTimerView(remainingSec, totalSec, skin, "running", "", null);
+          updateTimerView(remainingSec, totalSec, skin, "running", "", null, isStrict, treeState);
         }
       }
     });
@@ -743,7 +829,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Timer Button Actions
   startBtn.addEventListener("click", () => {
-    ext.runtime.sendMessage({ action: "START_TIMER", duration: selectedDuration }, () => {
+    const isStrict = strictModeToggle ? strictModeToggle.checked : false;
+    ext.runtime.sendMessage({
+      action: "START_TIMER",
+      duration: selectedDuration,
+      strictMode: isStrict
+    }, () => {
       syncTimerFromStorage();
     });
   });
@@ -1172,6 +1263,10 @@ document.addEventListener("DOMContentLoaded", () => {
     if (changes.ambientSound) {
       ambientSelect.value = changes.ambientSound.newValue || "none";
     }
+    if (changes.strictMode && strictModeToggle) {
+      strictModeToggle.checked = !!changes.strictMode.newValue;
+      strictModeCard.classList.toggle("active", !!changes.strictMode.newValue);
+    }
     if (changes.timerState || changes.sessionEndTime || changes.treeState || changes.coins || changes.lastDrop) {
       syncTimerFromStorage();
       if (activeTab === "tabGarden") renderGardenTab();
@@ -1180,7 +1275,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // Initial Load
-  ext.storage.local.get(["lang", "ambientSound"], (data) => {
+  ext.storage.local.get(["lang", "ambientSound", "strictMode", "sessionDuration"], (data) => {
     if (data.lang) {
       langSelect.value = data.lang;
       applyLanguage(data.lang);
@@ -1189,6 +1284,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     if (data.ambientSound) {
       ambientSelect.value = data.ambientSound;
+    }
+    if (data.strictMode !== undefined && strictModeToggle) {
+      strictModeToggle.checked = !!data.strictMode;
+      strictModeCard.classList.toggle("active", !!data.strictMode);
+    }
+    if (data.sessionDuration) {
+      updateCustomDuration(data.sessionDuration);
     }
     syncTimerFromStorage();
   });

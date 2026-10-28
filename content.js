@@ -10,12 +10,20 @@
       duringFocus: "во время активной сессии фокуса.",
       bannerDesc: "Ваше дерево погибло из-за отвлечения на этот сайт.",
       quote: "«Каждое секундное отвлечение губит плоды сосредоточенности. Примите этот урок и посадите новое дерево!»",
+      okBtn: "✓ ОК, понятно",
       closeTab: "✖ Закрыть вкладку",
       goBack: "↩ Назад",
       switchToFullscreen: "📺 На весь экран",
       switchToBanner: "🪟 Компактный вид",
       minimize: "➖ Свернуть",
-      minimizedPill: "🥀 Дерево завяло"
+      minimizedPill: "🥀 Дерево завяло",
+      strictBadge: "🔒 СТРОГИЙ РЕЖИМ",
+      strictTitle: "ДОСТУП ЗАБЛОКИРОВАН 🔒",
+      strictDesc: "В строгом режиме запрещено заходить на запрещенные сайты до окончания таймера!",
+      strictTimerLabel: "⏳ До окончания концентрации осталось:",
+      strictNoOkNotice: "Кнопка «ОК» отключена! В строгом режиме нельзя убрать это окно до конца таймера.",
+      strictUnlocked: "🎉 Время вышло! Сессия концентрации успешно завершена.",
+      unblockBtn: "✓ Разблокировать сайт"
     },
     en: {
       badge: "⚠️ Focus Broken",
@@ -24,12 +32,20 @@
       duringFocus: "during an active focus session.",
       bannerDesc: "Your focus tree has withered due to visiting this site.",
       quote: "“Every momentary distraction steals your focus. Accept the lesson and plant a new tree!”",
+      okBtn: "✓ OK, Understood",
       closeTab: "✖ Close Tab",
       goBack: "↩ Go back",
       switchToFullscreen: "📺 Full Screen",
       switchToBanner: "🪟 Compact View",
       minimize: "➖ Minimize",
-      minimizedPill: "🥀 Tree withered"
+      minimizedPill: "🥀 Tree withered",
+      strictBadge: "🔒 STRICT MODE",
+      strictTitle: "ACCESS BLOCKED 🔒",
+      strictDesc: "In strict mode, visiting prohibited sites is blocked until the timer expires!",
+      strictTimerLabel: "⏳ Time remaining until unlock:",
+      strictNoOkNotice: "The 'OK' button is disabled! In strict mode, you cannot dismiss this window until focus ends.",
+      strictUnlocked: "🎉 Time's up! Focus session successfully completed.",
+      unblockBtn: "✓ Unlock Website"
     },
     uz: {
       badge: "⚠️ Fokus buzildi",
@@ -38,12 +54,20 @@
       duringFocus: "saytiga fokus vaqtida kirdingiz.",
       bannerDesc: "Ushbu saytga kirganingiz sababli daraxtingiz nobud bo'ldi.",
       quote: "«Har bir chalg'ish diqqat mevasini nobud qiladi. Saboq oling va yangi daraxt eking!»",
+      okBtn: "✓ OK, tushundim",
       closeTab: "✖ Tabni yopish",
       goBack: "↩ Orqaga",
       switchToFullscreen: "📺 To'liq ekran",
       switchToBanner: "🪟 Ixcham ko'rinish",
       minimize: "➖ Yashirish",
-      minimizedPill: "🥀 Daraxt so'ldi"
+      minimizedPill: "🥀 Daraxt so'ldi",
+      strictBadge: "🔒 QAT'IY REJIM",
+      strictTitle: "KIRISH TAQIQLANDI 🔒",
+      strictDesc: "Qat'iy rejimda taymer tugaguncha taqiqlangan saytlarga kirish butunlay bloklangan!",
+      strictTimerLabel: "⏳ Fokus tugashiga qoldi:",
+      strictNoOkNotice: "'OK' tugmasi o'chirilgan! Qat'iy rejimda taymer tugaguncha bu oynani yopib bo'lmaydi.",
+      strictUnlocked: "🎉 Vaqt tugadi! Fokus sessiyasi yakunlandi.",
+      unblockBtn: "✓ Saytni ochish"
     },
     ja: {
       badge: "⚠️ 集中が途切れました",
@@ -52,12 +76,20 @@
       duringFocus: "を開いてしまいました。",
       bannerDesc: "このサイトにアクセスしたため、木が息絶えてしまいました。",
       quote: "「一瞬の誘惑が集中を奪います。気持ちを切り替えて新しい木を育てましょう！」",
+      okBtn: "✓ 了解",
       closeTab: "✖ タブを閉じる",
       goBack: "↩ 戻る",
       switchToFullscreen: "📺 全画面表示",
       switchToBanner: "🪟 コンパクト表示",
       minimize: "➖ 最小化",
-      minimizedPill: "🥀 木が枯れました"
+      minimizedPill: "🥀 木が枯れました",
+      strictBadge: "🔒 厳格モード",
+      strictTitle: "アクセス制限中 🔒",
+      strictDesc: "厳格モード中はタイマー終了まで禁止サイトへのアクセスが完全にブロックされます！",
+      strictTimerLabel: "⏳ 集中終了まで残り時間：",
+      strictNoOkNotice: "「了解」ボタンは無効です！厳格モード中はタイマー終了までこの画面を閉じられません。",
+      strictUnlocked: "🎉 終了しました！集中セッションが正常に完了しました。",
+      unblockBtn: "✓ サイトのブロック解除"
     }
   };
 
@@ -283,9 +315,15 @@
     }
   }
 
+  let strictTimerInterval = null;
+
   // 2. RENDER FULLSCREEN OVERLAY
-  function renderFullscreenOverlay(blockedDomain, lang = "ru") {
+  function renderFullscreenOverlay(blockedDomain, lang = "ru", isStrict = false, sessionEndTime = 0) {
     if (activeElementContainer) activeElementContainer.remove();
+    if (strictTimerInterval) {
+      clearInterval(strictTimerInterval);
+      strictTimerInterval = null;
+    }
 
     try {
       if (window.stop) window.stop();
@@ -312,131 +350,288 @@
       text-align: center !important;
       padding: 24px !important;
       box-sizing: border-box !important;
+      overflow-y: auto !important;
     `;
 
-    overlay.innerHTML = `
-      <div style="
-        background: rgba(30, 30, 46, 0.85);
-        backdrop-filter: blur(16px);
-        -webkit-backdrop-filter: blur(16px);
-        border: 1px solid rgba(243, 139, 168, 0.3);
-        border-radius: 24px;
-        padding: 40px 32px;
-        max-width: 520px;
-        width: 100%;
-        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 30px rgba(243, 139, 168, 0.15);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        animation: fpFadeIn 0.4s ease-out;
-      ">
-        <div style="margin-bottom: 24px; filter: drop-shadow(0 8px 16px rgba(0,0,0,0.4));">
-          ${getWitheredSvg(140)}
-        </div>
+    document.documentElement.style.overflow = "hidden";
+    if (document.body) document.body.style.overflow = "hidden";
 
+    if (isStrict) {
+      // -------------------------------------------------------------
+      // STRICT MODE: NO "OK" BUTTON, IMPENETRABLE LOCK WITH COUNTDOWN
+      // -------------------------------------------------------------
+      overlay.innerHTML = `
         <div style="
-          display: inline-flex;
-          align-items: center;
-          gap: 6px;
-          padding: 6px 14px;
-          background: rgba(243, 139, 168, 0.15);
-          border: 1px solid #f38ba8;
-          border-radius: 20px;
-          color: #f38ba8;
-          font-size: 0.85rem;
-          font-weight: 700;
-          text-transform: uppercase;
-          letter-spacing: 0.5px;
-          margin-bottom: 16px;
-        ">
-          <span>⚠️</span> ${t.badge}
-        </div>
-
-        <h1 style="
-          font-size: 1.85rem;
-          margin: 0 0 10px 0;
-          color: #f38ba8;
-          font-weight: 800;
-          line-height: 1.2;
-        ">
-          ${t.title}
-        </h1>
-
-        <p style="
-          font-size: 1rem;
-          margin: 0 0 18px 0;
-          color: #bac2de;
-          line-height: 1.5;
-        ">
-          ${t.openedSite} <span style="color: #f38ba8; font-weight: 700; background: rgba(243, 139, 168, 0.12); padding: 2px 6px; border-radius: 4px;">${blockedDomain || location.hostname}</span> ${t.duringFocus}
-        </p>
-
-        <div style="
-          font-style: italic;
-          font-size: 0.9rem;
-          color: #a6adc8;
-          background: #181825;
-          border-left: 3px solid #f38ba8;
-          padding: 10px 14px;
-          border-radius: 0 8px 8px 0;
-          margin-bottom: 26px;
-          text-align: left;
+          background: rgba(30, 30, 46, 0.95);
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
+          border: 2px solid #f38ba8;
+          border-radius: 24px;
+          padding: 36px 30px;
+          max-width: 520px;
           width: 100%;
-          box-sizing: border-box;
+          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 35px rgba(243, 139, 168, 0.35);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          animation: fpFadeIn 0.35s ease-out;
         ">
-          ${t.quote}
-        </div>
+          <div style="margin-bottom: 16px; filter: drop-shadow(0 8px 16px rgba(0,0,0,0.5));">
+            ${getWitheredSvg(130)}
+          </div>
 
-        <div style="display: flex; gap: 10px; width: 100%; margin-bottom: 10px;">
-          <button id="fp-fs-close-tab" style="
-            flex: 1;
-            padding: 12px 18px;
-            background: linear-gradient(135deg, #f38ba8 0%, #eba0ac 100%);
-            color: #11111b;
-            border: none;
-            border-radius: 12px;
+          <div style="
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            background: rgba(243, 139, 168, 0.2);
+            border: 1.5px solid #f38ba8;
+            border-radius: 20px;
+            color: #f38ba8;
+            font-size: 0.85rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-bottom: 14px;
+            box-shadow: 0 0 15px rgba(243, 139, 168, 0.3);
+          ">
+            ${t.strictBadge}
+          </div>
+
+          <h1 style="
+            font-size: 1.8rem;
+            margin: 0 0 10px 0;
+            color: #f38ba8;
+            font-weight: 800;
+            line-height: 1.2;
+          ">
+            ${t.strictTitle}
+          </h1>
+
+          <p style="
+            font-size: 0.95rem;
+            margin: 0 0 16px 0;
+            color: #bac2de;
+            line-height: 1.45;
+          ">
+            ${t.openedSite} <span style="color: #f38ba8; font-weight: 700; background: rgba(243, 139, 168, 0.15); padding: 2px 6px; border-radius: 4px;">${blockedDomain || location.hostname}</span>.<br>
+            ${t.strictDesc}
+          </p>
+
+          <!-- Live Countdown Box -->
+          <div id="fp-strict-timer-box" style="
+            background: #181825;
+            border: 1px solid rgba(243, 139, 168, 0.4);
+            border-radius: 14px;
+            padding: 12px 20px;
+            width: 100%;
+            margin-bottom: 16px;
+            box-sizing: border-box;
+          ">
+            <span style="font-size: 0.8rem; color: #a6adc8; display: block; margin-bottom: 4px;">${t.strictTimerLabel}</span>
+            <div id="fp-strict-timer" style="
+              font-size: 2.2rem;
+              font-weight: 800;
+              font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+              color: #f38ba8;
+              letter-spacing: 2px;
+            ">--:--</div>
+          </div>
+
+          <!-- Strict Notice (NO OK BUTTON) -->
+          <div style="
+            background: rgba(243, 139, 168, 0.1);
+            border: 1px dashed rgba(243, 139, 168, 0.5);
+            padding: 8px 12px;
+            border-radius: 10px;
+            color: #f9e2af;
+            font-size: 0.78rem;
+            margin-bottom: 20px;
+            width: 100%;
+            box-sizing: border-box;
+          ">
+            🚫 ${t.strictNoOkNotice}
+          </div>
+
+          <!-- Actions: Only Close Tab or Go Back -->
+          <div style="display: flex; gap: 10px; width: 100%;">
+            <button id="fp-fs-close-tab" style="
+              flex: 1;
+              padding: 12px 18px;
+              background: linear-gradient(135deg, #f38ba8 0%, #eba0ac 100%);
+              color: #11111b;
+              border: none;
+              border-radius: 12px;
+              font-weight: 800;
+              font-size: 0.92rem;
+              cursor: pointer;
+              box-shadow: 0 4px 14px rgba(243, 139, 168, 0.35);
+            ">
+              ${t.closeTab}
+            </button>
+
+            <button id="fp-fs-back" style="
+              flex: 1;
+              padding: 12px 18px;
+              background: #313244;
+              color: #cdd6f4;
+              border: 1px solid #45475a;
+              border-radius: 12px;
+              font-weight: 700;
+              font-size: 0.92rem;
+              cursor: pointer;
+            ">
+              ${t.goBack}
+            </button>
+          </div>
+        </div>
+      `;
+    } else {
+      // -------------------------------------------------------------
+      // REGULAR MODE: WITH "OK" BUTTON TO DISMISS NOTIFICATION
+      // -------------------------------------------------------------
+      overlay.innerHTML = `
+        <div style="
+          background: rgba(30, 30, 46, 0.92);
+          backdrop-filter: blur(18px);
+          -webkit-backdrop-filter: blur(18px);
+          border: 1px solid rgba(243, 139, 168, 0.35);
+          border-radius: 24px;
+          padding: 36px 30px;
+          max-width: 520px;
+          width: 100%;
+          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7), 0 0 30px rgba(243, 139, 168, 0.2);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          animation: fpFadeIn 0.35s ease-out;
+        ">
+          <div style="margin-bottom: 20px; filter: drop-shadow(0 8px 16px rgba(0,0,0,0.4));">
+            ${getWitheredSvg(135)}
+          </div>
+
+          <div style="
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            background: rgba(243, 139, 168, 0.15);
+            border: 1px solid #f38ba8;
+            border-radius: 20px;
+            color: #f38ba8;
+            font-size: 0.85rem;
             font-weight: 700;
-            font-size: 0.95rem;
-            cursor: pointer;
-            box-shadow: 0 4px 12px rgba(243, 139, 168, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 14px;
           ">
-            ${t.closeTab}
-          </button>
+            <span>⚠️</span> ${t.badge}
+          </div>
 
-          <button id="fp-fs-back" style="
-            flex: 1;
-            padding: 12px 18px;
-            background: #313244;
-            color: #cdd6f4;
-            border: 1px solid #45475a;
-            border-radius: 12px;
-            font-weight: 600;
-            font-size: 0.95rem;
-            cursor: pointer;
+          <h1 style="
+            font-size: 1.85rem;
+            margin: 0 0 10px 0;
+            color: #f38ba8;
+            font-weight: 800;
+            line-height: 1.2;
           ">
-            ${t.goBack}
-          </button>
+            ${t.title}
+          </h1>
+
+          <p style="
+            font-size: 0.95rem;
+            margin: 0 0 16px 0;
+            color: #bac2de;
+            line-height: 1.45;
+          ">
+            ${t.openedSite} <span style="color: #f38ba8; font-weight: 700; background: rgba(243, 139, 168, 0.12); padding: 2px 6px; border-radius: 4px;">${blockedDomain || location.hostname}</span> ${t.duringFocus}
+          </p>
+
+          <div style="
+            font-style: italic;
+            font-size: 0.88rem;
+            color: #a6adc8;
+            background: #181825;
+            border-left: 3px solid #f38ba8;
+            padding: 10px 14px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 22px;
+            text-align: left;
+            width: 100%;
+            box-sizing: border-box;
+          ">
+            ${t.quote}
+          </div>
+
+          <!-- PRIMARY ACTION: "OK" BUTTON TO REMOVE NOTIFICATION -->
+          <div style="width: 100%; margin-bottom: 12px;">
+            <button id="fp-fs-dismiss-ok" style="
+              width: 100%;
+              padding: 13px 20px;
+              background: linear-gradient(135deg, #a6e3a1 0%, #94e2d5 100%);
+              color: #11111b;
+              border: none;
+              border-radius: 12px;
+              font-weight: 800;
+              font-size: 1rem;
+              cursor: pointer;
+              box-shadow: 0 4px 14px rgba(166, 227, 161, 0.35);
+              transition: transform 0.15s ease;
+            ">
+              ${t.okBtn}
+            </button>
+          </div>
+
+          <!-- SECONDARY ACTIONS: Close Tab or Go Back -->
+          <div style="display: flex; gap: 10px; width: 100%;">
+            <button id="fp-fs-close-tab" style="
+              flex: 1;
+              padding: 10px 14px;
+              background: #313244;
+              color: #f38ba8;
+              border: 1px solid rgba(243, 139, 168, 0.4);
+              border-radius: 10px;
+              font-weight: 700;
+              font-size: 0.85rem;
+              cursor: pointer;
+            ">
+              ${t.closeTab}
+            </button>
+
+            <button id="fp-fs-back" style="
+              flex: 1;
+              padding: 10px 14px;
+              background: #313244;
+              color: #cdd6f4;
+              border: 1px solid #45475a;
+              border-radius: 10px;
+              font-weight: 600;
+              font-size: 0.85rem;
+              cursor: pointer;
+            ">
+              ${t.goBack}
+            </button>
+          </div>
         </div>
-
-        <!-- Toggle to compact banner -->
-        <button id="fp-fs-to-banner" style="
-          background: transparent;
-          border: none;
-          color: #94e2d5;
-          font-size: 0.82rem;
-          font-weight: 600;
-          cursor: pointer;
-          text-decoration: underline;
-          padding: 6px;
-        ">
-          ${t.switchToBanner}
-        </button>
-      </div>
-    `;
+      `;
+    }
 
     document.documentElement.appendChild(overlay);
     activeElementContainer = overlay;
 
+    // Attach "OK" dismiss button (available in normal mode)
+    const okBtn = document.getElementById("fp-fs-dismiss-ok");
+    if (okBtn) {
+      okBtn.addEventListener("click", () => {
+        overlay.remove();
+        activeElementContainer = null;
+        document.documentElement.style.overflow = "";
+        if (document.body) document.body.style.overflow = "";
+      });
+    }
+
+    // Attach Close Tab button
     const closeBtn = document.getElementById("fp-fs-close-tab");
     if (closeBtn) {
       closeBtn.addEventListener("click", () => {
@@ -444,6 +639,7 @@
       });
     }
 
+    // Attach Go Back button
     const backBtn = document.getElementById("fp-fs-back");
     if (backBtn) {
       backBtn.addEventListener("click", () => {
@@ -455,22 +651,60 @@
       });
     }
 
-    const toBannerBtn = document.getElementById("fp-fs-to-banner");
-    if (toBannerBtn) {
-      toBannerBtn.addEventListener("click", () => {
-        overlay.remove();
-        renderCompactBanner(blockedDomain, lang);
-      });
+    // Live countdown timer for Strict Mode
+    if (isStrict && sessionEndTime) {
+      const updateStrictCountdown = () => {
+        const timerEl = document.getElementById("fp-strict-timer");
+        if (!timerEl) return;
+        const now = Date.now();
+        const diffSec = Math.max(0, Math.floor((sessionEndTime - now) / 1000));
+        const m = Math.floor(diffSec / 60);
+        const s = diffSec % 60;
+        timerEl.textContent = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+
+        if (diffSec <= 0) {
+          clearInterval(strictTimerInterval);
+          strictTimerInterval = null;
+          const box = document.getElementById("fp-strict-timer-box");
+          if (box) {
+            box.innerHTML = `
+              <div style="color: #a6e3a1; font-weight: 700; font-size: 0.95rem; margin-bottom: 8px;">${t.strictUnlocked}</div>
+              <button id="fp-strict-unblock-btn" style="
+                background: linear-gradient(135deg, #a6e3a1 0%, #94e2d5 100%);
+                color: #11111b;
+                border: none;
+                border-radius: 10px;
+                padding: 10px 16px;
+                font-weight: 700;
+                cursor: pointer;
+              ">${t.unblockBtn}</button>
+            `;
+            const unblockBtn = document.getElementById("fp-strict-unblock-btn");
+            if (unblockBtn) {
+              unblockBtn.addEventListener("click", () => {
+                overlay.remove();
+                activeElementContainer = null;
+                document.documentElement.style.overflow = "";
+                if (document.body) document.body.style.overflow = "";
+              });
+            }
+          }
+        }
+      };
+
+      updateStrictCountdown();
+      strictTimerInterval = setInterval(updateStrictCountdown, 1000);
     }
   }
 
   // Choose renderer based on user preference
-  function showWarning(domain, style = "banner", lang = "ru") {
+  function showWarning(domain, style = "fullscreen", lang = "ru", isStrict = false, sessionEndTime = 0) {
     if (hasBlockedCurrentPage && activeElementContainer) return;
     hasBlockedCurrentPage = true;
 
-    if (style === "fullscreen") {
-      renderFullscreenOverlay(domain, lang);
+    // In Strict mode, ALWAYS show the impenetrable fullscreen overlay without OK button!
+    if (isStrict || style === "fullscreen") {
+      renderFullscreenOverlay(domain, lang, isStrict, sessionEndTime);
     } else {
       renderCompactBanner(domain, lang);
     }
@@ -479,17 +713,28 @@
   function applyBlockingLogic() {
     ext.storage.local.get([
       "timerState", "isTimerRunning", "blockedSites", "whiteListSites",
-      "blockMode", "lang", "alertStyle"
+      "blockMode", "lang", "alertStyle", "strictMode", "sessionEndTime"
     ], (data) => {
       const isRunning = data.timerState === "running" || data.isTimerRunning === true;
-      if (!isRunning) return;
+      if (!isRunning) {
+        // If timer is not running, clean up any active strict overlay
+        if (activeElementContainer && data.timerState !== "withered") {
+          activeElementContainer.remove();
+          activeElementContainer = null;
+          document.documentElement.style.overflow = "";
+          if (document.body) document.body.style.overflow = "";
+        }
+        return;
+      }
 
       const {
         blockedSites = [],
         whiteListSites = [],
         blockMode = "blacklist",
         lang = "ru",
-        alertStyle = "banner"
+        alertStyle = "fullscreen",
+        strictMode = false,
+        sessionEndTime = 0
       } = data;
 
       const currentUrl = window.location.href;
@@ -504,7 +749,7 @@
       if (shouldBlock) {
         const domain = window.location.hostname;
         ext.runtime.sendMessage({ action: "TREE_WITHERED", domain: domain, url: currentUrl });
-        showWarning(domain, alertStyle, lang);
+        showWarning(domain, alertStyle, lang, strictMode, sessionEndTime);
       }
     });
   }
@@ -525,7 +770,7 @@
   }
 
   ext.storage.onChanged.addListener((changes) => {
-    if (changes.timerState || changes.isTimerRunning || changes.blockedSites || changes.blockMode || changes.alertStyle) {
+    if (changes.timerState || changes.isTimerRunning || changes.blockedSites || changes.blockMode || changes.alertStyle || changes.strictMode) {
       applyBlockingLogic();
     }
   });
