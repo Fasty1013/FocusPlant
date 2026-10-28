@@ -69,6 +69,10 @@ document.addEventListener("DOMContentLoaded", () => {
       blacklistOpt: "Черный список (Запрещать сайты из списка)",
       whitelistOpt: "Белый список (Разрешать только эти сайты)",
       modeDesc: "Если зайти на запрещенный сайт во время фокуса, дерево погибнет!",
+      lblAlertStyle: "Формат предупреждения:",
+      alertStyleBanner: "🪟 Компактный плавающий баннер (не мешает)",
+      alertStyleFullscreen: "📺 На весь экран (полная блокировка)",
+      lblAlertStyleDesc: "Баннер аккуратно появляется сверху и виден сразу, не перекрывая сайт.",
       quickAdd: "Быстрое добавление:",
       activeSites: "Активный список сайтов:",
       sitePlaceholder: "например: youtube.com"
@@ -138,6 +142,10 @@ document.addEventListener("DOMContentLoaded", () => {
       blacklistOpt: "Blacklist (Block listed websites)",
       whitelistOpt: "Whitelist (Allow only listed websites)",
       modeDesc: "Visiting a blocked site during focus will wither your tree!",
+      lblAlertStyle: "Warning Style:",
+      alertStyleBanner: "🪟 Compact Floating Banner (recommended)",
+      alertStyleFullscreen: "📺 Full Screen (strict blocking)",
+      lblAlertStyleDesc: "The banner appears neatly at the top without hiding the webpage.",
       quickAdd: "Quick Add:",
       activeSites: "Active Website List:",
       sitePlaceholder: "e.g. youtube.com"
@@ -207,6 +215,10 @@ document.addEventListener("DOMContentLoaded", () => {
       blacklistOpt: "Qora ro'yxat (Ro'yxatdagi saytlarni to'sish)",
       whitelistOpt: "Oq ro'yxat (Faqat shu saytlarga ruxsat)",
       modeDesc: "Taqiqlangan saytga kirsangiz, daraxtingiz so'ladi!",
+      lblAlertStyle: "Ogohlantirish ko'rinishi:",
+      alertStyleBanner: "🪟 Ixcham suzuvchi banner (xalaqit bermaydi)",
+      alertStyleFullscreen: "📺 To'liq ekran (qat'iy bloklash)",
+      lblAlertStyleDesc: "Banner sahifani to'sib qo'ymasdan tepadan chiroyli chiqadi.",
       quickAdd: "Tezkor qo'shish:",
       activeSites: "Faol saytlar ro'yxati:",
       sitePlaceholder: "masalan: youtube.com"
@@ -276,6 +288,10 @@ document.addEventListener("DOMContentLoaded", () => {
       blacklistOpt: "ブラックリスト (指定サイトをブロック)",
       whitelistOpt: "ホワイトリスト (指定サイトのみ許可)",
       modeDesc: "集中中に禁止サイトを開くと木が枯れてしまいます！",
+      lblAlertStyle: "警告の表示形式:",
+      alertStyleBanner: "🪟 コンパクトバナー（邪魔にならない）",
+      alertStyleFullscreen: "📺 全画面表示（完全ブロック）",
+      lblAlertStyleDesc: "バナーはWebページを崩さず画面上部にスマートに表示されます。",
       quickAdd: "クイック追加:",
       activeSites: "登録済みサイト一覧:",
       sitePlaceholder: "例: youtube.com"
@@ -445,6 +461,15 @@ document.addEventListener("DOMContentLoaded", () => {
     blockModeSelect.options[0].textContent = t.blacklistOpt;
     blockModeSelect.options[1].textContent = t.whitelistOpt;
     document.getElementById("lblModeDesc").textContent = t.modeDesc;
+
+    const alertStyleSelect = document.getElementById("alertStyle");
+    if (alertStyleSelect && t.lblAlertStyle) {
+      document.getElementById("lblAlertStyle").textContent = t.lblAlertStyle;
+      alertStyleSelect.options[0].textContent = t.alertStyleBanner;
+      alertStyleSelect.options[1].textContent = t.alertStyleFullscreen;
+      document.getElementById("lblAlertStyleDesc").textContent = t.lblAlertStyleDesc;
+    }
+
     document.getElementById("lblQuickAddTitle").textContent = t.quickAdd;
     document.getElementById("lblActiveSites").textContent = t.activeSites;
     siteInput.placeholder = t.sitePlaceholder;
@@ -1061,10 +1086,22 @@ document.addEventListener("DOMContentLoaded", () => {
   // -------------------------------------------------------------
   // TAB 5: BLOCKER SETTINGS
   // -------------------------------------------------------------
+  const alertStyleSelect = document.getElementById("alertStyle");
+  if (alertStyleSelect) {
+    alertStyleSelect.addEventListener("change", (e) => {
+      const style = e.target.value;
+      ext.storage.local.set({ alertStyle: style });
+    });
+  }
+
   function renderBlockerTab() {
-    ext.storage.local.get(["blockMode", "blockedSites", "whiteListSites"], (data) => {
+    ext.storage.local.get(["blockMode", "blockedSites", "whiteListSites", "alertStyle"], (data) => {
       const mode = data.blockMode || "blacklist";
       blockModeSelect.value = mode;
+
+      if (alertStyleSelect) {
+        alertStyleSelect.value = data.alertStyle || "banner";
+      }
 
       const list = mode === "blacklist" ? (data.blockedSites || []) : (data.whiteListSites || []);
       siteCount.textContent = `${list.length}`;

@@ -166,7 +166,8 @@ ext.runtime.onInstalled.addListener(() => {
         totalFocusMinutes: 0,
         dailyStats: [0, 0, 0, 0, 0, 0, 0]
       },
-      lang: "ru"
+      lang: "ru",
+      alertStyle: "banner"
     };
 
     const toSet = {};
