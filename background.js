@@ -87,6 +87,82 @@ function rollTreeByDuration(minutes) {
   return { skin, rarity: chosenRarity };
 }
 
+// Cross-Browser Background Audio Manager (Keeps playing even when browser is minimized or popup is closed)
+let creatingOffscreenDoc = null;
+async function ensureOffscreenDoc() {
+  if (typeof chrome !== 'undefined' && chrome.offscreen && chrome.offscreen.createDocument) {
+    if (chrome.offscreen.hasDocument) {
+      try {
+        if (await chrome.offscreen.hasDocument()) return;
+      } catch (e) {}
+    }
+    if (chrome.runtime.getContexts) {
+      try {
+        const contexts = await chrome.runtime.getContexts({ contextTypes: ['OFFSCREEN_DOCUMENT'] });
+        if (contexts && contexts.length > 0) return;
+      } catch (e) {}
+    }
+    if (creatingOffscreenDoc) {
+      await creatingOffscreenDoc;
+      return;
+    }
+    try {
+      creatingOffscreenDoc = chrome.offscreen.createDocument({
+        url: 'offscreen.html',
+        reasons: ['AUDIO_PLAYBACK'],
+        justification: 'Keep ambient focus audio playing when popup is closed or browser is minimized'
+      });
+      await creatingOffscreenDoc;
+    } catch (e) {
+      // Document might already exist
+    } finally {
+      creatingOffscreenDoc = null;
+    }
+  }
+}
+
+async function setAmbientAudio(soundType) {
+  await ext.storage.local.set({ ambientSound: soundType });
+
+  if (soundType === "none") {
+    try { ext.runtime.sendMessage({ action: "STOP_AMBIENT" }); } catch (e) {}
+    if (typeof soundManager !== 'undefined') {
+      soundManager.stopAmbient();
+    }
+    return;
+  }
+
+  if (typeof chrome !== 'undefined' && chrome.offscreen) {
+    await ensureOffscreenDoc();
+    try {
+      ext.runtime.sendMessage({ action: "PLAY_AMBIENT", soundType });
+    } catch (e) {}
+    setTimeout(() => {
+      try {
+        ext.runtime.sendMessage({ action: "PLAY_AMBIENT", soundType });
+      } catch (e) {}
+    }, 150);
+  } else {
+    if (typeof soundManager !== 'undefined') {
+      soundManager.playAmbient(soundType);
+    }
+  }
+}
+
+function playBackgroundChime() {
+  try { ext.runtime.sendMessage({ action: "PLAY_CHIME" }); } catch (e) {}
+  if (typeof soundManager !== 'undefined') {
+    soundManager.playCompleteChime();
+  }
+}
+
+function playBackgroundWilt() {
+  try { ext.runtime.sendMessage({ action: "PLAY_WILT" }); } catch (e) {}
+  if (typeof soundManager !== 'undefined') {
+    soundManager.playWiltSound();
+  }
+}
+
 // Helper to update badge
 function setBadge(text, color = "#10b981") {
   const action = ext.action || ext.browserAction;
@@ -167,7 +243,8 @@ ext.runtime.onInstalled.addListener(() => {
         dailyStats: [0, 0, 0, 0, 0, 0, 0]
       },
       lang: "ru",
-      alertStyle: "banner"
+      alertStyle: "banner",
+      ambientSound: "none"
     };
 
     const toSet = {};
@@ -182,6 +259,17 @@ ext.runtime.onInstalled.addListener(() => {
     }
   });
 });
+
+// Resume background sound on browser startup if session is still running
+if (ext.runtime.onStartup) {
+  ext.runtime.onStartup.addListener(() => {
+    ext.storage.local.get(["timerState", "ambientSound"], (data) => {
+      if (data.timerState === "running" && data.ambientSound && data.ambientSound !== "none") {
+        setAmbientAudio(data.ambientSound);
+      }
+    });
+  });
+}
 
 // Periodic badge update alarm
 ext.alarms.onAlarm.addListener((alarm) => {
@@ -252,6 +340,8 @@ function handleTreeWithered(domain) {
       stats: stats
     }, () => {
       setBadge("🥀", "#ef4444");
+      setAmbientAudio("none");
+      playBackgroundWilt();
       showNotification(
         "🥀 Дерево завяло!",
         `Вы зашли на сайт "${domain}" во время фокуса. Ваше дерево погибло. Не сдавайтесь, попробуйте снова!`
@@ -362,6 +452,8 @@ function handleSessionComplete() {
       lastDrop: lastDropInfo
     }, () => {
       setBadge("✓", "#10b981");
+      setAmbientAudio("none");
+      playBackgroundChime();
       const rarityLabel = RARITY_NAMES[rolledRarity] || "";
       showNotification(
         `🎉 Вы вырастили дерево [${rarityLabel}]!`,
@@ -479,6 +571,7 @@ ext.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     case "RESET_TIMER": {
       ext.alarms.clear("FOCUS_SESSION_END");
       ext.alarms.clear("BADGE_TICK");
+      setAmbientAudio("none");
 
       ext.storage.local.get(["sessionDuration"], (data) => {
         const dur = data.sessionDuration || 1500;
@@ -510,6 +603,13 @@ ext.runtime.onMessage.addListener((msg, sender, sendResponse) => {
         ext.tabs.remove(sender.tab.id);
       }
       sendResponse({ success: true });
+      return true;
+    }
+
+    case "SET_AMBIENT_SOUND": {
+      setAmbientAudio(msg.soundType).then(() => {
+        sendResponse({ success: true, soundType: msg.soundType });
+      });
       return true;
     }
 

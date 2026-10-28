@@ -772,10 +772,10 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // Ambient Sound Controller
+  // Ambient Sound Controller (Persists in background & offscreen document)
   ambientSelect.addEventListener("change", (e) => {
     const val = e.target.value;
-    soundManager.playAmbient(val);
+    ext.runtime.sendMessage({ action: "SET_AMBIENT_SOUND", soundType: val });
   });
 
   // -------------------------------------------------------------
@@ -1169,6 +1169,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Storage Change Listener for live sync
   ext.storage.onChanged.addListener((changes) => {
+    if (changes.ambientSound) {
+      ambientSelect.value = changes.ambientSound.newValue || "none";
+    }
     if (changes.timerState || changes.sessionEndTime || changes.treeState || changes.coins || changes.lastDrop) {
       syncTimerFromStorage();
       if (activeTab === "tabGarden") renderGardenTab();
@@ -1177,12 +1180,15 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // Initial Load
-  ext.storage.local.get(["lang"], (data) => {
+  ext.storage.local.get(["lang", "ambientSound"], (data) => {
     if (data.lang) {
       langSelect.value = data.lang;
       applyLanguage(data.lang);
     } else {
       applyLanguage("ru");
+    }
+    if (data.ambientSound) {
+      ambientSelect.value = data.ambientSound;
     }
     syncTimerFromStorage();
   });
