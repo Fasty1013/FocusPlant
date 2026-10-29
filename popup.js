@@ -1842,6 +1842,8 @@ document.addEventListener("DOMContentLoaded", () => {
           <div class="skin-details">
             <div class="skin-name-row">
               <span class="skin-name">${skin.name[currentLang] || skin.name.ru} ${skin.emoji}</span>
+            </div>
+            <div class="skin-tags-row">
               <span class="skin-rarity-pill" style="background:${rarityObj.bg};color:${rarityObj.color};">${rarityObj.stars}</span>
               ${exclusiveBadge}
             </div>
@@ -1850,7 +1852,7 @@ document.addEventListener("DOMContentLoaded", () => {
           <div class="skin-action">
             ${
               isEquipped
-                ? `<button class="btn btn-sm btn-primary" disabled>${t.equipped}</button>`
+                ? `<button class="btn btn-sm btn-equipped" disabled>${t.equipped}</button>`
                 : isOwned
                   ? `<button class="btn btn-sm btn-warning equip-btn" data-skin="${skin.id}">${t.equip}</button>`
                   : `<button class="btn btn-sm btn-primary buy-btn" data-skin="${skin.id}" data-price="${skin.price}">🪙 ${skin.price} ${t.buy}</button>`
