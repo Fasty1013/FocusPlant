@@ -74,6 +74,7 @@
           <div class="wither-alert" id="witherAlert" style="display: none;">
             <span>🥀 Дерево завяло! Причина: <b id="witherReasonText">Запрещенный сайт</b></span>
           </div>
+          <button class="garden-preview-pill" id="goToGardenBtn" title="Перейти в виртуальный 3D сад">🏝️ Открыть изометрический 3D Сад ➔</button>
         </div>
       </div>
 
@@ -194,34 +195,29 @@
         </div>
       </div>
 
-      <!-- 🏝️ Interactive Living Garden Island (Визуальный 2D-остров Сада) -->
+      <!-- 🏝️ Interactive 3D Isometric Virtual Garden (Изометрический 3D-Сад) -->
       <div class="garden-section-card meadow-island-section">
         <div class="meadow-header">
           <div class="meadow-title-row">
             <span class="meadow-icon">🏝️</span>
             <div class="meadow-titles">
-              <h4 id="lblMeadowTitle">Живой Остров Сада</h4>
-              <span class="meadow-stage-badge" id="meadowStageBadge">🌿 Полянка (0 деревьев)</span>
+              <h4 id="lblMeadowTitle">Изометрический Сад</h4>
+              <span class="meadow-stage-badge" id="meadowStageBadge">🌿 Полянка (Сетка 4×4)</span>
             </div>
           </div>
           <div class="meadow-controls">
-            <button class="meadow-filter-btn active" id="btnFilterAllTrees" data-filter="all" title="Все выращенные деревья">Все</button>
-            <button class="meadow-filter-btn" id="btnFilterTodayTrees" data-filter="today" title="Только за сегодня">Сегодня</button>
+            <button class="meadow-filter-btn active" id="btnFilterMyTrees" data-filter="my" title="Мой сад">Мой сад</button>
+            <button class="meadow-filter-btn" id="btnFilterShowcase" data-filter="showcase" title="Все виды деревьев">Все виды ✨</button>
           </div>
         </div>
 
-        <!-- Meadow Viewport Stage -->
-        <div class="meadow-viewport" id="meadowViewport">
-          <!-- Sky Ambiance & Atmospheric Decor -->
+        <!-- 3D Isometric Garden Viewport -->
+        <div class="meadow-viewport iso-garden-viewport" id="meadowViewport">
+          <!-- Sky, Sunlight & Ambiance -->
           <div class="meadow-sky">
             <div class="meadow-sun-glow"></div>
             <div class="meadow-cloud c1"></div>
             <div class="meadow-cloud c2"></div>
-            <div class="meadow-stars">
-              <span class="star s1">✦</span>
-              <span class="star s2">✦</span>
-              <span class="star s3">✦</span>
-            </div>
             <div class="meadow-fireflies">
               <span class="firefly f1"></span>
               <span class="firefly f2"></span>
@@ -230,37 +226,20 @@
             </div>
           </div>
 
-          <!-- Floating Grassy Island with 3D Earth Base -->
-          <div class="meadow-island-body" id="meadowIslandBody">
-            <!-- Grass Surface where Trees are planted -->
-            <div class="meadow-grass-surface" id="meadowGrassSurface">
-              <div class="grass-decor-tufts">
-                <span class="flower fl1">🌸</span>
-                <span class="flower fl2">🌼</span>
-                <span class="flower fl3">🍀</span>
-                <span class="flower fl4">✨</span>
+          <!-- 3D Isometric Stage Container -->
+          <div class="iso-stage-wrapper">
+            <!-- 3D Floating Ground Island -->
+            <div class="iso-island-cube">
+              <!-- Top 4x4 Isometric Grid of Lush Grass Tiles -->
+              <div class="iso-grid-board" id="isoGridBoard">
+                <!-- 16 distinct isometric grass tiles dynamically generated -->
               </div>
-              <div class="planted-trees-container" id="plantedTreesContainer">
-                <!-- Staggered SVG trees dynamically injected here -->
-              </div>
-            </div>
-            <!-- Island Cliff Underside -->
-            <div class="meadow-cliff-base">
-              <div class="cliff-strata"></div>
-              <div class="cliff-moss-layer">
-                <span class="moss-vine mv1"></span>
-                <span class="moss-vine mv2"></span>
-                <span class="moss-vine mv3"></span>
-              </div>
+              <!-- 3D Island Earth Sides -->
+              <div class="iso-cliff-side-left"></div>
+              <div class="iso-cliff-side-right"></div>
             </div>
             <!-- Abyss Ambient Shadow -->
-            <div class="island-ground-shadow"></div>
-          </div>
-
-          <!-- Empty Island State (Visible when 0 trees) -->
-          <div class="meadow-empty-overlay" id="meadowEmptyOverlay" style="display: none;">
-            <div class="empty-island-sprout">🌱</div>
-            <p id="lblMeadowEmpty">Остров ждёт первого семени! Завершите сеанс фокуса, чтобы посадить здесь своё первое дерево.</p>
+            <div class="iso-ground-shadow"></div>
           </div>
 
           <!-- Tree Inspector Modal (Appears when clicking any tree) -->
@@ -286,7 +265,7 @@
         </div>
 
         <div class="meadow-footer">
-          <small class="meadow-hint" id="lblMeadowHint">💡 Нажмите на любое дерево, чтобы увидеть дату посадки и историю</small>
+          <small class="meadow-hint" id="lblMeadowHint">💡 Нажмите на любое дерево или плитку в сетке для просмотра</small>
         </div>
       </div>
 
