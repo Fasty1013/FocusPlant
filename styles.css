@@ -867,7 +867,9 @@ input:disabled + .slider.round {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2px;
+  margin-bottom: 4px;
+  flex-wrap: wrap;
+  gap: 6px;
 }
 
 .meadow-title-row {
@@ -910,6 +912,8 @@ input:disabled + .slider.round {
 .meadow-controls {
   display: flex;
   gap: 4px;
+  flex-wrap: wrap;
+  align-items: center;
 }
 
 .meadow-filter-btn {
@@ -1869,7 +1873,8 @@ input:disabled + .slider.round {
   gap: 8px;
   max-height: 380px;
   overflow-y: auto;
-  padding-right: 2px;
+  overflow-x: hidden;
+  padding-right: 4px;
 }
 
 .skin-card {
@@ -1878,9 +1883,12 @@ input:disabled + .slider.round {
   background: var(--bg-secondary);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
-  padding: 10px 12px;
-  gap: 12px;
-  transition: border-color 0.2s;
+  padding: 8px 10px;
+  gap: 10px;
+  transition: all 0.2s ease;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .skin-card.selected {
@@ -1889,8 +1897,8 @@ input:disabled + .slider.round {
 }
 
 .skin-preview-box {
-  width: 52px;
-  height: 52px;
+  width: 48px;
+  height: 48px;
   background: var(--bg-input);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-sm);
@@ -1908,38 +1916,71 @@ input:disabled + .slider.round {
 
 .skin-details {
   flex: 1;
+  min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 3px;
+  overflow: hidden;
 }
 
 .skin-name-row {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
+  flex-wrap: wrap;
 }
 
 .skin-name {
-  font-size: 0.88rem;
+  font-size: 0.84rem;
   font-weight: 700;
   color: #fff;
+  line-height: 1.2;
+  word-break: break-word;
 }
 
 .skin-rarity-pill {
-  font-size: 0.62rem;
-  font-weight: 700;
-  padding: 1px 6px;
+  font-size: 0.58rem;
+  font-weight: 800;
+  padding: 1px 5px;
   border-radius: 4px;
+  flex-shrink: 0;
+  line-height: 1.2;
 }
 
 .skin-desc {
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   color: var(--text-muted);
   line-height: 1.3;
+  word-break: break-word;
 }
 
 .skin-action {
   flex-shrink: 0;
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+}
+
+.skin-action .btn {
+  font-size: 0.72rem;
+  padding: 6px 10px;
+  font-weight: 700;
+  white-space: nowrap;
+  border-radius: var(--radius-sm);
+}
+
+.skin-action .buy-btn {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 2px 6px rgba(16, 185, 129, 0.3);
+  transition: all 0.2s ease;
+}
+
+.skin-action .buy-btn:hover {
+  background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.5);
 }
 
 /* TAB 4: Tasks & Quests */
