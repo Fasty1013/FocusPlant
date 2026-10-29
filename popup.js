@@ -80,7 +80,23 @@ document.addEventListener("DOMContentLoaded", () => {
       lblAlertStyleDesc: "На весь экран показывает окно с кнопкой «ОК» (а в строгом режиме — без кнопки «ОК»).",
       quickAdd: "Быстрое добавление:",
       activeSites: "Активный список сайтов:",
-      sitePlaceholder: "например: youtube.com"
+      sitePlaceholder: "например: youtube.com",
+      meadowTitle: "Живой Остров Сада",
+      meadowStage0: "🌱 Пустой остров",
+      meadowStage1: "🌱 Росток",
+      meadowStage2: "🌿 Полянка",
+      meadowStage3: "🌳 Роща",
+      meadowStage4: "🌲 Густой лес",
+      meadowStage5: "🏰 Заповедник",
+      meadowFilterAll: "Все",
+      meadowFilterToday: "Сегодня",
+      todayLabel: "сегодня",
+      meadowEmpty: "Остров ждёт первого семени! Завершите сеанс фокуса, чтобы посадить здесь своё первое дерево 🌱",
+      meadowHint: "💡 Нажмите на любое дерево, чтобы увидеть дату посадки и историю",
+      inspectDate: "📅 Дата:",
+      inspectDuration: "⏱ Фокус:",
+      inspectStatusGrown: "Выращено успешно!",
+      inspectStatusWithered: "Завяло из-за отвлечения"
     },
     en: {
       timerTab: "⏱ Timer",
@@ -158,7 +174,23 @@ document.addEventListener("DOMContentLoaded", () => {
       lblAlertStyleDesc: "Full screen displays notification with 'OK' button (in strict mode without 'OK').",
       quickAdd: "Quick Add:",
       activeSites: "Active Website List:",
-      sitePlaceholder: "e.g. youtube.com"
+      sitePlaceholder: "e.g. youtube.com",
+      meadowTitle: "Living Garden Island",
+      meadowStage0: "🌱 Empty Island",
+      meadowStage1: "🌱 Sprout",
+      meadowStage2: "🌿 Meadow",
+      meadowStage3: "🌳 Grove",
+      meadowStage4: "🌲 Dense Forest",
+      meadowStage5: "🏰 Sanctuary",
+      meadowFilterAll: "All",
+      meadowFilterToday: "Today",
+      todayLabel: "today",
+      meadowEmpty: "The island awaits its first seed! Complete a focus session to plant your first tree here 🌱",
+      meadowHint: "💡 Click any tree to inspect its planting date and focus history",
+      inspectDate: "📅 Date:",
+      inspectDuration: "⏱ Focus:",
+      inspectStatusGrown: "Grown successfully!",
+      inspectStatusWithered: "Withered due to distraction"
     },
     uz: {
       timerTab: "⏱ Taymer",
@@ -236,7 +268,23 @@ document.addEventListener("DOMContentLoaded", () => {
       lblAlertStyleDesc: "To'liq ekran 'OK' tugmali oynani ko'rsatadi (qat'iy rejimda 'OK'siz).",
       quickAdd: "Tezkor qo'shish:",
       activeSites: "Faol saytlar ro'yxati:",
-      sitePlaceholder: "masalan: youtube.com"
+      sitePlaceholder: "masalan: youtube.com",
+      meadowTitle: "Jonli Bog' Oroli",
+      meadowStage0: "🌱 Bo'sh orol",
+      meadowStage1: "🌱 Nihol",
+      meadowStage2: "🌿 Maydoncha",
+      meadowStage3: "🌳 To'qayzor",
+      meadowStage4: "🌲 Qalin o'rmon",
+      meadowStage5: "🏰 Qo'riqxona",
+      meadowFilterAll: "Hammasi",
+      meadowFilterToday: "Bugun",
+      todayLabel: "bugun",
+      meadowEmpty: "Orol birinchi urug'ni kutmoqda! Bu yerga birinchi daraxtingizni ekish uchun diqqat seansini yakunlang 🌱",
+      meadowHint: "💡 Ekish sanasi va tarixini ko'rish uchun istalgan daraxtni bosing",
+      inspectDate: "📅 Sana:",
+      inspectDuration: "⏱ Fokus:",
+      inspectStatusGrown: "Muvaffaqiyatli o'stirildi!",
+      inspectStatusWithered: "Chalg'ish tufayli so'ldi"
     },
     ja: {
       timerTab: "⏱ タイマー",
@@ -314,7 +362,23 @@ document.addEventListener("DOMContentLoaded", () => {
       lblAlertStyleDesc: "全画面で「了解」ボタン付き警告を表示（厳格モードでは「了解」なし）。",
       quickAdd: "クイック追加:",
       activeSites: "登録済みサイト一覧:",
-      sitePlaceholder: "例: youtube.com"
+      sitePlaceholder: "例: youtube.com",
+      meadowTitle: "生きている庭園の島",
+      meadowStage0: "🌱 静かな無人島",
+      meadowStage1: "🌱 芽生え",
+      meadowStage2: "🌿 草原",
+      meadowStage3: "🌳 木立ち",
+      meadowStage4: "🌲 豊かな森",
+      meadowStage5: "🏰 聖なる樹海",
+      meadowFilterAll: "すべて",
+      meadowFilterToday: "今日",
+      todayLabel: "今日",
+      meadowEmpty: "島は最初の種を待っています！集中セッションを完了して、ここに最初の木を植えましょう 🌱",
+      meadowHint: "💡 木をクリックすると、植樹日や集中セッションの履歴を確認できます",
+      inspectDate: "📅 植樹日:",
+      inspectDuration: "⏱ 集中:",
+      inspectStatusGrown: "見事に成長しました！",
+      inspectStatusWithered: "集中途切れにより枯死"
     }
   };
 
@@ -509,6 +573,15 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("lblActiveSites").textContent = t.activeSites;
     siteInput.placeholder = t.sitePlaceholder;
     addSiteBtn.textContent = t.addBtn;
+
+    // Meadow Island Localized Text
+    if (document.getElementById("lblMeadowTitle")) document.getElementById("lblMeadowTitle").textContent = t.meadowTitle;
+    if (document.getElementById("btnFilterAllTrees")) document.getElementById("btnFilterAllTrees").textContent = t.meadowFilterAll;
+    if (document.getElementById("btnFilterTodayTrees")) document.getElementById("btnFilterTodayTrees").textContent = t.meadowFilterToday;
+    if (document.getElementById("lblMeadowEmpty")) document.getElementById("lblMeadowEmpty").textContent = t.meadowEmpty;
+    if (document.getElementById("lblMeadowHint")) document.getElementById("lblMeadowHint").textContent = t.meadowHint;
+    if (document.getElementById("lblInspectDate")) document.getElementById("lblInspectDate").textContent = t.inspectDate;
+    if (document.getElementById("lblInspectDuration")) document.getElementById("lblInspectDuration").textContent = t.inspectDuration;
 
     // Refresh active views
     syncTimerFromStorage();
@@ -885,8 +958,214 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // -------------------------------------------------------------
-  // TAB 2: VIRTUAL GARDEN & RARITIES ALMANAC
+  // TAB 2: VIRTUAL GARDEN, LIVING MEADOW ISLAND & RARITIES ALMANAC
   // -------------------------------------------------------------
+  let activeMeadowFilter = "all";
+
+  const btnFilterAllTrees = document.getElementById("btnFilterAllTrees");
+  const btnFilterTodayTrees = document.getElementById("btnFilterTodayTrees");
+  const inspectorCloseBtn = document.getElementById("inspectorCloseBtn");
+  const treeInspectorModal = document.getElementById("treeInspectorModal");
+  const meadowViewport = document.getElementById("meadowViewport");
+
+  if (btnFilterAllTrees) {
+    btnFilterAllTrees.addEventListener("click", () => {
+      activeMeadowFilter = "all";
+      btnFilterAllTrees.classList.add("active");
+      if (btnFilterTodayTrees) btnFilterTodayTrees.classList.remove("active");
+      renderGardenTab();
+    });
+  }
+
+  if (btnFilterTodayTrees) {
+    btnFilterTodayTrees.addEventListener("click", () => {
+      activeMeadowFilter = "today";
+      btnFilterTodayTrees.classList.add("active");
+      if (btnFilterAllTrees) btnFilterAllTrees.classList.remove("active");
+      renderGardenTab();
+    });
+  }
+
+  if (inspectorCloseBtn) {
+    inspectorCloseBtn.addEventListener("click", () => {
+      if (treeInspectorModal) treeInspectorModal.style.display = "none";
+      document.querySelectorAll(".meadow-tree.inspected").forEach(el => el.classList.remove("inspected"));
+    });
+  }
+
+  if (meadowViewport) {
+    meadowViewport.addEventListener("click", (e) => {
+      if (!e.target.closest(".meadow-tree") && !e.target.closest(".tree-inspector-modal")) {
+        if (treeInspectorModal) treeInspectorModal.style.display = "none";
+        document.querySelectorAll(".meadow-tree.inspected").forEach(el => el.classList.remove("inspected"));
+      }
+    });
+  }
+
+  // Procedural 2D Living Meadow Island Renderer
+  function renderLivingMeadow(forest, t) {
+    const container = document.getElementById("plantedTreesContainer");
+    const emptyOverlay = document.getElementById("meadowEmptyOverlay");
+    const stageBadge = document.getElementById("meadowStageBadge");
+    const modal = document.getElementById("treeInspectorModal");
+    const previewEl = document.getElementById("inspectorTreePreview");
+    const pillEl = document.getElementById("inspectorRarityPill");
+    const titleEl = document.getElementById("inspectorTreeTitle");
+    const dateEl = document.getElementById("inspectTreeDate");
+    const durEl = document.getElementById("inspectTreeDuration");
+    const statusEl = document.getElementById("inspectTreeStatus");
+
+    if (!container) return;
+    container.innerHTML = "";
+    if (modal) modal.style.display = "none";
+
+    let displayTrees = [...forest];
+    if (activeMeadowFilter === "today") {
+      const todayStr = new Date().toDateString();
+      displayTrees = displayTrees.filter(tr => tr.date && new Date(tr.date).toDateString() === todayStr);
+    }
+
+    const totalCount = displayTrees.length;
+
+    // Stage milestone calculation
+    if (stageBadge) {
+      let stageName = t.meadowStage0 || "🌱 Пустой остров";
+      if (totalCount >= 26) stageName = t.meadowStage5 || "🏰 Заповедник";
+      else if (totalCount >= 17) stageName = t.meadowStage4 || "🌲 Густой лес";
+      else if (totalCount >= 9) stageName = t.meadowStage3 || "🌳 Роща";
+      else if (totalCount >= 4) stageName = t.meadowStage2 || "🌿 Полянка";
+      else if (totalCount >= 1) stageName = t.meadowStage1 || "🌱 Росток";
+
+      const countLabel = activeMeadowFilter === "today"
+        ? ` (${totalCount} ${t.todayLabel || "сегодня"})`
+        : ` (${totalCount} 🌳)`;
+      stageBadge.textContent = `${stageName}${countLabel}`;
+    }
+
+    if (totalCount === 0) {
+      if (emptyOverlay) emptyOverlay.style.display = "flex";
+      return;
+    }
+
+    if (emptyOverlay) emptyOverlay.style.display = "none";
+
+    // 22 organically staggered scenic positions across 4 depth tiers on the grassy hill
+    const SLOTS = [
+      // 1. Hero center slot
+      { left: 50, top: 52, scale: 1.0, z: 25 },
+      // 2-6. Tier 1: Back row (smaller trees high up on hill)
+      { left: 34, top: 20, scale: 0.74, z: 12 },
+      { left: 66, top: 20, scale: 0.74, z: 12 },
+      { left: 50, top: 16, scale: 0.72, z: 10 },
+      { left: 20, top: 26, scale: 0.76, z: 14 },
+      { left: 80, top: 26, scale: 0.76, z: 14 },
+      // 7-12. Tier 2: Middle row
+      { left: 28, top: 38, scale: 0.90, z: 20 },
+      { left: 72, top: 38, scale: 0.90, z: 20 },
+      { left: 40, top: 34, scale: 0.88, z: 18 },
+      { left: 60, top: 34, scale: 0.88, z: 18 },
+      { left: 14, top: 46, scale: 0.85, z: 22 },
+      { left: 86, top: 46, scale: 0.85, z: 22 },
+      // 13-17. Tier 3: Front-mid row
+      { left: 33, top: 64, scale: 1.08, z: 30 },
+      { left: 67, top: 64, scale: 1.08, z: 30 },
+      { left: 50, top: 68, scale: 1.12, z: 32 },
+      { left: 18, top: 68, scale: 1.04, z: 28 },
+      { left: 82, top: 68, scale: 1.04, z: 28 },
+      // 18-22. Tier 4: Foreground hero edges
+      { left: 26, top: 82, scale: 1.18, z: 36 },
+      { left: 74, top: 82, scale: 1.18, z: 36 },
+      { left: 42, top: 86, scale: 1.22, z: 38 },
+      { left: 58, top: 86, scale: 1.22, z: 38 },
+      { left: 10, top: 76, scale: 1.08, z: 34 }
+    ];
+
+    // Plot recent trees
+    const treesToPlot = [...displayTrees].slice(-SLOTS.length);
+
+    treesToPlot.forEach((tree, idx) => {
+      const slot = SLOTS[idx % SLOTS.length];
+      const isWithered = tree.status === "withered";
+      const skinObj = TREE_SKINS[tree.skin] || TREE_SKINS.oak;
+      const rarityObj = RARITIES[tree.rarity] || RARITIES.common;
+      const isRareOrBetter = ["legendary", "mythic"].includes(tree.rarity);
+
+      const treeEl = document.createElement("div");
+      treeEl.className = `meadow-tree ${isRareOrBetter ? "rare-glow" : ""}`;
+      treeEl.style.left = `${slot.left}%`;
+      treeEl.style.top = `${slot.top}%`;
+      treeEl.style.transform = `translateX(-50%) translateY(-100%) scale(${slot.scale})`;
+      treeEl.style.setProperty("--tree-scale", slot.scale);
+      treeEl.style.zIndex = slot.z;
+
+      // Staggered wind sway animation
+      const animDelay = -((idx * 0.7) % 3.6).toFixed(2);
+      const animDur = (3.2 + ((idx * 0.35) % 1.2)).toFixed(2);
+      treeEl.style.animationDelay = `${animDelay}s`;
+      treeEl.style.animationDuration = `${animDur}s`;
+
+      const baseWidth = Math.round(44 * slot.scale);
+      const baseHeight = Math.round(50 * slot.scale);
+      treeEl.style.width = `${baseWidth}px`;
+      treeEl.style.height = `${baseHeight}px`;
+
+      // Shadow underneath
+      const shadowEl = document.createElement("div");
+      shadowEl.className = "tree-ground-shadow";
+
+      // SVG Avatar
+      const avatarWrap = document.createElement("div");
+      avatarWrap.className = "meadow-tree-avatar";
+      avatarWrap.innerHTML = renderTreeSVG(tree.skin, 5, isWithered);
+
+      treeEl.appendChild(shadowEl);
+      treeEl.appendChild(avatarWrap);
+
+      // Tooltip preview title
+      const dateStr = tree.date ? new Date(tree.date).toLocaleDateString() : "";
+      const timeStr = tree.date ? new Date(tree.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : "";
+      const fullDateStr = `${dateStr} ${timeStr}`.trim();
+      treeEl.title = `${skinObj.name[currentLang] || skinObj.name.ru} (${rarityObj.name[currentLang] || rarityObj.name.ru})\n${fullDateStr}`;
+
+      // Click to inspect!
+      treeEl.addEventListener("click", (e) => {
+        e.stopPropagation();
+        document.querySelectorAll(".meadow-tree.inspected").forEach(el => el.classList.remove("inspected"));
+        treeEl.classList.add("inspected");
+
+        if (modal) {
+          modal.style.display = "block";
+          if (previewEl) {
+            previewEl.innerHTML = renderTreeSVG(tree.skin, 5, isWithered);
+          }
+          if (pillEl) {
+            pillEl.textContent = `${rarityObj.stars} ${rarityObj.name[currentLang] || rarityObj.name.ru}`.toUpperCase();
+            pillEl.style.background = rarityObj.bg;
+            pillEl.style.color = rarityObj.color;
+            pillEl.style.border = `1px solid ${rarityObj.border}`;
+          }
+          if (titleEl) {
+            titleEl.textContent = `${skinObj.name[currentLang] || skinObj.name.ru} ${skinObj.emoji}`;
+          }
+          if (dateEl) {
+            dateEl.textContent = fullDateStr || "—";
+          }
+          if (durEl) {
+            durEl.textContent = `${tree.duration || 0} ${t.minuteUnit}`;
+          }
+          if (statusEl) {
+            statusEl.textContent = isWithered
+              ? (tree.reason ? `🥀 ${t.withered}: ${tree.reason}` : `🥀 ${t.inspectStatusWithered}`)
+              : `🌱 ${t.inspectStatusGrown}`;
+            statusEl.className = `inspector-status-badge ${isWithered ? "withered" : ""}`;
+          }
+        }
+      });
+
+      container.appendChild(treeEl);
+    });
+  }
+
   function renderGardenTab() {
     ext.storage.local.get(["forest", "stats", "unlockedSkins", "selectedSkin"], (data) => {
       const forest = Array.isArray(data.forest) ? data.forest : [];
@@ -910,6 +1189,9 @@ document.addEventListener("DOMContentLoaded", () => {
       statWithered.textContent = withered;
       statMinutes.textContent = `${stats.totalFocusMinutes || 0}m`;
       statRate.textContent = `${rate}%`;
+
+      // Render Interactive Living Meadow Island
+      renderLivingMeadow(forest, t);
 
       // Render Rarities Almanac
       const allSkins = Object.values(TREE_SKINS);

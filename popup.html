@@ -194,6 +194,102 @@
         </div>
       </div>
 
+      <!-- 🏝️ Interactive Living Garden Island (Визуальный 2D-остров Сада) -->
+      <div class="garden-section-card meadow-island-section">
+        <div class="meadow-header">
+          <div class="meadow-title-row">
+            <span class="meadow-icon">🏝️</span>
+            <div class="meadow-titles">
+              <h4 id="lblMeadowTitle">Живой Остров Сада</h4>
+              <span class="meadow-stage-badge" id="meadowStageBadge">🌿 Полянка (0 деревьев)</span>
+            </div>
+          </div>
+          <div class="meadow-controls">
+            <button class="meadow-filter-btn active" id="btnFilterAllTrees" data-filter="all" title="Все выращенные деревья">Все</button>
+            <button class="meadow-filter-btn" id="btnFilterTodayTrees" data-filter="today" title="Только за сегодня">Сегодня</button>
+          </div>
+        </div>
+
+        <!-- Meadow Viewport Stage -->
+        <div class="meadow-viewport" id="meadowViewport">
+          <!-- Sky Ambiance & Atmospheric Decor -->
+          <div class="meadow-sky">
+            <div class="meadow-sun-glow"></div>
+            <div class="meadow-cloud c1"></div>
+            <div class="meadow-cloud c2"></div>
+            <div class="meadow-stars">
+              <span class="star s1">✦</span>
+              <span class="star s2">✦</span>
+              <span class="star s3">✦</span>
+            </div>
+            <div class="meadow-fireflies">
+              <span class="firefly f1"></span>
+              <span class="firefly f2"></span>
+              <span class="firefly f3"></span>
+              <span class="firefly f4"></span>
+            </div>
+          </div>
+
+          <!-- Floating Grassy Island with 3D Earth Base -->
+          <div class="meadow-island-body" id="meadowIslandBody">
+            <!-- Grass Surface where Trees are planted -->
+            <div class="meadow-grass-surface" id="meadowGrassSurface">
+              <div class="grass-decor-tufts">
+                <span class="flower fl1">🌸</span>
+                <span class="flower fl2">🌼</span>
+                <span class="flower fl3">🍀</span>
+                <span class="flower fl4">✨</span>
+              </div>
+              <div class="planted-trees-container" id="plantedTreesContainer">
+                <!-- Staggered SVG trees dynamically injected here -->
+              </div>
+            </div>
+            <!-- Island Cliff Underside -->
+            <div class="meadow-cliff-base">
+              <div class="cliff-strata"></div>
+              <div class="cliff-moss-layer">
+                <span class="moss-vine mv1"></span>
+                <span class="moss-vine mv2"></span>
+                <span class="moss-vine mv3"></span>
+              </div>
+            </div>
+            <!-- Abyss Ambient Shadow -->
+            <div class="island-ground-shadow"></div>
+          </div>
+
+          <!-- Empty Island State (Visible when 0 trees) -->
+          <div class="meadow-empty-overlay" id="meadowEmptyOverlay" style="display: none;">
+            <div class="empty-island-sprout">🌱</div>
+            <p id="lblMeadowEmpty">Остров ждёт первого семени! Завершите сеанс фокуса, чтобы посадить здесь своё первое дерево.</p>
+          </div>
+
+          <!-- Tree Inspector Modal (Appears when clicking any tree) -->
+          <div class="tree-inspector-modal" id="treeInspectorModal" style="display: none;">
+            <button class="inspector-close" id="inspectorCloseBtn" title="Закрыть">✕</button>
+            <div class="inspector-card-body">
+              <div class="inspector-tree-preview" id="inspectorTreePreview"></div>
+              <div class="inspector-info">
+                <div class="inspector-rarity-pill" id="inspectorRarityPill">★ РЕДКОЕ</div>
+                <h5 class="inspector-tree-title" id="inspectorTreeTitle">Сакура Самурая 🌸</h5>
+                <div class="inspector-meta-row">
+                  <span class="meta-label" id="lblInspectDate">📅 Дата:</span>
+                  <span class="meta-val" id="inspectTreeDate">29.10.2026, 14:30</span>
+                </div>
+                <div class="inspector-meta-row">
+                  <span class="meta-label" id="lblInspectDuration">⏱ Фокус:</span>
+                  <span class="meta-val" id="inspectTreeDuration">25 мин</span>
+                </div>
+                <div class="inspector-status-badge" id="inspectTreeStatus">🌱 Успешно выращено!</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="meadow-footer">
+          <small class="meadow-hint" id="lblMeadowHint">💡 Нажмите на любое дерево, чтобы увидеть дату посадки и историю</small>
+        </div>
+      </div>
+
       <!-- Tree Rarities Almanac (Коллекция деревьев) -->
       <div class="garden-section-card">
         <div class="almanac-header">
