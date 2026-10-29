@@ -114,7 +114,10 @@ document.addEventListener("DOMContentLoaded", () => {
       confirmSellAllWithered: (count, total) => `Убрать и переработать все ${count} засохших деревьев за +${total} монет?`,
       toastSoldWitheredSuccess: (count, total) => `🧹 Убрано ${count} засохших деревьев! Получено +${total} 🪙`,
       exclusiveShopBadge: "ЭКСКЛЮЗИВ",
-      exclusiveShopDesc: "💎 Эксклюзив магазина (нельзя выбить)"
+      exclusiveShopDesc: "💎 Эксклюзив магазина (нельзя выбить)",
+      achievementsHeader: "🏆 Медали и достижения",
+      achievementsSub: "Награды в монетах за особые рекорды",
+      achievementUnlockedToast: (name, reward) => `🏆 Достижение «${name}» получено! +${reward} 🪙`
     },
     en: {
       timerTab: "⏱ Timer",
@@ -226,7 +229,10 @@ document.addEventListener("DOMContentLoaded", () => {
       confirmSellAllWithered: (count, total) => `Recycle all ${count} withered trees into compost for +${total} coins?`,
       toastSoldWitheredSuccess: (count, total) => `🧹 Cleared ${count} withered trees! Received +${total} 🪙`,
       exclusiveShopBadge: "EXCLUSIVE",
-      exclusiveShopDesc: "💎 Shop Exclusive (Cannot be rolled)"
+      exclusiveShopDesc: "💎 Shop Exclusive (Cannot be rolled)",
+      achievementsHeader: "🏆 Medals & Achievements",
+      achievementsSub: "Earn coin rewards for special records",
+      achievementUnlockedToast: (name, reward) => `🏆 Achievement «${name}» claimed! +${reward} 🪙`
     },
     uz: {
       timerTab: "⏱ Taymer",
@@ -338,7 +344,10 @@ document.addEventListener("DOMContentLoaded", () => {
       confirmSellAllWithered: (count, total) => `Barcha ${count} ta so'lgan daraxtlarni +${total} tangaga qayta ishlashga sotmoqchimisiz?`,
       toastSoldWitheredSuccess: (count, total) => `🧹 ${count} ta so'lgan daraxt tozalandi! +${total} 🪙 olindi`,
       exclusiveShopBadge: "EKSKLUZIV",
-      exclusiveShopDesc: "💎 Do'kon eksklyuzivi (chiqmaydi)"
+      exclusiveShopDesc: "💎 Do'kon eksklyuzivi (chiqmaydi)",
+      achievementsHeader: "🏆 Medallar va yutuqlar",
+      achievementsSub: "Maxsus yutuqlar uchun tanga mukofotlari",
+      achievementUnlockedToast: (name, reward) => `🏆 «${name}» yutug'i olindi! +${reward} 🪙`
     },
     ja: {
       timerTab: "⏱ タイマー",
@@ -450,9 +459,111 @@ document.addEventListener("DOMContentLoaded", () => {
       confirmSellAllWithered: (count, total) => `枯れてしまった${count}本の木を堆肥として+${total}コインで売却しますか？`,
       toastSoldWitheredSuccess: (count, total) => `🧹 枯れた木を${count}本片付けました！+${total} 🪙`,
       exclusiveShopBadge: "限定品",
-      exclusiveShopDesc: "💎 ショップ限定（タイマー不可）"
+      exclusiveShopDesc: "💎 ショップ限定（タイマー不可）",
+      achievementsHeader: "🏆 勲章と実績",
+      achievementsSub: "特別な記録を達成してコイン報酬を獲得",
+      achievementUnlockedToast: (name, reward) => `🏆 実績「${name}」を獲得しました！+${reward} 🪙`
     }
   };
+
+  const DEFAULT_ACHIEVEMENTS = [
+    {
+      id: "night_owl",
+      icon: "🦉",
+      title: { ru: "Ночная сова", en: "Night Owl", uz: "Tungi boyqush", ja: "夜のフクロウ" },
+      desc: {
+        ru: "Успешно вырастить дерево после 23:00",
+        en: "Successfully grow a tree after 23:00",
+        uz: "Soat 23:00 dan keyin muvaffaqiyatli daraxt o'stiring",
+        ja: "夜23時以降に木を1本育てる"
+      },
+      target: 1,
+      current: 0,
+      unlocked: false,
+      claimed: false,
+      reward: 50
+    },
+    {
+      id: "marathon",
+      icon: "🏃",
+      title: { ru: "Марафонец", en: "Marathoner", uz: "Marafonchi", ja: "マラソンランナー" },
+      desc: {
+        ru: "Непрерывный сеанс фокуса 90+ минут",
+        en: "Continuous focus session for 90+ minutes",
+        uz: "90+ daqiqalik uzluksiz diqqat seansi",
+        ja: "90分以上の連続集中セッションを完了する"
+      },
+      target: 1,
+      current: 0,
+      unlocked: false,
+      claimed: false,
+      reward: 100
+    },
+    {
+      id: "iron_will",
+      icon: "🛡️",
+      title: { ru: "Железная воля", en: "Iron Will", uz: "Temir iroda", ja: "鋼の意志" },
+      desc: {
+        ru: "Вырастить 5 деревьев подряд в Строгом режиме без срывов",
+        en: "Grow 5 trees in a row in Strict Mode without failure",
+        uz: "Qat'iy rejimda ketma-ket 5 ta daraxtni buzmasdan o'stiring",
+        ja: "厳格モードで失敗せずに連続5本の木を育てる"
+      },
+      target: 5,
+      current: 0,
+      unlocked: false,
+      claimed: false,
+      reward: 150
+    },
+    {
+      id: "mythic_botanist",
+      icon: "👑",
+      title: { ru: "Королевский ботаник", en: "Royal Botanist", uz: "Qirollik botanigi", ja: "王立植物学者" },
+      desc: {
+        ru: "Выбить первое Мифическое дерево",
+        en: "Discover your first Mythic tree",
+        uz: "Birinchi Afsonaviy (Mifik) daraxtni qo'lga kiriting",
+        ja: "初の神話級（ミシック）の木を発見する"
+      },
+      target: 1,
+      current: 0,
+      unlocked: false,
+      claimed: false,
+      reward: 200
+    },
+    {
+      id: "first_sprout",
+      icon: "🌱",
+      title: { ru: "Первый росток", en: "First Sprout", uz: "Birinchi nihol", ja: "初めての芽吹き" },
+      desc: {
+        ru: "Успешно вырастить своё первое дерево фокуса",
+        en: "Successfully grow your very first focus tree",
+        uz: "Birinchi diqqat daraxtingizni muvaffaqiyatli o'stiring",
+        ja: "初めての木を無事に育て上げる"
+      },
+      target: 1,
+      current: 0,
+      unlocked: false,
+      claimed: false,
+      reward: 25
+    },
+    {
+      id: "grove_master",
+      icon: "🌲",
+      title: { ru: "Мастер леса", en: "Grove Master", uz: "O'rmon ustasi", ja: "森のマスター" },
+      desc: {
+        ru: "Собрать коллекцию из 10 уникальных видов деревьев",
+        en: "Collect 10 unique species of trees",
+        uz: "10 xil turdagi noyob daraxtlar to'plamini yiging",
+        ja: "10種類のユニークな木をコレクションする"
+      },
+      target: 10,
+      current: 0,
+      unlocked: false,
+      claimed: false,
+      reward: 100
+    }
+  ];
 
   // State Variables
   let currentLang = "ru";
@@ -1076,6 +1187,8 @@ document.addEventListener("DOMContentLoaded", () => {
     if (document.getElementById("lblHqDuration")) document.getElementById("lblHqDuration").textContent = t.lblHqDuration || "⏱ Время фокуса";
     if (document.getElementById("lblHqDuplicates")) document.getElementById("lblHqDuplicates").textContent = t.lblHqDuplicates || "🌿 В коллекции";
     if (document.getElementById("lblHqValue")) document.getElementById("lblHqValue").textContent = t.lblHqValue || "💎 Ценность";
+    if (document.getElementById("lblAchievementsHeader") && t.achievementsHeader) document.getElementById("lblAchievementsHeader").textContent = t.achievementsHeader;
+    if (document.getElementById("lblAchievementsSub") && t.achievementsSub) document.getElementById("lblAchievementsSub").textContent = t.achievementsSub;
 
     // Refresh active views
     syncTimerFromStorage();
@@ -2321,7 +2434,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // TAB 4: TASKS & QUESTS
   // -------------------------------------------------------------
   function renderTasksTab() {
-    ext.storage.local.get(["quests", "todos", "coins"], (data) => {
+    ext.storage.local.get(["quests", "todos", "coins", "achievements", "unlockedSkins", "forest", "stats", "strictStreak"], (data) => {
       const quests = Array.isArray(data.quests) ? data.quests : [];
       const todos = Array.isArray(data.todos) ? data.todos : [];
       const coins = data.coins || 0;
@@ -2373,6 +2486,164 @@ document.addEventListener("DOMContentLoaded", () => {
           });
         });
       });
+
+      // -------------------------------------------------------------
+      // 🏆 Achievements & Medals Rendering
+      // -------------------------------------------------------------
+      const achievementsGrid = document.getElementById("achievementsGrid");
+      const achievementsCountBadge = document.getElementById("achievementsCountBadge");
+      let achievements = Array.isArray(data.achievements) ? [...data.achievements] : [];
+      const unlockedSkins = Array.isArray(data.unlockedSkins) ? data.unlockedSkins : ["oak"];
+      const forest = Array.isArray(data.forest) ? data.forest : [];
+      const strictStreak = data.strictStreak || 0;
+
+      // Merge defaults if missing
+      DEFAULT_ACHIEVEMENTS.forEach(defAch => {
+        const found = achievements.find(a => a.id === defAch.id);
+        if (!found) achievements.push({ ...defAch });
+      });
+
+      // Passive retroactive unlock checks for past accomplishments
+      let hasAchievementUpdates = false;
+      achievements = achievements.map(ach => {
+        let changed = false;
+        let shouldUnlock = false;
+        let currentVal = ach.current || 0;
+
+        if (ach.id === "grove_master") {
+          currentVal = unlockedSkins.length;
+          if (unlockedSkins.length >= 10 && !ach.unlocked) shouldUnlock = true;
+          changed = true;
+        } else if (ach.id === "iron_will") {
+          currentVal = Math.max(currentVal, strictStreak);
+          if (strictStreak >= 5 && !ach.unlocked) shouldUnlock = true;
+          changed = true;
+        } else if (ach.id === "first_sprout") {
+          if (forest.some(t => t.status === "completed") && !ach.unlocked) {
+            shouldUnlock = true;
+            currentVal = 1;
+            changed = true;
+          }
+        } else if (ach.id === "mythic_botanist") {
+          if (forest.some(t => t.rarity === "mythic" && t.status === "completed") && !ach.unlocked) {
+            shouldUnlock = true;
+            currentVal = 1;
+            changed = true;
+          }
+        } else if (ach.id === "marathon") {
+          if (forest.some(t => t.duration >= 90 && t.status === "completed") && !ach.unlocked) {
+            shouldUnlock = true;
+            currentVal = 1;
+            changed = true;
+          }
+        }
+
+        if (shouldUnlock && !ach.unlocked) {
+          hasAchievementUpdates = true;
+          return {
+            ...ach,
+            current: Math.max(currentVal, ach.target),
+            unlocked: true,
+            unlockedDate: ach.unlockedDate || new Date().toISOString()
+          };
+        }
+
+        if (changed && currentVal !== ach.current) {
+          hasAchievementUpdates = true;
+          return { ...ach, current: currentVal };
+        }
+
+        return ach;
+      });
+
+      if (hasAchievementUpdates) {
+        ext.storage.local.set({ achievements: achievements });
+      }
+
+      if (achievementsGrid) {
+        achievementsGrid.innerHTML = "";
+        let unlockedCount = 0;
+
+        achievements.forEach(ach => {
+          if (ach.unlocked) unlockedCount++;
+          const card = document.createElement("div");
+          const isClaimed = !!ach.claimed;
+          const isUnlocked = !!ach.unlocked;
+
+          let stateClass = "locked";
+          if (isClaimed) stateClass = "claimed";
+          else if (isUnlocked) stateClass = "unlocked";
+
+          card.className = `achievement-badge-card ${stateClass}`;
+
+          const titleStr = ach.title[currentLang] || ach.title.ru;
+          const descStr = ach.desc[currentLang] || ach.desc.ru;
+
+          let progressHtml = "";
+          if (ach.target > 1 && !isUnlocked) {
+            const pct = Math.min(100, Math.round(((ach.current || 0) / ach.target) * 100));
+            progressHtml = `
+              <div class="achievement-badge-progress-wrap">
+                <div class="achievement-progress-bg">
+                  <div class="achievement-progress-bar" style="width: ${pct}%;"></div>
+                </div>
+                <span class="achievement-progress-text">${ach.current || 0} / ${ach.target}</span>
+              </div>
+            `;
+          }
+
+          let actionHtml = "";
+          if (isClaimed) {
+            actionHtml = `<span class="achievement-claimed-pill">✓ ${t.claimedReward || "Получено"}</span>`;
+          } else if (isUnlocked) {
+            actionHtml = `<button class="achievement-claim-btn" data-achid="${ach.id}">🎁 +${ach.reward} 🪙</button>`;
+          } else {
+            actionHtml = `<span class="achievement-locked-pill">🔒 +${ach.reward} 🪙</span>`;
+          }
+
+          card.innerHTML = `
+            <div class="achievement-badge-icon">${ach.icon}</div>
+            <div class="achievement-badge-details">
+              <div class="achievement-badge-title-row">
+                <span class="achievement-badge-title">${titleStr}</span>
+              </div>
+              <div class="achievement-badge-desc">${descStr}</div>
+              ${progressHtml}
+            </div>
+            <div class="achievement-badge-action">
+              ${actionHtml}
+            </div>
+          `;
+
+          achievementsGrid.appendChild(card);
+        });
+
+        if (achievementsCountBadge) {
+          achievementsCountBadge.textContent = `${unlockedCount} / ${achievements.length}`;
+        }
+
+        // Claim button listener
+        achievementsGrid.querySelectorAll(".achievement-claim-btn").forEach(btn => {
+          btn.addEventListener("click", () => {
+            const achId = btn.dataset.achid;
+            const targetAch = achievements.find(a => a.id === achId);
+            if (!targetAch || !targetAch.unlocked || targetAch.claimed) return;
+
+            targetAch.claimed = true;
+            const newCoins = coins + targetAch.reward;
+
+            ext.storage.local.set({ achievements: achievements, coins: newCoins }, () => {
+              coinsCount.textContent = newCoins;
+              soundManager.playCoinSound();
+              const toastMsg = typeof t.achievementUnlockedToast === "function"
+                ? t.achievementUnlockedToast(targetAch.title[currentLang] || targetAch.title.ru, targetAch.reward)
+                : `🏆 Достижение «${targetAch.title.ru}» получено! +${targetAch.reward} 🪙`;
+              showToast(toastMsg);
+              renderTasksTab();
+            });
+          });
+        });
+      }
 
       // Todos
       todoList.innerHTML = "";

@@ -358,6 +358,23 @@
 
     <!-- TAB 4: Tasks & Daily Quests -->
     <section id="tabTasks" class="tab-content">
+      <!-- 🏆 Achievements & Medals -->
+      <div class="tasks-card achievements-card">
+        <div class="achievements-header">
+          <div class="achievements-title-wrap">
+            <span class="achievements-icon">🏆</span>
+            <div class="achievements-titles">
+              <h4 id="lblAchievementsHeader">Медали и достижения</h4>
+              <span class="achievements-subtitle" id="lblAchievementsSub">Награды в монетах за особые рекорды</span>
+            </div>
+          </div>
+          <span class="achievements-count-badge" id="achievementsCountBadge">0 / 6</span>
+        </div>
+        <div id="achievementsGrid" class="achievements-grid">
+          <!-- Injected dynamically by popup.js -->
+        </div>
+      </div>
+
       <div class="tasks-card">
         <h4 id="lblQuestsHeader">🎯 Ежедневные квесты</h4>
         <div id="questList" class="quest-list"></div>

@@ -1,4 +1,4 @@
-﻿// Focus Plant Pro - Cross-Browser Background Service Worker & Script
+// Focus Plant Pro - Cross-Browser Background Service Worker & Script
 const ext = (typeof browser !== 'undefined' && browser.runtime) ? browser : chrome;
 
 const DEFAULT_BLOCKLIST = [
@@ -25,6 +25,105 @@ const DEFAULT_QUESTS = [
   { id: 1, desc: "Завершить 1 сессию фокуса", target: 1, current: 0, done: false, claimed: false, reward: 25 },
   { id: 2, desc: "Сфокусироваться на 45 минут", target: 45, current: 0, done: false, claimed: false, reward: 40 },
   { id: 3, desc: "Выполнить 2 задачи из списка", target: 2, current: 0, done: false, claimed: false, reward: 30 }
+];
+
+const DEFAULT_ACHIEVEMENTS = [
+  {
+    id: "night_owl",
+    icon: "🦉",
+    title: { ru: "Ночная сова", en: "Night Owl", uz: "Tungi boyqush", zh: "夜猫子" },
+    desc: {
+      ru: "Успешно вырастить дерево после 23:00",
+      en: "Successfully grow a tree after 23:00",
+      uz: "Soat 23:00 dan keyin muvaffaqiyatli daraxt o'stiring",
+      zh: "晚上 23:00 后成功种出一棵树"
+    },
+    target: 1,
+    current: 0,
+    unlocked: false,
+    claimed: false,
+    reward: 50
+  },
+  {
+    id: "marathon",
+    icon: "🏃",
+    title: { ru: "Марафонец", en: "Marathoner", uz: "Marafonchi", zh: "马拉松选手" },
+    desc: {
+      ru: "Непрерывный сеанс фокуса 90+ минут",
+      en: "Continuous focus session for 90+ minutes",
+      uz: "90+ daqiqalik uzluksiz diqqat seansi",
+      zh: "连续专注 90 分钟以上"
+    },
+    target: 1,
+    current: 0,
+    unlocked: false,
+    claimed: false,
+    reward: 100
+  },
+  {
+    id: "iron_will",
+    icon: "🛡️",
+    title: { ru: "Железная воля", en: "Iron Will", uz: "Temir iroda", zh: "钢铁意志" },
+    desc: {
+      ru: "Вырастить 5 деревьев подряд в Строгом режиме без срывов",
+      en: "Grow 5 trees in a row in Strict Mode without failure",
+      uz: "Qat'iy rejimda ketma-ket 5 ta daraxtni buzmasdan o'stiring",
+      zh: "在严格模式下连续种出 5 棵树且不违规"
+    },
+    target: 5,
+    current: 0,
+    unlocked: false,
+    claimed: false,
+    reward: 150
+  },
+  {
+    id: "mythic_botanist",
+    icon: "👑",
+    title: { ru: "Королевский ботаник", en: "Royal Botanist", uz: "Qirollik botanigi", zh: "皇家植物学家" },
+    desc: {
+      ru: "Выбить первое Мифическое дерево",
+      en: "Discover your first Mythic tree",
+      uz: "Birinchi Afsonaviy (Mifik) daraxtni qo'lga kiriting",
+      zh: "抽到第一棵神话级树木"
+    },
+    target: 1,
+    current: 0,
+    unlocked: false,
+    claimed: false,
+    reward: 200
+  },
+  {
+    id: "first_sprout",
+    icon: "🌱",
+    title: { ru: "Первый росток", en: "First Sprout", uz: "Birinchi nihol", zh: "破土萌芽" },
+    desc: {
+      ru: "Успешно вырастить своё первое дерево фокуса",
+      en: "Successfully grow your very first focus tree",
+      uz: "Birinchi diqqat daraxtingizni muvaffaqiyatli o'stiring",
+      zh: "成功种出第一棵专注树"
+    },
+    target: 1,
+    current: 0,
+    unlocked: false,
+    claimed: false,
+    reward: 25
+  },
+  {
+    id: "grove_master",
+    icon: "🌲",
+    title: { ru: "Мастер леса", en: "Grove Master", uz: "O'rmon ustasi", zh: "森林大师" },
+    desc: {
+      ru: "Собрать коллекцию из 10 уникальных видов деревьев",
+      en: "Collect 10 unique species of trees",
+      uz: "10 xil turdagi noyob daraxtlar to'plamini yiging",
+      zh: "收集 10 种不同品种的树木"
+    },
+    target: 10,
+    current: 0,
+    unlocked: false,
+    claimed: false,
+    reward: 100
+  }
 ];
 
 // Tree Rarity Pools
@@ -245,7 +344,9 @@ ext.runtime.onInstalled.addListener(() => {
       lang: "ru",
       alertStyle: "fullscreen",
       ambientSound: "none",
-      strictMode: false
+      strictMode: false,
+      achievements: DEFAULT_ACHIEVEMENTS,
+      strictStreak: 0
     };
 
     const toSet = {};
@@ -356,7 +457,8 @@ function handleTreeWithered(domain) {
       treeState: "withered",
       witherReason: domain || "Запрещенный сайт",
       forest: forest,
-      stats: stats
+      stats: stats,
+      strictStreak: 0
     }, () => {
       setBadge(isStrict ? "🔒" : "🥀", "#ef4444");
       if (!isStrict) {
@@ -380,7 +482,7 @@ function handleSessionComplete() {
 
   ext.storage.local.get([
     "sessionDuration", "selectedSkin", "unlockedSkins", "forest", "stats",
-    "coins", "xp", "level", "quests"
+    "coins", "xp", "level", "quests", "achievements", "strictMode", "strictStreak", "treeState"
   ], (data) => {
     const durationSec = data.sessionDuration || 1500;
     const durationMin = Math.round(durationSec / 60);
@@ -452,6 +554,79 @@ function handleSessionComplete() {
       return q;
     }) : DEFAULT_QUESTS;
 
+    const isHealthy = data.treeState !== "withered";
+
+    // Strict Streak logic
+    let strictStreak = data.strictStreak || 0;
+    if (data.strictMode && isHealthy) {
+      strictStreak += 1;
+    } else if (!isHealthy) {
+      strictStreak = 0;
+    }
+
+    // Achievements Evaluation
+    let storedAchievements = Array.isArray(data.achievements) ? [...data.achievements] : [];
+    DEFAULT_ACHIEVEMENTS.forEach(defAch => {
+      const existing = storedAchievements.find(a => a.id === defAch.id);
+      if (!existing) {
+        storedAchievements.push({ ...defAch });
+      }
+    });
+
+    const completionHour = new Date().getHours();
+    let newlyUnlockedAch = null;
+
+    storedAchievements = storedAchievements.map(ach => {
+      if (ach.unlocked) return ach;
+
+      let shouldUnlock = false;
+      let newCurrent = ach.current || 0;
+
+      if (ach.id === "night_owl") {
+        if (isHealthy && (completionHour >= 23 || completionHour < 4)) {
+          shouldUnlock = true;
+          newCurrent = 1;
+        }
+      } else if (ach.id === "marathon") {
+        if (isHealthy && durationMin >= 90) {
+          shouldUnlock = true;
+          newCurrent = 1;
+        }
+      } else if (ach.id === "iron_will") {
+        newCurrent = strictStreak;
+        if (strictStreak >= 5) {
+          shouldUnlock = true;
+        }
+      } else if (ach.id === "mythic_botanist") {
+        if (isHealthy && rolledRarity === "mythic") {
+          shouldUnlock = true;
+          newCurrent = 1;
+        }
+      } else if (ach.id === "first_sprout") {
+        if (isHealthy) {
+          shouldUnlock = true;
+          newCurrent = 1;
+        }
+      } else if (ach.id === "grove_master") {
+        newCurrent = unlocked.length;
+        if (unlocked.length >= 10) {
+          shouldUnlock = true;
+        }
+      }
+
+      if (shouldUnlock) {
+        newlyUnlockedAch = ach;
+        return {
+          ...ach,
+          current: Math.max(newCurrent, ach.target),
+          unlocked: true,
+          unlockedDate: new Date().toISOString()
+        };
+      }
+
+      return { ...ach, current: newCurrent };
+    });
+
     const lastDropInfo = {
       skin: rolledSkin,
       rarity: rolledRarity,
@@ -472,6 +647,8 @@ function handleSessionComplete() {
       forest: forest,
       stats: stats,
       quests: quests,
+      achievements: storedAchievements,
+      strictStreak: strictStreak,
       lastDrop: lastDropInfo
     }, () => {
       setBadge("✓", "#10b981");
@@ -482,6 +659,14 @@ function handleSessionComplete() {
         `🎉 Вы вырастили дерево [${rarityLabel}]!`,
         `Сессия ${durationMin} мин! Вам выпало дерево: ${rolledSkin.toUpperCase()}. Награда: +${earnedCoins} 🪙, +${earnedXp} XP!`
       );
+      if (newlyUnlockedAch) {
+        setTimeout(() => {
+          showNotification(
+            `🏆 Новое достижение разблокировано!`,
+            `Вы получили медаль «${newlyUnlockedAch.title.ru}» ${newlyUnlockedAch.icon}! Заберите награду +${newlyUnlockedAch.reward} 🪙 в разделе задач.`
+          );
+        }, 1200);
+      }
     });
   });
 }
