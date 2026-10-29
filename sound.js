@@ -317,3 +317,7 @@ class SoundEngine {
 }
 
 const soundManager = new SoundEngine();
+
+if (typeof window !== 'undefined') {
+  window.soundManager = soundManager;
+}

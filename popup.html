@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Focus Plant Pro</title>
   <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
   <div class="app-container">
-    
+
     <!-- Top Header -->
     <header class="app-header">
       <div class="header-brand">
@@ -43,7 +45,7 @@
 
     <!-- TAB 1: Focus Timer -->
     <section id="tabTimer" class="tab-content active">
-      
+
       <!-- New Tree Drop Celebration Card -->
       <div class="drop-reveal-card" id="dropRevealCard" style="display: none;">
         <button class="drop-close-btn" id="dropCloseBtn" title="Закрыть">✕</button>
@@ -66,8 +68,10 @@
         <!-- SVG Circular Ring & Tree -->
         <div class="tree-display-container">
           <svg class="progress-ring" width="220" height="220">
-            <circle class="progress-ring-bg" stroke="rgba(255,255,255,0.06)" stroke-width="8" cx="110" cy="110" r="96" fill="transparent"/>
-            <circle class="progress-ring-circle" id="progressRing" stroke="#10b981" stroke-width="8" stroke-linecap="round" cx="110" cy="110" r="96" fill="transparent"/>
+            <circle class="progress-ring-bg" stroke="rgba(255,255,255,0.06)" stroke-width="8" cx="110" cy="110" r="96"
+              fill="transparent" />
+            <circle class="progress-ring-circle" id="progressRing" stroke="#10b981" stroke-width="8"
+              stroke-linecap="round" cx="110" cy="110" r="96" fill="transparent" />
           </svg>
           <div class="tree-avatar-wrapper" id="treeAvatar">
             <!-- Dynamic SVG Tree injected by trees.js -->
@@ -81,7 +85,8 @@
           <div class="wither-alert" id="witherAlert" style="display: none;">
             <span>🥀 Дерево завяло! Причина: <b id="witherReasonText">Запрещенный сайт</b></span>
           </div>
-          <button class="garden-preview-pill" id="goToGardenBtn" title="Перейти в виртуальный 3D сад">🏝️ Открыть изометрический 3D Сад ➔</button>
+          <button class="garden-preview-pill" id="goToGardenBtn" title="Перейти в виртуальный 3D сад">🏝️ Открыть
+            изометрический 3D Сад ➔</button>
         </div>
       </div>
 
@@ -142,7 +147,8 @@
             <span class="strict-title" id="lblStrictTitle">Строгий режим</span>
             <span class="strict-pill" id="lblStrictPill">Хардкор</span>
           </div>
-          <small class="strict-desc" id="lblStrictDesc">Нельзя поставить паузу или сдаться. Блокировка без кнопки «ОК»!</small>
+          <small class="strict-desc" id="lblStrictDesc">Нельзя поставить паузу или сдаться. Блокировка без кнопки
+            «ОК»!</small>
         </div>
         <label class="switch" title="Включить строгий режим">
           <input type="checkbox" id="strictModeToggle">
@@ -214,10 +220,14 @@
             </div>
           </div>
           <div class="meadow-controls">
-            <button class="meadow-filter-btn active" id="btnFilterMyTrees" data-filter="my" title="Мой сад">Мой сад</button>
-            <button class="meadow-filter-btn" id="btnFilterShowcase" data-filter="showcase" title="Все виды деревьев">Все виды ✨</button>
-            <button class="meadow-filter-btn btn-sell-all" id="btnSellAllDuplicates" style="display: none;" title="Продать все дубликаты">💰 Продать дубликаты</button>
-            <button class="meadow-filter-btn btn-sell-withered" id="btnSellAllWithered" style="display: none;" title="Продать все засохшие">🥀 Продать засохшие</button>
+            <button class="meadow-filter-btn active" id="btnFilterMyTrees" data-filter="my" title="Мой сад">Мой
+              сад</button>
+            <button class="meadow-filter-btn" id="btnFilterShowcase" data-filter="showcase"
+              title="Все виды деревьев">Все виды ✨</button>
+            <button class="meadow-filter-btn btn-sell-all" id="btnSellAllDuplicates" style="display: none;"
+              title="Продать все дубликаты">💰 Продать дубликаты</button>
+            <button class="meadow-filter-btn btn-sell-withered" id="btnSellAllWithered" style="display: none;"
+              title="Продать все засохшие">🥀 Продать засохшие</button>
           </div>
         </div>
 
@@ -306,8 +316,10 @@
                 <div class="inspector-status-badge" id="inspectTreeStatus">🌱 Успешно выращено!</div>
 
                 <div class="inspector-actions-row">
-                  <button class="inspector-btn inspector-btn-zoom" id="btnOpenHqModal" title="Открыть в высоком качестве">🔍 HQ Осмотр</button>
-                  <button class="inspector-btn inspector-btn-sell" id="btnSellDuplicate" style="display: none;" title="Продать дубликат">💰 <span id="lblSellDuplicate">Продать дубликат</span></button>
+                  <button class="inspector-btn inspector-btn-zoom" id="btnOpenHqModal"
+                    title="Открыть в высоком качестве">🔍 HQ Осмотр</button>
+                  <button class="inspector-btn inspector-btn-sell" id="btnSellDuplicate" style="display: none;"
+                    title="Продать дубликат">💰 <span id="lblSellDuplicate">Продать дубликат</span></button>
                 </div>
               </div>
             </div>
@@ -315,7 +327,8 @@
         </div>
 
         <div class="meadow-footer">
-          <small class="meadow-hint" id="lblMeadowHint">💡 Нажмите на любое дерево или плитку в сетке для просмотра</small>
+          <small class="meadow-hint" id="lblMeadowHint">💡 Нажмите на любое дерево или плитку в сетке для
+            просмотра</small>
         </div>
       </div>
 
@@ -325,7 +338,8 @@
           <h4 id="lblAlmanacHeader">📖 Алманах редкостей деревьев</h4>
           <span class="almanac-counter" id="almanacCounter">0 / 12 открыто</span>
         </div>
-        <p class="almanac-subdesc" id="lblAlmanacSubdesc">Ставьте больше времени на таймере, чтобы разблокировать редкие, эпические и мифические виды!</p>
+        <p class="almanac-subdesc" id="lblAlmanacSubdesc">Ставьте больше времени на таймере, чтобы разблокировать
+          редкие, эпические и мифические виды!</p>
         <div class="almanac-grid" id="almanacGrid">
           <!-- Injected dynamically by popup.js -->
         </div>
@@ -402,7 +416,8 @@
           <option value="blacklist">Черный список (Запрещать сайты из списка)</option>
           <option value="whitelist">Белый список (Разрешать только эти сайты)</option>
         </select>
-        <small class="mode-desc" id="lblModeDesc">Если зайти на запрещенный сайт во время фокуса, дерево погибнет!</small>
+        <small class="mode-desc" id="lblModeDesc">Если зайти на запрещенный сайт во время фокуса, дерево
+          погибнет!</small>
       </div>
 
       <!-- Warning Display Style -->
@@ -412,7 +427,8 @@
           <option value="fullscreen">📺 На весь экран (окно с кнопкой «ОК»)</option>
           <option value="banner">🪟 Компактный плавающий баннер</option>
         </select>
-        <small class="mode-desc" id="lblAlertStyleDesc" style="color: #94e2d5;">На весь экран показывает окно с кнопкой «ОК» (а в строгом режиме — без кнопки «ОК»).</small>
+        <small class="mode-desc" id="lblAlertStyleDesc" style="color: #94e2d5;">На весь экран показывает окно с кнопкой
+          «ОК» (а в строгом режиме — без кнопки «ОК»).</small>
       </div>
 
       <!-- Quick Add Pills -->
@@ -450,7 +466,7 @@
     <div class="hq-tree-modal-backdrop" id="hqTreeModal" style="display: none;">
       <div class="hq-tree-card">
         <button class="hq-close-btn" id="hqCloseBtn" title="Закрыть">✕</button>
-        
+
         <div class="hq-tree-header">
           <div class="hq-rarity-badge" id="hqRarityBadge">★ РЕДКОЕ ДЕРЕВО</div>
           <h3 class="hq-tree-title" id="hqTreeTitle">Цветущая Сакура 🌸</h3>
@@ -532,6 +548,11 @@
 
   <script src="trees.js"></script>
   <script src="sound.js"></script>
+  <script src="i18n.js"></script>
+  <script src="weather.js"></script>
+  <script src="garden.js"></script>
+  <script src="shareCard.js"></script>
   <script src="popup.js"></script>
 </body>
+
 </html>

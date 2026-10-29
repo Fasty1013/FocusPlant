@@ -845,3 +845,9 @@ function renderWitheredTree(skin) {
     </svg>
   `;
 }
+
+if (typeof window !== 'undefined') {
+  window.RARITIES = RARITIES;
+  window.TREE_SKINS = TREE_SKINS;
+  window.renderTreeSVG = renderTreeSVG;
+}
