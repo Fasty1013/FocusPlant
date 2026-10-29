@@ -1003,22 +1003,24 @@ document.addEventListener("DOMContentLoaded", () => {
   if (inspectorCloseBtn) {
     inspectorCloseBtn.addEventListener("click", () => {
       if (treeInspectorModal) treeInspectorModal.style.display = "none";
-      document.querySelectorAll(".iso-tree-stand.inspected").forEach(el => el.classList.remove("inspected"));
+      document.querySelectorAll(".iso-tree-sprite.inspected").forEach(el => el.classList.remove("inspected"));
     });
   }
 
   if (meadowViewport) {
     meadowViewport.addEventListener("click", (e) => {
-      if (!e.target.closest(".iso-tile") && !e.target.closest(".tree-inspector-modal")) {
+      if (!e.target.closest(".iso-tree-sprite") && !e.target.closest(".iso-tile-poly") && !e.target.closest(".tree-inspector-modal")) {
         if (treeInspectorModal) treeInspectorModal.style.display = "none";
-        document.querySelectorAll(".iso-tree-stand.inspected").forEach(el => el.classList.remove("inspected"));
+        document.querySelectorAll(".iso-tree-sprite.inspected").forEach(el => el.classList.remove("inspected"));
       }
     });
   }
 
-  // 3D Isometric Top-Down Grid Garden Renderer
+  // 3D Isometric 2.5D Island Garden Renderer
   function renderLivingMeadow(forest, t, selectedSkin = "oak") {
-    const gridBoard = document.getElementById("isoGridBoard");
+    const cliffBase = document.getElementById("isoCliffBase");
+    const tilesGroup = document.getElementById("isoTilesGroup");
+    const treesContainer = document.getElementById("isoTreesContainer");
     const stageBadge = document.getElementById("meadowStageBadge");
     const modal = document.getElementById("treeInspectorModal");
     const previewEl = document.getElementById("inspectorTreePreview");
@@ -1028,8 +1030,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const durEl = document.getElementById("inspectTreeDuration");
     const statusEl = document.getElementById("inspectTreeStatus");
 
-    if (!gridBoard) return;
-    gridBoard.innerHTML = "";
+    if (!cliffBase || !tilesGroup || !treesContainer) return;
+
+    cliffBase.innerHTML = "";
+    tilesGroup.innerHTML = "";
+    treesContainer.innerHTML = "";
     if (modal) modal.style.display = "none";
 
     const isShowcase = activeMeadowFilter === "showcase";
@@ -1073,7 +1078,7 @@ document.addEventListener("DOMContentLoaded", () => {
         };
       });
     } else {
-      // Real user forest: if 0 trees, plant active tree in center tile (tile 5 or 6)
+      // Real user forest: if 0 trees, plant active tree in center tile (tile 5)
       if (forest.length === 0) {
         const activeObj = TREE_SKINS[selectedSkin] || TREE_SKINS.oak;
         tilesData[5] = {
@@ -1093,116 +1098,167 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
-    // Render 16 Isometric Grass Tiles
-    for (let i = 0; i < 16; i++) {
-      const tree = tilesData[i];
-      const tileEl = document.createElement("div");
-      tileEl.className = "iso-tile";
-      tileEl.dataset.slot = i + 1;
+    // Render 3D Earth / Cliff Extrusion under the island
+    cliffBase.innerHTML = `
+      <!-- Deep 3D Left Cliff Wall -->
+      <polygon points="36,126 188,206 188,238 36,158" fill="url(#cliffLeft)" />
+      <!-- Deep 3D Right Cliff Wall -->
+      <polygon points="188,206 340,126 340,158 188,238" fill="url(#cliffRight)" />
+      <!-- Cliff Strata Accent Lines -->
+      <polygon points="36,134 188,214 188,220 36,140" fill="#1e293b" opacity="0.6" />
+      <polygon points="188,214 340,134 340,140 188,220" fill="#0f172a" opacity="0.6" />
+      <!-- Mossy Grass Overhang Lip -->
+      <path d="M 36,126 Q 74,148 112,165 Q 150,188 188,206 Q 226,188 264,165 Q 302,148 340,126 L 340,131 Q 302,153 264,170 Q 226,193 188,211 Q 150,193 112,170 Q 74,153 36,131 Z" fill="#059669" opacity="0.9" />
+    `;
 
-      // Soil plot in the center
-      const plotEl = document.createElement("div");
-      plotEl.className = "iso-tile-plot";
-      tileEl.appendChild(plotEl);
+    // Render 16 Isometric Grass Diamond Tiles & Standing Trees
+    for (let r = 0; r < 4; r++) {
+      for (let c = 0; c < 4; c++) {
+        const i = r * 4 + c;
+        const tree = tilesData[i];
 
-      if (tree) {
-        const isWithered = tree.status === "withered";
-        const skinObj = TREE_SKINS[tree.skin] || TREE_SKINS.oak;
-        const rarityObj = RARITIES[tree.rarity] || RARITIES.common;
+        // Isometric projection formulas:
+        const cx = 188 + (c - r) * 38;
+        const cy = 66 + (c + r) * 20;
 
-        // Glow class based on rarity
-        let glowClass = "";
-        if (tree.rarity === "rare") glowClass = "rare-neon";
-        else if (tree.rarity === "epic") glowClass = "epic-crystal";
-        else if (["legendary", "mythic"].includes(tree.rarity)) glowClass = "legendary-cosmic";
+        // Diamond vertices: (top, right, bottom, left)
+        const pTop = `${cx},${cy - 20}`;
+        const pRight = `${cx + 38},${cy}`;
+        const pBottom = `${cx},${cy + 20}`;
+        const pLeft = `${cx - 38},${cy}`;
+        const polyPoints = `${pTop} ${pRight} ${pBottom} ${pLeft}`;
 
-        // Upright standing tree container
-        const treeStand = document.createElement("div");
-        treeStand.className = `iso-tree-stand ${glowClass}`;
-        
-        // Staggered wind sway animation
-        const swayDelay = -((i * 0.45) % 3.6).toFixed(2);
-        treeStand.style.animationDelay = `${swayDelay}s`;
+        const fillGrad = (r + c) % 2 === 0 ? "url(#grassGradA)" : "url(#grassGradB)";
 
-        // Tree contact shadow on grass
-        const shadowEl = document.createElement("div");
-        shadowEl.className = "iso-tree-shadow";
-        treeStand.appendChild(shadowEl);
+        // SVG Diamond Polygon
+        const poly = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+        poly.setAttribute("points", polyPoints);
+        poly.setAttribute("fill", fillGrad);
+        poly.setAttribute("stroke", "rgba(255, 255, 255, 0.28)");
+        poly.setAttribute("stroke-width", "1");
+        poly.setAttribute("class", "iso-tile-poly");
+        poly.dataset.slot = i + 1;
+        tilesGroup.appendChild(poly);
 
-        // Vector SVG Tree
-        const svgContainer = document.createElement("div");
-        svgContainer.style.width = "100%";
-        svgContainer.style.height = "100%";
-        svgContainer.innerHTML = renderTreeSVG(tree.skin, 5, isWithered);
-        treeStand.appendChild(svgContainer);
+        // Center Soil Plot Ellipse
+        const plot = document.createElementNS("http://www.w3.org/2000/svg", "ellipse");
+        plot.setAttribute("cx", cx);
+        plot.setAttribute("cy", cy);
+        plot.setAttribute("rx", "16");
+        plot.setAttribute("ry", "8");
+        plot.setAttribute("fill", "rgba(6, 78, 59, 0.45)");
+        plot.setAttribute("stroke", "rgba(255, 255, 255, 0.2)");
+        plot.setAttribute("stroke-width", "1");
+        plot.setAttribute("stroke-dasharray", "2,2");
+        plot.setAttribute("class", "iso-tile-plot");
+        tilesGroup.appendChild(plot);
 
-        tileEl.appendChild(treeStand);
-
-        // Date and time string
-        const dateStr = tree.date ? new Date(tree.date).toLocaleDateString() : "";
-        const timeStr = tree.date ? new Date(tree.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : "";
-        const fullDateStr = `${dateStr} ${timeStr}`.trim();
-
-        // Click on tile / tree to inspect
-        tileEl.addEventListener("click", (e) => {
-          e.stopPropagation();
-          document.querySelectorAll(".iso-tree-stand.inspected").forEach(el => el.classList.remove("inspected"));
-          treeStand.classList.add("inspected");
-
-          if (modal) {
-            modal.style.display = "block";
-            if (previewEl) {
-              previewEl.innerHTML = renderTreeSVG(tree.skin, 5, isWithered);
+        // Click handler on plot/tile when empty
+        if (!tree) {
+          poly.addEventListener("click", (e) => {
+            e.stopPropagation();
+            document.querySelectorAll(".iso-tree-sprite.inspected").forEach(el => el.classList.remove("inspected"));
+            if (modal) {
+              modal.style.display = "block";
+              if (previewEl) previewEl.innerHTML = renderStage1(selectedSkin);
+              if (pillEl) {
+                pillEl.textContent = "СВОБОДНЫЙ УЧАСТОК";
+                pillEl.style.background = "rgba(166, 227, 161, 0.15)";
+                pillEl.style.color = "#a6e3a1";
+                pillEl.style.border = "1px solid #a6e3a1";
+              }
+              if (titleEl) titleEl.textContent = `Грядка #${i + 1} 🌱`;
+              if (dateEl) dateEl.textContent = "Ждёт семян";
+              if (durEl) durEl.textContent = "—";
+              if (statusEl) {
+                statusEl.textContent = "Запустите таймер фокуса, чтобы посадить здесь дерево!";
+                statusEl.className = "inspector-status-badge";
+              }
             }
-            if (pillEl) {
-              pillEl.textContent = `${rarityObj.stars} ${rarityObj.name[currentLang] || rarityObj.name.ru}`.toUpperCase();
-              pillEl.style.background = rarityObj.bg;
-              pillEl.style.color = rarityObj.color;
-              pillEl.style.border = `1px solid ${rarityObj.border}`;
+          });
+        } else {
+          // Tree is planted on this tile
+          const isWithered = tree.status === "withered";
+          const skinObj = TREE_SKINS[tree.skin] || TREE_SKINS.oak;
+          const rarityObj = RARITIES[tree.rarity] || RARITIES.common;
+
+          // Glow class based on rarity
+          let glowClass = "";
+          if (tree.rarity === "rare") glowClass = "rare-neon";
+          else if (tree.rarity === "epic") glowClass = "epic-crystal";
+          else if (["legendary", "mythic"].includes(tree.rarity)) glowClass = "legendary-cosmic";
+
+          // Tree Sprite DOM Element (Upright in 2D Screen Space, NO Squashing!)
+          const treeSprite = document.createElement("div");
+          treeSprite.className = `iso-tree-sprite ${glowClass}`;
+          treeSprite.dataset.slot = i + 1;
+          treeSprite.style.left = `${cx}px`;
+          treeSprite.style.top = `${cy}px`;
+          // Depth sort: tiles further down the screen (larger r+c) occlude tiles in back
+          treeSprite.style.zIndex = (r + c) * 10 + 5;
+
+          // Staggered wind sway animation
+          const swayDelay = -((i * 0.45) % 3.8).toFixed(2);
+          treeSprite.style.animationDelay = `${swayDelay}s`;
+
+          // Tree contact shadow directly under the trunk
+          const shadowEl = document.createElement("div");
+          shadowEl.className = "tree-contact-shadow";
+          treeSprite.appendChild(shadowEl);
+
+          // Full SVG Tree Graphics
+          const svgWrap = document.createElement("div");
+          svgWrap.style.width = "100%";
+          svgWrap.style.height = "100%";
+          svgWrap.innerHTML = renderTreeSVG(tree.skin, 5, isWithered);
+          treeSprite.appendChild(svgWrap);
+
+          treesContainer.appendChild(treeSprite);
+
+          // Date & Time formatting
+          const dateStr = tree.date ? new Date(tree.date).toLocaleDateString() : "";
+          const timeStr = tree.date ? new Date(tree.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : "";
+          const fullDateStr = `${dateStr} ${timeStr}`.trim();
+
+          // Inspection function
+          const triggerInspect = (e) => {
+            e.stopPropagation();
+            document.querySelectorAll(".iso-tree-sprite.inspected").forEach(el => el.classList.remove("inspected"));
+            treeSprite.classList.add("inspected");
+
+            if (modal) {
+              modal.style.display = "block";
+              if (previewEl) {
+                previewEl.innerHTML = renderTreeSVG(tree.skin, 5, isWithered);
+              }
+              if (pillEl) {
+                pillEl.textContent = `${rarityObj.stars} ${rarityObj.name[currentLang] || rarityObj.name.ru}`.toUpperCase();
+                pillEl.style.background = rarityObj.bg;
+                pillEl.style.color = rarityObj.color;
+                pillEl.style.border = `1px solid ${rarityObj.border}`;
+              }
+              if (titleEl) {
+                titleEl.textContent = `${skinObj.name[currentLang] || skinObj.name.ru} ${skinObj.emoji}`;
+              }
+              if (dateEl) {
+                dateEl.textContent = fullDateStr || "—";
+              }
+              if (durEl) {
+                durEl.textContent = `${tree.duration || 0} ${t.minuteUnit}`;
+              }
+              if (statusEl) {
+                statusEl.textContent = isWithered
+                  ? (tree.reason ? `🥀 ${t.withered}: ${tree.reason}` : `🥀 ${t.inspectStatusWithered}`)
+                  : (tree.isStarter ? `🌱 Ваш саженец (готов к росту!)` : `🌱 ${t.inspectStatusGrown}`);
+                statusEl.className = `inspector-status-badge ${isWithered ? "withered" : ""}`;
+              }
             }
-            if (titleEl) {
-              titleEl.textContent = `${skinObj.name[currentLang] || skinObj.name.ru} ${skinObj.emoji}`;
-            }
-            if (dateEl) {
-              dateEl.textContent = fullDateStr || "—";
-            }
-            if (durEl) {
-              durEl.textContent = `${tree.duration || 0} ${t.minuteUnit}`;
-            }
-            if (statusEl) {
-              statusEl.textContent = isWithered
-                ? (tree.reason ? `🥀 ${t.withered}: ${tree.reason}` : `🥀 ${t.inspectStatusWithered}`)
-                : (tree.isStarter ? `🌱 Ваш саженец (готов к росту!)` : `🌱 ${t.inspectStatusGrown}`);
-              statusEl.className = `inspector-status-badge ${isWithered ? "withered" : ""}`;
-            }
-          }
-        });
-      } else {
-        // Empty plot click hint
-        tileEl.title = `Свободная грядка #${i + 1}`;
-        tileEl.addEventListener("click", (e) => {
-          e.stopPropagation();
-          if (modal) {
-            modal.style.display = "block";
-            if (previewEl) previewEl.innerHTML = renderStage1(selectedSkin);
-            if (pillEl) {
-              pillEl.textContent = "СВОБОДНЫЙ УЧАСТОК";
-              pillEl.style.background = "rgba(166, 227, 161, 0.15)";
-              pillEl.style.color = "#a6e3a1";
-              pillEl.style.border = "1px solid #a6e3a1";
-            }
-            if (titleEl) titleEl.textContent = `Грядка #${i + 1} 🌱`;
-            if (dateEl) dateEl.textContent = "Ждёт семян";
-            if (durEl) durEl.textContent = "—";
-            if (statusEl) {
-              statusEl.textContent = "Запустите таймер фокуса, чтобы посадить здесь дерево!";
-              statusEl.className = "inspector-status-badge";
-            }
-          }
-        });
+          };
+
+          treeSprite.addEventListener("click", triggerInspect);
+          poly.addEventListener("click", triggerInspect);
+        }
       }
-
-      gridBoard.appendChild(tileEl);
     }
   }
 
