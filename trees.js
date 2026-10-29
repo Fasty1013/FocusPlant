@@ -91,6 +91,15 @@ const TREE_SKINS = {
     emoji: "🍎",
     color: "#f9e2af"
   },
+  orange_tree: {
+    id: "orange_tree",
+    rarity: "uncommon",
+    name: { ru: "Сочный Апельсин", en: "Valencia Orange", uz: "Shirin Apelsin", ja: "オレンジの木" },
+    desc: { ru: "Средиземноморское цитрусовое дерево с яркими ароматными плодами.", en: "Mediterranean citrus tree with vibrant aromatic fruits.", uz: "Yorqin mevali o'rta dengiz apelsini.", ja: "爽やかな香りと果実を実らせる柑橘の木。" },
+    price: 180,
+    emoji: "🍊",
+    color: "#fab387"
+  },
 
   // RARE
   sakura: {
@@ -110,6 +119,15 @@ const TREE_SKINS = {
     price: 250,
     emoji: "🎋",
     color: "#89dceb"
+  },
+  jacaranda: {
+    id: "jacaranda",
+    rarity: "rare",
+    name: { ru: "Сиреневая Джакаранда", en: "Purple Jacaranda", uz: "Binafsha Jakaranda", ja: "ジャカランダの木" },
+    desc: { ru: "Волшебное субтропическое дерево с пышным облаком лавандовых цветов.", en: "Enchanting tree blooming with a violet-lavender cloud of flowers.", uz: "Binafsharang gullar bulutiga ega sehrli daraxt.", ja: "紫色の花が雲のように咲き誇る幻想的な木。" },
+    price: 320,
+    emoji: "🪻",
+    color: "#b4befe"
   },
 
   // EPIC
@@ -131,6 +149,25 @@ const TREE_SKINS = {
     emoji: "🍁",
     color: "#eba0ac"
   },
+  golden_ginkgo: {
+    id: "golden_ginkgo",
+    rarity: "epic",
+    name: { ru: "Золотой Гинкго", en: "Golden Ginkgo", uz: "Oltin Ginkgo", ja: "黄金のイチョウ" },
+    desc: { ru: "Древнейшее священное древо мира с веерообразными золотыми листьями.", en: "Ancient sacred tree with brilliant fan-shaped golden leaves.", uz: "Yelpig'ichsimon oltin bargli qadimiy daraxt.", ja: "扇形の黄金の葉が舞い散る長寿と繁栄の木。" },
+    price: 550,
+    emoji: "🍂",
+    color: "#f9e2af"
+  },
+  cyber_neon: {
+    id: "cyber_neon",
+    rarity: "epic",
+    exclusiveShop: true,
+    name: { ru: "Кибер-Неон 2077", en: "Cyber Neon 2077", uz: "Kiber-Neon 2077", ja: "サイバーネオン 2077" },
+    desc: { ru: "⚡ ЭКСКЛЮЗИВ МАГАЗИНА: Футуристическое кибер-древо с неоновыми импульсами. Нельзя выбить из сессий фокуса!", en: "⚡ SHOP EXCLUSIVE: Futuristic tree pulsing with neon data streams. Cannot be rolled from focus sessions!", uz: "⚡ DO'KON EKSKLUZIVI: Neon impulslarga ega futuristik kiber daraxt. Fokusdan chiqmaydi!", ja: "⚡ ショップ限定: ネオンパルスが走る未来型サイバーツリー。タイマーからは出現しません！" },
+    price: 650,
+    emoji: "⚡",
+    color: "#00f0ff"
+  },
 
   // LEGENDARY
   world_tree: {
@@ -151,6 +188,16 @@ const TREE_SKINS = {
     emoji: "💎",
     color: "#89b4fa"
   },
+  volcano_magma: {
+    id: "volcano_magma",
+    rarity: "legendary",
+    exclusiveShop: true,
+    name: { ru: "Магматический Вулкан", en: "Volcanic Magma Tree", uz: "Vulkan Magma Daraxti", ja: "溶岩のマグマ樹" },
+    desc: { ru: "🔥 ЭКСКЛЮЗИВ МАГАЗИНА: Застывший базальт с раскалёнными магматическими жилами и искрами пламени. Нельзя выбить!", en: "🔥 SHOP EXCLUSIVE: Obsidian core coursing with liquid magma rivers and glowing embers. Cannot be rolled!", uz: "🔥 DO'KON EKSKLUZIVI: Qaynoq magma daryolari va olov uchqunlari bilan to'la daraxt. Fokusdan chiqmaydi!", ja: "🔥 ショップ限定: 黒曜石の幹に灼熱の溶岩が流れる火山樹。タイマーからは入手不可！" },
+    price: 950,
+    emoji: "🌋",
+    color: "#ff5500"
+  },
 
   // MYTHIC
   mystic: {
@@ -170,6 +217,16 @@ const TREE_SKINS = {
     price: 1500,
     emoji: "🌌",
     color: "#f38ba8"
+  },
+  celestial_starlight: {
+    id: "celestial_starlight",
+    rarity: "mythic",
+    exclusiveShop: true,
+    name: { ru: "Звёздный Селестиал", en: "Celestial Starlight", uz: "Yulduzli Selestial", ja: "星神のセレスティアル" },
+    desc: { ru: "✦ ВЫСШИЙ ЭКСКЛЮЗИВ: Выковано из звёздного света и алмазной космической пыли. Доступно только в магазине!", en: "✦ SUPREME EXCLUSIVE: Forged from pure starlight, astral diamonds and auroras. Shop exclusive!", uz: "✦ OLIY EKSKLUZIV: Yulduzlar nuri va olmos changidan yaratilgan oliyjanob daraxt!", ja: "✦ 最高峰限定: 星屑とオーロラを纏う神聖なる星樹。ショップでのみ入手可能！" },
+    price: 2000,
+    emoji: "🌟",
+    color: "#f5e0dc"
   }
 };
 
@@ -341,13 +398,19 @@ function renderStage5(skin, scale = 1.0) {
     case "sakura": return renderSakuraTree(scale);
     case "pine": return renderPineTree(scale);
     case "apple": return renderAppleTree(scale);
+    case "orange_tree": return renderOrangeTree(scale);
     case "bamboo": return renderBambooGrove(scale);
+    case "jacaranda": return renderJacaranda(scale);
     case "wisteria": return renderWisteriaTree(scale);
     case "autumn_maple": return renderMapleTree(scale);
+    case "golden_ginkgo": return renderGoldenGinkgo(scale);
+    case "cyber_neon": return renderCyberNeon(scale);
     case "world_tree": return renderWorldTree(scale);
     case "crystal": return renderCrystalTree(scale);
+    case "volcano_magma": return renderVolcanoMagma(scale);
     case "cosmic": return renderCosmicTree(scale);
     case "mystic": return renderMysticTree(scale);
+    case "celestial_starlight": return renderCelestialStarlight(scale);
     case "oak":
     default:
       return renderOakTree(scale);
@@ -597,6 +660,166 @@ function renderCosmicTree(scale = 1.0) {
       <circle cx="100" cy="55" r="7" fill="#f9e2af" class="glow-particle"/>
       <circle cx="75" cy="40" r="2.5" fill="#ffffff" class="glow-particle"/>
       <circle cx="125" cy="70" r="2.5" fill="#ffffff" class="glow-particle"/>
+    </svg>
+  `;
+}
+
+// 13. Valencia Orange Tree (Uncommon)
+function renderOrangeTree(scale = 1.0) {
+  return `
+    <svg viewBox="0 0 200 200" class="tree-svg">
+      <ellipse cx="100" cy="178" rx="${70 * scale}" ry="14" fill="#313244"/>
+      <path d="M92 178 C90 142 94 112 98 82 L102 82 C106 112 110 142 108 178 Z" fill="#6c7086"/>
+      <path d="M96 115 C82 98 65 96 52 88" stroke="#6c7086" stroke-width="6.5" stroke-linecap="round"/>
+      <path d="M104 105 C120 94 135 92 148 80" stroke="#6c7086" stroke-width="6.5" stroke-linecap="round"/>
+      <circle cx="56" cy="80" r="${27 * scale}" fill="#a6e3a1"/>
+      <circle cx="144" cy="72" r="${27 * scale}" fill="#a6e3a1"/>
+      <circle cx="82" cy="54" r="${33 * scale}" fill="#94e2d5"/>
+      <circle cx="118" cy="52" r="${33 * scale}" fill="#a6e3a1"/>
+      <circle cx="100" cy="40" r="${35 * scale}" fill="#40a02b"/>
+      <!-- Bright Juicy Oranges with Shine -->
+      <circle cx="50" cy="78" r="7.5" fill="#fab387"/>
+      <circle cx="48" cy="76" r="2" fill="#ffffff" opacity="0.8"/>
+      <circle cx="78" cy="52" r="8" fill="#fab387"/>
+      <circle cx="76" cy="50" r="2.2" fill="#ffffff" opacity="0.8"/>
+      <circle cx="120" cy="46" r="8" fill="#fab387"/>
+      <circle cx="118" cy="44" r="2.2" fill="#ffffff" opacity="0.8"/>
+      <circle cx="145" cy="75" r="7.5" fill="#fab387"/>
+      <circle cx="143" cy="73" r="2" fill="#ffffff" opacity="0.8"/>
+      <circle cx="98" cy="65" r="8" fill="#fab387"/>
+      <circle cx="96" cy="63" r="2.2" fill="#ffffff" opacity="0.8"/>
+    </svg>
+  `;
+}
+
+// 14. Purple Jacaranda (Rare)
+function renderJacaranda(scale = 1.0) {
+  return `
+    <svg viewBox="0 0 200 200" class="tree-svg">
+      <ellipse cx="100" cy="178" rx="${72 * scale}" ry="14" fill="#313244"/>
+      <!-- Graceful Curved Bark -->
+      <path d="M92 178 C88 135 106 105 98 75 L104 75 C112 105 94 135 108 178 Z" fill="#585b70"/>
+      <!-- Soft Violet & Lilac Bell Canopy Clouds -->
+      <circle cx="58" cy="80" r="${29 * scale}" fill="#b4befe" opacity="0.9"/>
+      <circle cx="142" cy="74" r="${29 * scale}" fill="#cba6f7" opacity="0.9"/>
+      <circle cx="82" cy="50" r="${35 * scale}" fill="#cba6f7"/>
+      <circle cx="118" cy="48" r="${35 * scale}" fill="#b4befe"/>
+      <circle cx="100" cy="36" r="${37 * scale}" fill="#cba6f7"/>
+      <!-- Cascading Flower Clusters -->
+      <circle cx="46" cy="98" r="6" fill="#b4befe"/>
+      <circle cx="68" cy="105" r="5" fill="#cba6f7"/>
+      <circle cx="132" cy="98" r="6" fill="#cba6f7"/>
+      <circle cx="152" cy="92" r="5" fill="#b4befe"/>
+      <!-- Falling Lilac Petals -->
+      <circle cx="55" cy="130" r="2.8" fill="#b4befe" class="glow-particle"/>
+      <circle cx="142" cy="135" r="2.8" fill="#cba6f7" class="glow-particle"/>
+      <circle cx="95" cy="145" r="2.5" fill="#b4befe" class="glow-particle"/>
+    </svg>
+  `;
+}
+
+// 15. Golden Ginkgo (Epic)
+function renderGoldenGinkgo(scale = 1.0) {
+  return `
+    <svg viewBox="0 0 200 200" class="tree-svg">
+      <ellipse cx="100" cy="178" rx="${72 * scale}" ry="14" fill="#313244"/>
+      <!-- Sacred Ginkgo Bark -->
+      <path d="M92 178 C90 138 94 105 98 75 L104 75 C108 105 110 138 108 178 Z" fill="#6c7086"/>
+      <path d="M96 110 C80 92 64 90 52 82" stroke="#6c7086" stroke-width="6.5" stroke-linecap="round"/>
+      <path d="M104 100 C120 88 136 86 148 76" stroke="#6c7086" stroke-width="6.5" stroke-linecap="round"/>
+      <!-- Fan-Shaped Golden Leaf Clouds -->
+      <circle cx="54" cy="76" r="${28 * scale}" fill="#eed49f"/>
+      <circle cx="146" cy="70" r="${28 * scale}" fill="#f9e2af"/>
+      <circle cx="78" cy="46" r="${34 * scale}" fill="#f9e2af"/>
+      <circle cx="122" cy="44" r="${34 * scale}" fill="#eed49f"/>
+      <circle cx="100" cy="34" r="${36 * scale}" fill="#f9e2af"/>
+      <!-- Golden Fan Foliage Accents -->
+      <path d="M72 40 Q80 25 88 40 Z" fill="#fab387"/>
+      <path d="M112 40 Q120 25 128 40 Z" fill="#fab387"/>
+      <!-- Floating Sacred Gold Leaves -->
+      <polygon points="50,118 55,123 50,128 45,123" fill="#f9e2af"/>
+      <polygon points="148,112 153,117 148,122 143,117" fill="#eed49f"/>
+      <polygon points="98,138 103,143 98,148 93,143" fill="#fab387"/>
+    </svg>
+  `;
+}
+
+// 16. Cyber Neon 2077 (Epic / Shop Exclusive)
+function renderCyberNeon(scale = 1.0) {
+  return `
+    <svg viewBox="0 0 200 200" class="tree-svg">
+      <ellipse cx="100" cy="178" rx="${74 * scale}" ry="14" fill="#11111b"/>
+      <!-- Cyber Circuit Base -->
+      <path d="M70 178 L85 178 M115 178 L130 178" stroke="#00f0ff" stroke-width="2"/>
+      <!-- High-Tech Graphite Trunk with Neon Circuit Veins -->
+      <polygon points="92,178 97,75 103,75 108,178" fill="#181825" stroke="#00f0ff" stroke-width="1.5"/>
+      <line x1="100" y1="178" x2="100" y2="78" stroke="#00f0ff" stroke-width="2"/>
+      <line x1="97" y1="120" x2="68" y2="95" stroke="#00f0ff" stroke-width="2"/>
+      <line x1="103" y1="110" x2="132" y2="90" stroke="#ff007f" stroke-width="2"/>
+      <!-- Hexagonal / Polygonal Neon Foliage Nodes -->
+      <polygon points="100,18 72,40 72,75 100,95 128,75 128,40" fill="#00f0ff" opacity="0.65" stroke="#ffffff" stroke-width="1.5"/>
+      <polygon points="62,60 38,78 38,105 62,118 86,105 86,78" fill="#ff007f" opacity="0.65" stroke="#00f0ff" stroke-width="1.5"/>
+      <polygon points="138,55 114,73 114,100 138,115 162,100 162,73" fill="#00f0ff" opacity="0.75" stroke="#ff007f" stroke-width="1.5"/>
+      <circle cx="100" cy="56" r="${22 * scale}" fill="#11111b" stroke="#00f0ff" stroke-width="2"/>
+      <circle cx="100" cy="56" r="7" fill="#00f0ff" class="glow-particle"/>
+      <!-- Data Spark Particles -->
+      <circle cx="38" cy="78" r="3" fill="#00f0ff" class="glow-particle"/>
+      <circle cx="162" cy="73" r="3" fill="#ff007f" class="glow-particle"/>
+      <circle cx="100" cy="18" r="4" fill="#ffffff" class="glow-particle"/>
+    </svg>
+  `;
+}
+
+// 17. Volcanic Magma Tree (Legendary / Shop Exclusive)
+function renderVolcanoMagma(scale = 1.0) {
+  return `
+    <svg viewBox="0 0 200 200" class="tree-svg">
+      <ellipse cx="100" cy="178" rx="${74 * scale}" ry="14" fill="#181825"/>
+      <!-- Obsidian Basalt Trunk with Liquid Magma Veins -->
+      <path d="M88 178 C84 135 94 95 97 65 L103 65 C106 95 116 135 112 178 Z" fill="#1e1e2e" stroke="#ff5500" stroke-width="1.5"/>
+      <path d="M96 178 Q92 130 100 90 M104 178 Q108 135 101 95" stroke="#ffaa00" stroke-width="3" stroke-linecap="round"/>
+      <path d="M94 115 Q75 100 60 92" stroke="#ff5500" stroke-width="4.5" stroke-linecap="round"/>
+      <path d="M106 105 Q125 92 140 82" stroke="#ff5500" stroke-width="4.5" stroke-linecap="round"/>
+      <!-- Burning Magma & Molten Rock Canopy -->
+      <circle cx="56" cy="80" r="${28 * scale}" fill="#d20f39" opacity="0.9"/>
+      <circle cx="144" cy="72" r="${28 * scale}" fill="#fe640b" opacity="0.9"/>
+      <circle cx="80" cy="52" r="${34 * scale}" fill="#ff5500"/>
+      <circle cx="120" cy="50" r="${34 * scale}" fill="#d20f39"/>
+      <circle cx="100" cy="38" r="${36 * scale}" fill="#fe640b"/>
+      <circle cx="100" cy="38" r="${22 * scale}" fill="#ffaa00" opacity="0.6"/>
+      <!-- Rising Fiery Embers & Sparks -->
+      <circle cx="48" cy="65" r="3.5" fill="#ffaa00" class="glow-particle"/>
+      <circle cx="148" cy="60" r="3.5" fill="#ffaa00" class="glow-particle"/>
+      <circle cx="100" cy="15" r="4" fill="#ffffff" class="glow-particle"/>
+      <circle cx="78" cy="25" r="2.5" fill="#fe640b" class="glow-particle"/>
+      <circle cx="122" cy="22" r="2.5" fill="#fe640b" class="glow-particle"/>
+    </svg>
+  `;
+}
+
+// 18. Celestial Starlight (Mythic / Supreme Shop Exclusive)
+function renderCelestialStarlight(scale = 1.0) {
+  return `
+    <svg viewBox="0 0 200 200" class="tree-svg">
+      <ellipse cx="100" cy="178" rx="${76 * scale}" ry="14" fill="#181825"/>
+      <!-- Pearlescent Platinum & Ethereal Silver Trunk -->
+      <path d="M90 178 C86 130 94 90 98 60 L102 60 C106 90 114 130 110 178 Z" fill="#cdd6f4" stroke="#ffffff" stroke-width="1.5"/>
+      <!-- Radiant Diamond & Starlight Canopy -->
+      <circle cx="100" cy="50" r="${46 * scale}" fill="#b4befe" opacity="0.45"/>
+      <circle cx="100" cy="50" r="${38 * scale}" fill="#f5c2e7" opacity="0.55"/>
+      <circle cx="100" cy="50" r="${28 * scale}" fill="#ffffff" opacity="0.85"/>
+      <circle cx="60" cy="70" r="${26 * scale}" fill="#b4befe" opacity="0.75"/>
+      <circle cx="140" cy="70" r="${26 * scale}" fill="#f5c2e7" opacity="0.75"/>
+      <!-- Revolving Celestial Starlight Rings -->
+      <ellipse cx="100" cy="50" rx="66" ry="22" stroke="#ffffff" stroke-width="2" fill="none" opacity="0.85" transform="rotate(-18 100 50)"/>
+      <ellipse cx="100" cy="50" rx="66" ry="22" stroke="#f5c2e7" stroke-width="1" stroke-dasharray="4,4" fill="none" opacity="0.7" transform="rotate(22 100 50)"/>
+      <!-- Radiant Stars & Nova Sparkles -->
+      <polygon points="100,5 103,16 114,19 103,22 100,33 97,22 86,19 97,16" fill="#ffffff" class="glow-particle"/>
+      <polygon points="40,55 42,61 48,63 42,65 40,71 38,65 32,63 38,61" fill="#f9e2af" class="glow-particle"/>
+      <polygon points="160,45 162,51 168,53 162,55 160,61 158,55 152,53 158,51" fill="#f5c2e7" class="glow-particle"/>
+      <circle cx="100" cy="50" r="6" fill="#ffffff" class="glow-particle"/>
+      <circle cx="75" cy="40" r="3" fill="#ffffff" class="glow-particle"/>
+      <circle cx="125" cy="40" r="3" fill="#ffffff" class="glow-particle"/>
     </svg>
   `;
 }

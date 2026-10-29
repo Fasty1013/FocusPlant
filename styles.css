@@ -1373,6 +1373,35 @@ input:disabled + .slider.round {
   100% { box-shadow: 0 0 0 0 rgba(249, 226, 175, 0); }
 }
 
+/* Bulk sell withered trees button in header */
+.btn-sell-withered {
+  background: linear-gradient(135deg, rgba(243, 139, 168, 0.18) 0%, rgba(235, 160, 172, 0.22) 100%) !important;
+  border: 1px solid #f38ba8 !important;
+  color: #f38ba8 !important;
+  font-weight: 700;
+  transition: all 0.2s ease;
+}
+
+.btn-sell-withered:hover {
+  background: #f38ba8 !important;
+  color: #11111b !important;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 10px rgba(243, 139, 168, 0.45);
+}
+
+.skin-exclusive-badge {
+  font-size: 0.58rem;
+  font-weight: 800;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: linear-gradient(135deg, rgba(249, 226, 175, 0.25) 0%, rgba(243, 139, 168, 0.25) 100%);
+  border: 1px solid #f9e2af;
+  color: #f9e2af;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-left: 5px;
+}
+
 /* HQ Fullscreen Modal */
 .hq-tree-modal-backdrop {
   position: fixed;

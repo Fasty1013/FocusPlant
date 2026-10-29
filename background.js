@@ -1,4 +1,4 @@
-// Focus Plant Pro - Cross-Browser Background Service Worker & Script
+﻿// Focus Plant Pro - Cross-Browser Background Service Worker & Script
 const ext = (typeof browser !== 'undefined' && browser.runtime) ? browser : chrome;
 
 const DEFAULT_BLOCKLIST = [
@@ -30,9 +30,9 @@ const DEFAULT_QUESTS = [
 // Tree Rarity Pools
 const RARITY_POOLS = {
   common: ["oak", "birch"],
-  uncommon: ["pine", "apple"],
-  rare: ["sakura", "bamboo"],
-  epic: ["wisteria", "autumn_maple"],
+  uncommon: ["pine", "apple", "orange_tree"],
+  rare: ["sakura", "bamboo", "jacaranda"],
+  epic: ["wisteria", "autumn_maple", "golden_ginkgo"],
   legendary: ["world_tree", "crystal"],
   mythic: ["mystic", "cosmic"]
 };

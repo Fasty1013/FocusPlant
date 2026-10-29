@@ -109,7 +109,12 @@ document.addEventListener("DOMContentLoaded", () => {
       lblHqDate: "📅 Выращено",
       lblHqDuration: "⏱ Время фокуса",
       lblHqDuplicates: "🌿 В коллекции",
-      lblHqValue: "💎 Ценность"
+      lblHqValue: "💎 Ценность",
+      sellAllWitheredBtn: (count, total) => `🥀 Продать засохшие (${count} шт. • +${total} 🪙)`,
+      confirmSellAllWithered: (count, total) => `Убрать и переработать все ${count} засохших деревьев за +${total} монет?`,
+      toastSoldWitheredSuccess: (count, total) => `🧹 Убрано ${count} засохших деревьев! Получено +${total} 🪙`,
+      exclusiveShopBadge: "ЭКСКЛЮЗИВ",
+      exclusiveShopDesc: "💎 Эксклюзив магазина (нельзя выбить)"
     },
     en: {
       timerTab: "⏱ Timer",
@@ -216,7 +221,12 @@ document.addEventListener("DOMContentLoaded", () => {
       lblHqDate: "📅 Grown on",
       lblHqDuration: "⏱ Focus time",
       lblHqDuplicates: "🌿 In collection",
-      lblHqValue: "💎 Value"
+      lblHqValue: "💎 Value",
+      sellAllWitheredBtn: (count, total) => `🥀 Recycle Withered (${count} • +${total} 🪙)`,
+      confirmSellAllWithered: (count, total) => `Recycle all ${count} withered trees into compost for +${total} coins?`,
+      toastSoldWitheredSuccess: (count, total) => `🧹 Cleared ${count} withered trees! Received +${total} 🪙`,
+      exclusiveShopBadge: "EXCLUSIVE",
+      exclusiveShopDesc: "💎 Shop Exclusive (Cannot be rolled)"
     },
     uz: {
       timerTab: "⏱ Taymer",
@@ -323,7 +333,12 @@ document.addEventListener("DOMContentLoaded", () => {
       lblHqDate: "📅 O'stirilgan sana",
       lblHqDuration: "⏱ Fokus vaqti",
       lblHqDuplicates: "🌿 Kolleksiyada",
-      lblHqValue: "💎 Qiymati"
+      lblHqValue: "💎 Qiymati",
+      sellAllWitheredBtn: (count, total) => `🥀 So'lganlarni sotish (${count} ta • +${total} 🪙)`,
+      confirmSellAllWithered: (count, total) => `Barcha ${count} ta so'lgan daraxtlarni +${total} tangaga qayta ishlashga sotmoqchimisiz?`,
+      toastSoldWitheredSuccess: (count, total) => `🧹 ${count} ta so'lgan daraxt tozalandi! +${total} 🪙 olindi`,
+      exclusiveShopBadge: "EKSKLUZIV",
+      exclusiveShopDesc: "💎 Do'kon eksklyuzivi (chiqmaydi)"
     },
     ja: {
       timerTab: "⏱ タイマー",
@@ -430,7 +445,12 @@ document.addEventListener("DOMContentLoaded", () => {
       lblHqDate: "📅 育成日",
       lblHqDuration: "⏱ 集中時間",
       lblHqDuplicates: "🌿 コレクション",
-      lblHqValue: "💎 売却価値"
+      lblHqValue: "💎 売却価値",
+      sellAllWitheredBtn: (count, total) => `🥀 枯れ木を売却 (${count}本 • +${total} 🪙)`,
+      confirmSellAllWithered: (count, total) => `枯れてしまった${count}本の木を堆肥として+${total}コインで売却しますか？`,
+      toastSoldWitheredSuccess: (count, total) => `🧹 枯れた木を${count}本片付けました！+${total} 🪙`,
+      exclusiveShopBadge: "限定品",
+      exclusiveShopDesc: "💎 ショップ限定（タイマー不可）"
     }
   };
 
@@ -1367,15 +1387,59 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
+    // Bulk Sell All Withered Trees Button in header
+    const btnSellAllWithered = document.getElementById("btnSellAllWithered");
+    if (btnSellAllWithered) {
+      if (!isShowcase) {
+        const witheredTrees = forest.filter(f => f.status === "withered");
+        const witheredCount = witheredTrees.length;
+        if (witheredCount > 0) {
+          const totalWitheredCoins = witheredCount * 5;
+          btnSellAllWithered.style.display = "inline-flex";
+          btnSellAllWithered.textContent = t.sellAllWitheredBtn
+            ? t.sellAllWitheredBtn(witheredCount, totalWitheredCoins)
+            : `🥀 Продать засохшие (${witheredCount} шт. • +${totalWitheredCoins} 🪙)`;
+
+          btnSellAllWithered.onclick = () => {
+            const confirmMsg = t.confirmSellAllWithered
+              ? t.confirmSellAllWithered(witheredCount, totalWitheredCoins)
+              : `Убрать и переработать все ${witheredCount} засохших деревьев за +${totalWitheredCoins} монет?`;
+            if (confirm(confirmMsg)) {
+              ext.storage.local.get(["forest", "coins"], (data) => {
+                let fList = Array.isArray(data.forest) ? [...data.forest] : [];
+                let currentCoins = Number(data.coins) || 0;
+                const newForest = fList.filter(item => item.status !== "withered");
+                const newCoins = currentCoins + totalWitheredCoins;
+
+                ext.storage.local.set({ forest: newForest, coins: newCoins }, () => {
+                  if (typeof soundManager !== "undefined" && soundManager.playCoinSound) {
+                    soundManager.playCoinSound();
+                  }
+                  if (coinsCount) coinsCount.textContent = newCoins;
+                  showToast(t.toastSoldWitheredSuccess ? t.toastSoldWitheredSuccess(witheredCount, totalWitheredCoins) : `+${totalWitheredCoins} 🪙`);
+                  renderGardenTab();
+                });
+              });
+            }
+          };
+        } else {
+          btnSellAllWithered.style.display = "none";
+        }
+      } else {
+        btnSellAllWithered.style.display = "none";
+      }
+    }
+
     // Determine what trees to place on the 16 tiles (4x4)
     let tilesData = new Array(16).fill(null);
 
     if (isShowcase) {
-      // Showcase all 12 tree varieties
+      // Showcase all 16 unique tree varieties (full 4x4 grid!)
       const showcaseSkins = [
-        "oak", "birch", "pine", "apple",
-        "sakura", "bamboo", "wisteria", "autumn_maple",
-        "crystal", "world_tree", "mystic", "cosmic"
+        "oak", "birch", "pine", "apple", "orange_tree",
+        "sakura", "bamboo", "jacaranda",
+        "wisteria", "autumn_maple", "golden_ginkgo", "cyber_neon",
+        "world_tree", "crystal", "volcano_magma", "celestial_starlight"
       ];
       showcaseSkins.forEach((skinKey, i) => {
         const sObj = TREE_SKINS[skinKey] || TREE_SKINS.oak;
@@ -1683,7 +1747,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
         item.title = isOwned
           ? `${skin.name[currentLang] || skin.name.ru} (${rarityObj.name[currentLang] || rarityObj.name.ru})\n${skin.desc[currentLang] || skin.desc.ru}\n${t.almanacClickEquip}`
-          : `${t.almanacLockedHint}\n[${rarityObj.name[currentLang] || rarityObj.name.ru}]`;
+          : skin.exclusiveShop
+            ? `${skin.name[currentLang] || skin.name.ru}\n${t.exclusiveShopDesc || "💎 Эксклюзив магазина (нельзя выбить, только в магазине)"}`
+            : `${t.almanacLockedHint}\n[${rarityObj.name[currentLang] || rarityObj.name.ru}]`;
 
         if (isOwned) {
           item.addEventListener("click", () => {
@@ -1767,6 +1833,9 @@ document.addEventListener("DOMContentLoaded", () => {
         card.className = `skin-card ${isEquipped ? "selected" : ""}`;
 
         const previewSvg = renderTreeSVG(skin.id, 5, false);
+        const exclusiveBadge = skin.exclusiveShop
+          ? `<span class="skin-exclusive-badge">💎 ${t.exclusiveShopBadge || "ЭКСКЛЮЗИВ"}</span>`
+          : "";
 
         card.innerHTML = `
           <div class="skin-preview-box">${previewSvg}</div>
@@ -1774,6 +1843,7 @@ document.addEventListener("DOMContentLoaded", () => {
             <div class="skin-name-row">
               <span class="skin-name">${skin.name[currentLang] || skin.name.ru} ${skin.emoji}</span>
               <span class="skin-rarity-pill" style="background:${rarityObj.bg};color:${rarityObj.color};">${rarityObj.stars}</span>
+              ${exclusiveBadge}
             </div>
             <div class="skin-desc">${skin.desc[currentLang] || skin.desc.ru}</div>
           </div>
