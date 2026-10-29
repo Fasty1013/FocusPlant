@@ -96,7 +96,20 @@ document.addEventListener("DOMContentLoaded", () => {
       inspectDate: "📅 Дата:",
       inspectDuration: "⏱ Фокус:",
       inspectStatusGrown: "Выращено успешно!",
-      inspectStatusWithered: "Завяло из-за отвлечения"
+      inspectStatusWithered: "Завяло из-за отвлечения",
+      btnInspectZoom: "🔍 HQ Осмотр",
+      lblInspectDuplicates: "🌿 В саду:",
+      duplicateCount: (count) => count > 1 ? `${count} шт. (дубликатов: ${count - 1})` : "1 шт. (единственное)",
+      sellDuplicateBtn: (price) => `Продать дубликат (+${price} 🪙)`,
+      recycleWitheredBtn: (price) => `Убрать завядшее (+${price} 🪙)`,
+      sellAllDuplicatesBtn: (count, total) => `💰 Продать дубликаты (${count} шт. • +${total} 🪙)`,
+      confirmSellAll: (count, total) => `Продать все ${count} дубликатов деревьев за +${total} монет?\nУ вас гарантированно останется по 1 экземпляру каждого вида.`,
+      toastSoldSuccess: (name, price) => `✨ Продан дубликат «${name}»! Получено +${price} 🪙`,
+      toastSoldAllSuccess: (count, total) => `✨ Продано ${count} дубликатов! Получено +${total} 🪙`,
+      lblHqDate: "📅 Выращено",
+      lblHqDuration: "⏱ Время фокуса",
+      lblHqDuplicates: "🌿 В коллекции",
+      lblHqValue: "💎 Ценность"
     },
     en: {
       timerTab: "⏱ Timer",
@@ -190,7 +203,20 @@ document.addEventListener("DOMContentLoaded", () => {
       inspectDate: "📅 Date:",
       inspectDuration: "⏱ Focus:",
       inspectStatusGrown: "Grown successfully!",
-      inspectStatusWithered: "Withered due to distraction"
+      inspectStatusWithered: "Withered due to distraction",
+      btnInspectZoom: "🔍 HQ Zoom",
+      lblInspectDuplicates: "🌿 In Garden:",
+      duplicateCount: (count) => count > 1 ? `${count} (duplicates: ${count - 1})` : "1 (unique)",
+      sellDuplicateBtn: (price) => `Sell Duplicate (+${price} 🪙)`,
+      recycleWitheredBtn: (price) => `Clear Withered (+${price} 🪙)`,
+      sellAllDuplicatesBtn: (count, total) => `💰 Sell Duplicates (${count} • +${total} 🪙)`,
+      confirmSellAll: (count, total) => `Sell all ${count} duplicate trees for +${total} coins?\nYou will keep 1 copy of each grown species.`,
+      toastSoldSuccess: (name, price) => `✨ Sold duplicate "${name}"! Received +${price} 🪙`,
+      toastSoldAllSuccess: (count, total) => `✨ Sold ${count} duplicates! Received +${total} 🪙`,
+      lblHqDate: "📅 Grown on",
+      lblHqDuration: "⏱ Focus time",
+      lblHqDuplicates: "🌿 In collection",
+      lblHqValue: "💎 Value"
     },
     uz: {
       timerTab: "⏱ Taymer",
@@ -284,7 +310,20 @@ document.addEventListener("DOMContentLoaded", () => {
       inspectDate: "📅 Sana:",
       inspectDuration: "⏱ Fokus:",
       inspectStatusGrown: "Muvaffaqiyatli o'stirildi!",
-      inspectStatusWithered: "Chalg'ish tufayli so'ldi"
+      inspectStatusWithered: "Chalg'ish tufayli so'ldi",
+      btnInspectZoom: "🔍 HQ Ko'rish",
+      lblInspectDuplicates: "🌿 Bog'da:",
+      duplicateCount: (count) => count > 1 ? `${count} ta (dublikat: ${count - 1})` : "1 ta (yagona)",
+      sellDuplicateBtn: (price) => `Dublikatni sotish (+${price} 🪙)`,
+      recycleWitheredBtn: (price) => `So'lgan daraxtni tozalash (+${price} 🪙)`,
+      sellAllDuplicatesBtn: (count, total) => `💰 Dublikatlarni sotish (${count} ta • +${total} 🪙)`,
+      confirmSellAll: (count, total) => `Barcha ${count} ta dublikat daraxtlarni +${total} tangaga sotmoqchimisiz? Har bir turdan 1 tadan qoladi.`,
+      toastSoldSuccess: (name, price) => `✨ "${name}" dublikati sotildi! +${price} 🪙 olindi`,
+      toastSoldAllSuccess: (count, total) => `✨ ${count} ta dublikat sotildi! +${total} 🪙 olindi`,
+      lblHqDate: "📅 O'stirilgan sana",
+      lblHqDuration: "⏱ Fokus vaqti",
+      lblHqDuplicates: "🌿 Kolleksiyada",
+      lblHqValue: "💎 Qiymati"
     },
     ja: {
       timerTab: "⏱ タイマー",
@@ -378,7 +417,20 @@ document.addEventListener("DOMContentLoaded", () => {
       inspectDate: "📅 植樹日:",
       inspectDuration: "⏱ 集中:",
       inspectStatusGrown: "見事に成長しました！",
-      inspectStatusWithered: "集中途切れにより枯死"
+      inspectStatusWithered: "集中途切れにより枯死",
+      btnInspectZoom: "🔍 HQ 拡大",
+      lblInspectDuplicates: "🌿 所持数:",
+      duplicateCount: (count) => count > 1 ? `${count}本 (重複: ${count - 1}本)` : "1本 (単一)",
+      sellDuplicateBtn: (price) => `重複を売却 (+${price} 🪙)`,
+      recycleWitheredBtn: (price) => `枯れ木を片付ける (+${price} 🪙)`,
+      sellAllDuplicatesBtn: (count, total) => `💰 重複を売却 (${count}本 • +${total} 🪙)`,
+      confirmSellAll: (count, total) => `重複している${count}本の木を+${total}コインで売却しますか？各種類1本は手元に残ります。`,
+      toastSoldSuccess: (name, price) => `✨ 「${name}」の重複を売却しました！+${price} 🪙`,
+      toastSoldAllSuccess: (count, total) => `✨ ${count}本の重複を売却しました！+${total} 🪙`,
+      lblHqDate: "📅 育成日",
+      lblHqDuration: "⏱ 集中時間",
+      lblHqDuplicates: "🌿 コレクション",
+      lblHqValue: "💎 売却価値"
     }
   };
 
@@ -582,6 +634,13 @@ document.addEventListener("DOMContentLoaded", () => {
     if (document.getElementById("lblMeadowHint")) document.getElementById("lblMeadowHint").textContent = t.meadowHint;
     if (document.getElementById("lblInspectDate")) document.getElementById("lblInspectDate").textContent = t.inspectDate;
     if (document.getElementById("lblInspectDuration")) document.getElementById("lblInspectDuration").textContent = t.inspectDuration;
+    if (document.getElementById("btnInspectZoom")) document.getElementById("btnInspectZoom").textContent = t.btnInspectZoom || "🔍 HQ";
+    if (document.getElementById("btnOpenHqModal")) document.getElementById("btnOpenHqModal").textContent = t.btnInspectZoom || "🔍 HQ Осмотр";
+    if (document.getElementById("lblInspectDuplicates")) document.getElementById("lblInspectDuplicates").textContent = t.lblInspectDuplicates || "🌿 В саду:";
+    if (document.getElementById("lblHqDate")) document.getElementById("lblHqDate").textContent = t.lblHqDate || "📅 Выращено";
+    if (document.getElementById("lblHqDuration")) document.getElementById("lblHqDuration").textContent = t.lblHqDuration || "⏱ Время фокуса";
+    if (document.getElementById("lblHqDuplicates")) document.getElementById("lblHqDuplicates").textContent = t.lblHqDuplicates || "🌿 В коллекции";
+    if (document.getElementById("lblHqValue")) document.getElementById("lblHqValue").textContent = t.lblHqValue || "💎 Ценность";
 
     // Refresh active views
     syncTimerFromStorage();
@@ -1016,6 +1075,204 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // Helper: Price of selling a duplicate tree
+  function getTreeSellPrice(tree) {
+    if (!tree) return 15;
+    if (tree.status === "withered") return 5;
+    const skin = TREE_SKINS[tree.skin];
+    if (!skin) return 15;
+    const rarityMin = {
+      common: 15,
+      uncommon: 35,
+      rare: 80,
+      epic: 160,
+      legendary: 300,
+      mythic: 500
+    };
+    const base = skin.price ? Math.round(skin.price * 0.45) : 0;
+    return Math.max(rarityMin[skin.rarity] || 15, base);
+  }
+
+  // Helper: Calculate total duplicates in user's forest
+  function getForestDuplicatesSummary(forest) {
+    const skinCounts = {};
+    forest.forEach(f => {
+      if (f.status !== "withered") {
+        skinCounts[f.skin] = (skinCounts[f.skin] || 0) + 1;
+      }
+    });
+
+    let duplicateCount = 0;
+    let totalSellCoins = 0;
+
+    Object.entries(skinCounts).forEach(([skinKey, count]) => {
+      if (count > 1) {
+        const excess = count - 1;
+        duplicateCount += excess;
+        const sObj = TREE_SKINS[skinKey] || {};
+        const sampleTree = { skin: skinKey, rarity: sObj.rarity, status: "completed" };
+        totalSellCoins += excess * getTreeSellPrice(sampleTree);
+      }
+    });
+
+    return { duplicateCount, totalSellCoins };
+  }
+
+  // Toast Notification System
+  function showToast(message) {
+    let toast = document.getElementById("fpToast");
+    if (!toast) {
+      toast = document.createElement("div");
+      toast.id = "fpToast";
+      toast.style.position = "fixed";
+      toast.style.top = "18px";
+      toast.style.left = "50%";
+      toast.style.transform = "translateX(-50%) translateY(-24px)";
+      toast.style.background = "linear-gradient(135deg, rgba(24, 24, 37, 0.98) 0%, rgba(30, 30, 46, 0.98) 100%)";
+      toast.style.border = "1.5px solid var(--accent-mint)";
+      toast.style.color = "#fff";
+      toast.style.padding = "8px 16px";
+      toast.style.borderRadius = "20px";
+      toast.style.fontSize = "0.78rem";
+      toast.style.fontWeight = "700";
+      toast.style.zIndex = "99999";
+      toast.style.boxShadow = "0 8px 24px rgba(0,0,0,0.65), 0 0 16px rgba(148, 226, 213, 0.35)";
+      toast.style.transition = "all 0.28s cubic-bezier(0.16, 1, 0.3, 1)";
+      toast.style.opacity = "0";
+      toast.style.pointerEvents = "none";
+      document.body.appendChild(toast);
+    }
+    toast.textContent = message;
+    toast.style.opacity = "1";
+    toast.style.transform = "translateX(-50%) translateY(0)";
+
+    if (window._toastTimer) clearTimeout(window._toastTimer);
+    window._toastTimer = setTimeout(() => {
+      toast.style.opacity = "0";
+      toast.style.transform = "translateX(-50%) translateY(-24px)";
+    }, 2800);
+  }
+
+  // Sell individual duplicate tree
+  function sellDuplicateTree(tree, sellPrice) {
+    const t = i18n[currentLang] || i18n.ru;
+    ext.storage.local.get(["forest", "coins"], (data) => {
+      let forest = Array.isArray(data.forest) ? [...data.forest] : [];
+      let currentCoins = Number(data.coins) || 0;
+
+      let targetIdx = -1;
+      if (tree.id) {
+        targetIdx = forest.findIndex(f => f.id === tree.id);
+      }
+      if (targetIdx === -1) {
+        if (tree.status === "withered") {
+          targetIdx = forest.findIndex(f => f.skin === tree.skin && f.status === "withered");
+        } else {
+          targetIdx = forest.findIndex(f => f.skin === tree.skin && f.status !== "withered");
+        }
+      }
+
+      if (targetIdx !== -1) {
+        forest.splice(targetIdx, 1);
+        const newCoins = currentCoins + sellPrice;
+
+        ext.storage.local.set({ forest, coins: newCoins }, () => {
+          if (typeof soundManager !== "undefined" && soundManager.playCoinSound) {
+            soundManager.playCoinSound();
+          }
+          if (coinsCount) coinsCount.textContent = newCoins;
+
+          const skinObj = TREE_SKINS[tree.skin] || TREE_SKINS.oak;
+          const treeName = skinObj.name[currentLang] || skinObj.name.ru;
+          showToast(t.toastSoldSuccess ? t.toastSoldSuccess(treeName, sellPrice) : `+${sellPrice} 🪙`);
+
+          if (treeInspectorModal) treeInspectorModal.style.display = "none";
+          const hqModal = document.getElementById("hqTreeModal");
+          if (hqModal) hqModal.style.display = "none";
+
+          renderGardenTab();
+        });
+      }
+    });
+  }
+
+  // Open Full High-Quality Detail Modal (HQ Zoom View)
+  function openHqTreeModal(tree, isWithered, fullDateStr, duplicateCount, sellPrice) {
+    const hqModal = document.getElementById("hqTreeModal");
+    const hqRarity = document.getElementById("hqRarityBadge");
+    const hqTitle = document.getElementById("hqTreeTitle");
+    const hqDesc = document.getElementById("hqTreeDesc");
+    const hqHero = document.getElementById("hqTreeHero");
+    const hqGlow = document.getElementById("hqAmbientGlow");
+    const hqDate = document.getElementById("hqTreeDate");
+    const hqDur = document.getElementById("hqTreeDuration");
+    const hqDup = document.getElementById("hqTreeDuplicates");
+    const hqVal = document.getElementById("hqTreeValue");
+    const hqSell = document.getElementById("hqSellBtn");
+    const hqSellText = document.getElementById("hqSellBtnText");
+    const hqClose = document.getElementById("hqCloseBtn");
+    const hqBack = document.getElementById("hqBackBtn");
+    const t = i18n[currentLang] || i18n.ru;
+
+    if (!hqModal) return;
+
+    const skinObj = TREE_SKINS[tree.skin] || TREE_SKINS.oak;
+    const rarityObj = RARITIES[tree.rarity] || RARITIES.common;
+
+    if (hqRarity) {
+      hqRarity.textContent = `${rarityObj.stars} ${rarityObj.name[currentLang] || rarityObj.name.ru}`.toUpperCase();
+      hqRarity.style.background = rarityObj.bg;
+      hqRarity.style.color = rarityObj.color;
+      hqRarity.style.border = `1px solid ${rarityObj.border}`;
+    }
+
+    if (hqTitle) {
+      hqTitle.textContent = `${skinObj.name[currentLang] || skinObj.name.ru} ${skinObj.emoji}`;
+    }
+
+    if (hqDesc) {
+      hqDesc.textContent = (skinObj.desc && (skinObj.desc[currentLang] || skinObj.desc.ru)) || "";
+    }
+
+    if (hqHero) {
+      hqHero.innerHTML = renderTreeSVG(tree.skin, 5, isWithered);
+    }
+
+    if (hqGlow) {
+      const glowColor = rarityObj.color || "#a6e3a1";
+      hqGlow.style.background = `radial-gradient(circle, ${glowColor} 0%, rgba(16, 185, 129, 0.15) 50%, transparent 70%)`;
+    }
+
+    if (hqDate) hqDate.textContent = fullDateStr || "—";
+    if (hqDur) hqDur.textContent = `${tree.duration || 0} ${t.minuteUnit}`;
+    if (hqDup) hqDup.textContent = t.duplicateCount ? t.duplicateCount(duplicateCount) : `${duplicateCount} шт.`;
+    if (hqVal) hqVal.textContent = `+${sellPrice} 🪙`;
+
+    if (hqSell) {
+      if (!tree.isShowcase && !tree.isStarter && (duplicateCount > 1 || isWithered)) {
+        hqSell.style.display = "inline-flex";
+        if (hqSellText) {
+          hqSellText.textContent = isWithered
+            ? (t.recycleWitheredBtn ? t.recycleWitheredBtn(sellPrice) : `Убрать завядшее (+${sellPrice} 🪙)`)
+            : (t.sellDuplicateBtn ? t.sellDuplicateBtn(sellPrice) : `Продать дубликат (+${sellPrice} 🪙)`);
+        }
+        hqSell.onclick = (e) => {
+          e.stopPropagation();
+          sellDuplicateTree(tree, sellPrice);
+          hqModal.style.display = "none";
+        };
+      } else {
+        hqSell.style.display = "none";
+      }
+    }
+
+    const closeHq = () => { hqModal.style.display = "none"; };
+    if (hqClose) hqClose.onclick = closeHq;
+    if (hqBack) hqBack.onclick = closeHq;
+
+    hqModal.style.display = "flex";
+  }
+
   // 3D Isometric 2.5D Island Garden Renderer
   function renderLivingMeadow(forest, t, selectedSkin = "oak") {
     const cliffBase = document.getElementById("isoCliffBase");
@@ -1053,6 +1310,60 @@ document.addEventListener("DOMContentLoaded", () => {
         else if (totalGrown === 1) stageName = t.meadowStage1 || "🌱 Росток";
 
         stageBadge.textContent = `${stageName} (${totalGrown}/16)`;
+      }
+    }
+
+    // Bulk Sell All Duplicates Button in header
+    const btnSellAllDuplicates = document.getElementById("btnSellAllDuplicates");
+    if (btnSellAllDuplicates) {
+      if (!isShowcase && totalGrown > 1) {
+        const dupSummary = getForestDuplicatesSummary(forest);
+        if (dupSummary.duplicateCount > 0) {
+          btnSellAllDuplicates.style.display = "inline-flex";
+          btnSellAllDuplicates.textContent = t.sellAllDuplicatesBtn
+            ? t.sellAllDuplicatesBtn(dupSummary.duplicateCount, dupSummary.totalSellCoins)
+            : `💰 Продать дубликаты (${dupSummary.duplicateCount})`;
+
+          btnSellAllDuplicates.onclick = () => {
+            const confirmMsg = t.confirmSellAll
+              ? t.confirmSellAll(dupSummary.duplicateCount, dupSummary.totalSellCoins)
+              : `Продать все ${dupSummary.duplicateCount} дубликатов за +${dupSummary.totalSellCoins} монет?`;
+            if (confirm(confirmMsg)) {
+              ext.storage.local.get(["forest", "coins"], (data) => {
+                let fList = Array.isArray(data.forest) ? [...data.forest] : [];
+                let currentCoins = Number(data.coins) || 0;
+                const keptSkins = new Set();
+                const newForest = [];
+                let removedCount = 0;
+
+                fList.forEach(item => {
+                  if (item.status === "withered") {
+                    newForest.push(item);
+                  } else if (!keptSkins.has(item.skin)) {
+                    keptSkins.add(item.skin);
+                    newForest.push(item);
+                  } else {
+                    removedCount++;
+                  }
+                });
+
+                const newCoins = currentCoins + dupSummary.totalSellCoins;
+                ext.storage.local.set({ forest: newForest, coins: newCoins }, () => {
+                  if (typeof soundManager !== "undefined" && soundManager.playCoinSound) {
+                    soundManager.playCoinSound();
+                  }
+                  if (coinsCount) coinsCount.textContent = newCoins;
+                  showToast(t.toastSoldAllSuccess ? t.toastSoldAllSuccess(removedCount, dupSummary.totalSellCoins) : `+${dupSummary.totalSellCoins} 🪙`);
+                  renderGardenTab();
+                });
+              });
+            }
+          };
+        } else {
+          btnSellAllDuplicates.style.display = "none";
+        }
+      } else {
+        btnSellAllDuplicates.style.display = "none";
       }
     }
 
@@ -1174,6 +1485,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 statusEl.textContent = "Запустите таймер фокуса, чтобы посадить здесь дерево!";
                 statusEl.className = "inspector-status-badge";
               }
+
+              // Hide duplicate info and buttons for empty plots
+              const duplicatesRowEl = document.getElementById("inspectDuplicatesRow");
+              if (duplicatesRowEl) duplicatesRowEl.style.display = "none";
+              const btnSell = document.getElementById("btnSellDuplicate");
+              if (btnSell) btnSell.style.display = "none";
+              const btnOpenHq = document.getElementById("btnOpenHqModal");
+              if (btnOpenHq) btnOpenHq.style.display = "none";
             }
           });
         } else {
@@ -1252,6 +1571,59 @@ document.addEventListener("DOMContentLoaded", () => {
                   : (tree.isStarter ? `🌱 Ваш саженец (готов к росту!)` : `🌱 ${t.inspectStatusGrown}`);
                 statusEl.className = `inspector-status-badge ${isWithered ? "withered" : ""}`;
               }
+
+              // Duplicates Count Display
+              const sameSkinTrees = forest.filter(f => f.skin === tree.skin && f.status !== "withered");
+              const duplicateCount = sameSkinTrees.length;
+              const duplicatesValEl = document.getElementById("inspectDuplicatesVal");
+              const duplicatesRowEl = document.getElementById("inspectDuplicatesRow");
+              if (duplicatesValEl && duplicatesRowEl) {
+                if (isShowcase || tree.isStarter) {
+                  duplicatesRowEl.style.display = "none";
+                } else {
+                  duplicatesRowEl.style.display = "flex";
+                  duplicatesValEl.textContent = t.duplicateCount ? t.duplicateCount(duplicateCount) : `${duplicateCount} шт.`;
+                }
+              }
+
+              // Sell Duplicate Button
+              const btnSell = document.getElementById("btnSellDuplicate");
+              const lblSell = document.getElementById("lblSellDuplicate");
+              const sellPrice = getTreeSellPrice(tree);
+              if (btnSell) {
+                if (!isShowcase && !tree.isStarter && (duplicateCount > 1 || isWithered)) {
+                  btnSell.style.display = "inline-flex";
+                  const btnText = isWithered
+                    ? (t.recycleWitheredBtn ? t.recycleWitheredBtn(sellPrice) : `Убрать завядшее (+${sellPrice} 🪙)`)
+                    : (t.sellDuplicateBtn ? t.sellDuplicateBtn(sellPrice) : `Продать дубликат (+${sellPrice} 🪙)`);
+                  if (lblSell) lblSell.textContent = btnText;
+                  else btnSell.textContent = `💰 ${btnText}`;
+
+                  btnSell.onclick = (ev) => {
+                    ev.stopPropagation();
+                    sellDuplicateTree(tree, sellPrice);
+                  };
+                } else {
+                  btnSell.style.display = "none";
+                }
+              }
+
+              // Open HQ Zoom View Handlers
+              const openHqAction = (ev) => {
+                ev.stopPropagation();
+                openHqTreeModal(tree, isWithered, fullDateStr, duplicateCount, sellPrice);
+              };
+
+              const btnZoom = document.getElementById("btnInspectZoom");
+              const btnOpenHq = document.getElementById("btnOpenHqModal");
+              const previewWrap = document.getElementById("inspectorPreviewWrap");
+
+              if (btnZoom) btnZoom.onclick = openHqAction;
+              if (btnOpenHq) {
+                btnOpenHq.style.display = "inline-flex";
+                btnOpenHq.onclick = openHqAction;
+              }
+              if (previewWrap) previewWrap.onclick = openHqAction;
             }
           };
 
@@ -1360,6 +1732,13 @@ document.addEventListener("DOMContentLoaded", () => {
           const reasonStr = isWithered ? `\n${tree.reason}` : "";
           const rarityName = tree.rarity ? ` [${RARITIES[tree.rarity]?.name[currentLang] || ""}]` : "";
           cell.title = `${isWithered ? t.withered : t.grown}: ${skinObj.name[currentLang] || skinObj.name.ru}${rarityName}\n${durStr} • ${dateStr}${reasonStr}`;
+
+          cell.addEventListener("click", () => {
+            const sameSkinTrees = forest.filter(f => f.skin === tree.skin && f.status !== "withered");
+            const dupCount = sameSkinTrees.length;
+            const sPrice = getTreeSellPrice(tree);
+            openHqTreeModal(tree, isWithered, dateStr, dupCount, sPrice);
+          });
 
           forestGrid.appendChild(cell);
         });

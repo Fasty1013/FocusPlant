@@ -208,6 +208,7 @@
           <div class="meadow-controls">
             <button class="meadow-filter-btn active" id="btnFilterMyTrees" data-filter="my" title="Мой сад">Мой сад</button>
             <button class="meadow-filter-btn" id="btnFilterShowcase" data-filter="showcase" title="Все виды деревьев">Все виды ✨</button>
+            <button class="meadow-filter-btn btn-sell-all" id="btnSellAllDuplicates" style="display: none;" title="Продать все дубликаты">💰 Продать дубликаты</button>
           </div>
         </div>
 
@@ -274,7 +275,10 @@
           <div class="tree-inspector-modal" id="treeInspectorModal" style="display: none;">
             <button class="inspector-close" id="inspectorCloseBtn" title="Закрыть">✕</button>
             <div class="inspector-card-body">
-              <div class="inspector-tree-preview" id="inspectorTreePreview"></div>
+              <div class="inspector-tree-preview-wrap" id="inspectorPreviewWrap" title="Нажмите для HQ просмотра">
+                <div class="inspector-tree-preview" id="inspectorTreePreview"></div>
+                <span class="inspector-zoom-badge" id="btnInspectZoom">🔍 HQ</span>
+              </div>
               <div class="inspector-info">
                 <div class="inspector-rarity-pill" id="inspectorRarityPill">★ РЕДКОЕ</div>
                 <h5 class="inspector-tree-title" id="inspectorTreeTitle">Сакура Самурая 🌸</h5>
@@ -286,7 +290,16 @@
                   <span class="meta-label" id="lblInspectDuration">⏱ Фокус:</span>
                   <span class="meta-val" id="inspectTreeDuration">25 мин</span>
                 </div>
+                <div class="inspector-meta-row" id="inspectDuplicatesRow">
+                  <span class="meta-label" id="lblInspectDuplicates">🌿 В саду:</span>
+                  <span class="meta-val" id="inspectDuplicatesVal">1 шт.</span>
+                </div>
                 <div class="inspector-status-badge" id="inspectTreeStatus">🌱 Успешно выращено!</div>
+
+                <div class="inspector-actions-row">
+                  <button class="inspector-btn inspector-btn-zoom" id="btnOpenHqModal" title="Открыть в высоком качестве">🔍 HQ Осмотр</button>
+                  <button class="inspector-btn inspector-btn-sell" id="btnSellDuplicate" style="display: none;" title="Продать дубликат">💰 <span id="lblSellDuplicate">Продать дубликат</span></button>
+                </div>
               </div>
             </div>
           </div>
@@ -406,6 +419,55 @@
         <ul id="siteList" class="site-list"></ul>
       </div>
     </section>
+
+    <!-- 🌸 Full HQ Tree Detailed View Modal -->
+    <div class="hq-tree-modal-backdrop" id="hqTreeModal" style="display: none;">
+      <div class="hq-tree-card">
+        <button class="hq-close-btn" id="hqCloseBtn" title="Закрыть">✕</button>
+        
+        <div class="hq-tree-header">
+          <div class="hq-rarity-badge" id="hqRarityBadge">★ РЕДКОЕ ДЕРЕВО</div>
+          <h3 class="hq-tree-title" id="hqTreeTitle">Цветущая Сакура 🌸</h3>
+          <p class="hq-tree-desc" id="hqTreeDesc">Нежные розовые лепестки дарят гармонию и покой.</p>
+        </div>
+
+        <div class="hq-tree-stage">
+          <div class="hq-ambient-glow" id="hqAmbientGlow"></div>
+          <div class="hq-sparkles-wrap">
+            <span class="hq-sparkle s1">✦</span>
+            <span class="hq-sparkle s2">✨</span>
+            <span class="hq-sparkle s3">✦</span>
+          </div>
+          <div class="hq-tree-hero" id="hqTreeHero"></div>
+        </div>
+
+        <div class="hq-stats-grid">
+          <div class="hq-stat-box">
+            <span class="hq-stat-label" id="lblHqDate">📅 Выращено</span>
+            <span class="hq-stat-value" id="hqTreeDate">29.10.2026</span>
+          </div>
+          <div class="hq-stat-box">
+            <span class="hq-stat-label" id="lblHqDuration">⏱ Время фокуса</span>
+            <span class="hq-stat-value" id="hqTreeDuration">25 мин</span>
+          </div>
+          <div class="hq-stat-box">
+            <span class="hq-stat-label" id="lblHqDuplicates">🌿 В коллекции</span>
+            <span class="hq-stat-value" id="hqTreeDuplicates">3 шт. (2 дубл.)</span>
+          </div>
+          <div class="hq-stat-box">
+            <span class="hq-stat-label" id="lblHqValue">💎 Ценность</span>
+            <span class="hq-stat-value" id="hqTreeValue">100 🪙</span>
+          </div>
+        </div>
+
+        <div class="hq-actions-row">
+          <button class="hq-sell-btn" id="hqSellBtn" style="display: none;">
+            💰 <span id="hqSellBtnText">Продать дубликат (+100 🪙)</span>
+          </button>
+          <button class="hq-back-btn" id="hqBackBtn">✕ Закрыть</button>
+        </div>
+      </div>
+    </div>
 
   </div>
 

@@ -71,6 +71,31 @@ class SoundEngine {
     });
   }
 
+  // Play a rewarding coin pickup chime
+  playCoinSound() {
+    this.init();
+    if (!this.ctx || this.isMuted) return;
+
+    const notes = [987.77, 1318.51]; // B5 -> E6 chime
+    notes.forEach((freq, i) => {
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(freq, this.ctx.currentTime + i * 0.08);
+
+      gain.gain.setValueAtTime(0, this.ctx.currentTime + i * 0.08);
+      gain.gain.linearRampToValueAtTime(0.22, this.ctx.currentTime + i * 0.08 + 0.03);
+      gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + i * 0.08 + 0.45);
+
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+
+      osc.start(this.ctx.currentTime + i * 0.08);
+      osc.stop(this.ctx.currentTime + i * 0.08 + 0.5);
+    });
+  }
+
   // Helper to create noise buffer
   createNoiseBuffer(type = "pink") {
     const bufferSize = 3 * this.ctx.sampleRate;
