@@ -52,7 +52,10 @@
         <h3 class="drop-title" id="dropTitle">Вы вырастили новое дерево!</h3>
         <div class="drop-tree-name" id="dropTreeName">Древо Жизни</div>
         <div class="drop-reward-text" id="dropRewardText">+60 🪙 • +80 XP</div>
-        <button class="btn btn-sm btn-primary" id="dropClaimBtn">Полюбоваться в саду</button>
+        <div class="drop-actions-row">
+          <button class="btn btn-sm btn-primary" id="dropClaimBtn">Полюбоваться в саду</button>
+          <button class="btn btn-sm btn-warning" id="dropShareBtn">📸 Открытка</button>
+        </div>
       </div>
 
       <div class="timer-centerpiece" id="timerCenterpiece">
@@ -154,6 +157,7 @@
         <button id="resumeBtn" class="btn btn-primary" style="display: none;">▶ Продолжить</button>
         <button id="resetBtn" class="btn btn-danger" style="display: none;">🔄 Сдаться</button>
         <button id="plantNewBtn" class="btn btn-primary" style="display: none;">🌱 Посадить новое дерево</button>
+        <button id="timerShareBtn" class="btn btn-warning" style="display: none;">📸 Открытка</button>
       </div>
 
       <!-- Ambient Audio Sound with 6 Profiles -->
@@ -486,7 +490,40 @@
           <button class="hq-sell-btn" id="hqSellBtn" style="display: none;">
             💰 <span id="hqSellBtnText">Продать дубликат (+100 🪙)</span>
           </button>
+          <button class="hq-share-btn" id="hqShareBtn">📸 Открытка</button>
           <button class="hq-back-btn" id="hqBackBtn">✕ Закрыть</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 📸 Shareable Focus Card Modal (Stories & Socials) -->
+    <div id="shareCardModal" class="share-card-modal-backdrop" style="display: none;">
+      <div class="share-card-dialog">
+        <div class="share-card-header">
+          <div class="share-card-title-row">
+            <span class="share-icon">📸</span>
+            <div class="share-titles">
+              <h3 id="lblShareModalTitle">Открытка результата</h3>
+              <span class="share-subtitle" id="lblShareModalSub">Поделитесь успехом в Telegram, VK или Stories</span>
+            </div>
+          </div>
+          <button class="modal-close-icon-btn" id="closeShareModalBtn">✕</button>
+        </div>
+
+        <div class="share-card-canvas-wrap">
+          <canvas id="shareCardCanvas" width="800" height="1000"></canvas>
+        </div>
+
+        <div class="share-card-actions">
+          <button class="btn btn-primary share-btn-download" id="btnDownloadShareCard">
+            💾 Скачать PNG
+          </button>
+          <button class="btn btn-secondary share-btn-copy" id="btnCopyShareCard">
+            📋 Скопировать
+          </button>
+          <button class="btn btn-telegram share-btn-tg" id="btnTelegramShare">
+            ✈️ Telegram
+          </button>
         </div>
       </div>
     </div>
