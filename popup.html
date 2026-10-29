@@ -55,7 +55,11 @@
         <button class="btn btn-sm btn-primary" id="dropClaimBtn">Полюбоваться в саду</button>
       </div>
 
-      <div class="timer-centerpiece">
+      <div class="timer-centerpiece" id="timerCenterpiece">
+        <!-- Atmospheric Weather Canvas & Ambient Backdrop -->
+        <canvas id="weatherCanvas" class="weather-canvas"></canvas>
+        <div class="weather-ambient-backdrop" id="weatherBackdrop"></div>
+
         <!-- SVG Circular Ring & Tree -->
         <div class="tree-display-container">
           <svg class="progress-ring" width="220" height="220">
