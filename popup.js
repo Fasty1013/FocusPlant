@@ -2594,7 +2594,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
           let actionHtml = "";
           if (isClaimed) {
-            actionHtml = `<span class="achievement-claimed-pill">✓ ${t.claimedReward || "Получено"}</span>`;
+            actionHtml = `<span class="achievement-claimed-pill">${t.claimedReward || "✓ Получено"}</span>`;
           } else if (isUnlocked) {
             actionHtml = `<button class="achievement-claim-btn" data-achid="${ach.id}">🎁 +${ach.reward} 🪙</button>`;
           } else {
