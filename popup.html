@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Focus Plant Pro</title>
+  <link rel="stylesheet" href="styles/main.css">
   <link rel="stylesheet" href="styles.css">
 </head>
 
@@ -546,12 +547,53 @@
 
   </div>
 
+  <!-- Core Constants & Configuration -->
+  <script src="src/constants/app.constants.js"></script>
+  <script src="src/constants/economy.constants.js"></script>
+  <script src="src/constants/rarities.constants.js"></script>
+  <script src="src/constants/achievements.constants.js"></script>
+
+  <!-- Internationalization & Locales -->
+  <script src="src/locales/ru.js"></script>
+  <script src="src/locales/en.js"></script>
+  <script src="src/locales/uz.js"></script>
+  <script src="src/locales/ja.js"></script>
+  <script src="src/locales/i18nManager.js"></script>
+
+  <!-- Clean Mathematical & Utility Functions -->
+  <script src="src/utils/domain.js"></script>
+  <script src="src/utils/timeFormatter.js"></script>
+  <script src="src/utils/canvasHelper.js"></script>
+  <script src="src/utils/toast.js"></script>
+  <script src="src/utils/math/isometric.js"></script>
+  <script src="src/utils/math/probabilities.js"></script>
+
+  <!-- Graphics & Procedural Audio -->
+  <script src="src/graphics/skinsRegistry.js"></script>
+  <script src="src/graphics/treeRenderer.js"></script>
+  <script src="src/audio/soundEngine.js"></script>
+
+  <!-- Business Services -->
+  <script src="src/services/gardenEconomy.js"></script>
+  <script src="src/services/achievementEvaluator.js"></script>
+
+  <!-- UI Submodules & Controllers -->
+  <script src="src/modules/weatherController.js"></script>
+  <script src="src/modules/gardenController.js"></script>
+  <script src="src/modules/shareCardController.js"></script>
+  <script src="src/modules/shopController.js"></script>
+  <script src="src/modules/tasksController.js"></script>
+  <script src="src/modules/blockerController.js"></script>
+
+  <!-- Legacy Compatibility Bridges -->
   <script src="trees.js"></script>
   <script src="sound.js"></script>
   <script src="i18n.js"></script>
   <script src="weather.js"></script>
   <script src="garden.js"></script>
   <script src="shareCard.js"></script>
+
+  <!-- Main Popup Coordinator -->
   <script src="popup.js"></script>
 </body>
 

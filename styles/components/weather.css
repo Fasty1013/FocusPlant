@@ -1,0 +1,192 @@
+/* Atmospheric Weather Canvas & Backgrounds */
+.weather-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  border-radius: inherit;
+  z-index: 1;
+}
+
+.weather-ambient-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  border-radius: inherit;
+  z-index: 0;
+  opacity: 0;
+  transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.weather-ambient-backdrop.active {
+  opacity: 1;
+}
+
+/* Weather Themes */
+.timer-centerpiece.weather-theme-rain {
+  border-color: rgba(56, 189, 248, 0.35);
+  box-shadow: 0 6px 24px rgba(14, 165, 233, 0.2);
+}
+.weather-ambient-backdrop.theme-rain {
+  background: radial-gradient(circle at 50% 25%, rgba(56, 189, 248, 0.16) 0%, rgba(15, 23, 42, 0.4) 100%);
+}
+
+.timer-centerpiece.weather-theme-fire {
+  border-color: rgba(249, 115, 22, 0.45);
+  box-shadow: 0 6px 26px rgba(249, 115, 22, 0.22);
+}
+.weather-ambient-backdrop.theme-fire {
+  background: radial-gradient(ellipse at 50% 95%, rgba(249, 115, 22, 0.25) 0%, rgba(239, 68, 68, 0.12) 45%, transparent 80%);
+}
+
+.timer-centerpiece.weather-theme-zen {
+  border-color: rgba(168, 85, 247, 0.45);
+  box-shadow: 0 6px 26px rgba(168, 85, 247, 0.22);
+}
+.weather-ambient-backdrop.theme-zen {
+  background: radial-gradient(circle at 50% 45%, rgba(168, 85, 247, 0.18) 0%, rgba(99, 102, 241, 0.12) 55%, transparent 95%);
+}
+
+.timer-centerpiece.weather-theme-forest {
+  border-color: rgba(16, 185, 129, 0.4);
+  box-shadow: 0 6px 24px rgba(16, 185, 129, 0.2);
+}
+.weather-ambient-backdrop.theme-forest {
+  background: radial-gradient(circle at 50% 35%, rgba(16, 185, 129, 0.16) 0%, rgba(6, 78, 59, 0.3) 100%);
+}
+
+.timer-centerpiece.weather-theme-waves {
+  border-color: rgba(14, 165, 233, 0.4);
+  box-shadow: 0 6px 24px rgba(20, 184, 166, 0.18);
+}
+.weather-ambient-backdrop.theme-waves {
+  background: radial-gradient(ellipse at 50% 85%, rgba(14, 165, 233, 0.18) 0%, rgba(20, 184, 166, 0.1) 60%, transparent 100%);
+}
+
+.tree-display-container {
+  position: relative;
+  width: 220px;
+  height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.progress-ring {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
+}
+
+.progress-ring-circle {
+  transition: stroke-dashoffset 0.5s ease-in-out, stroke 0.3s;
+}
+
+.tree-avatar-wrapper {
+  width: 170px;
+  height: 170px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.tree-svg {
+  width: 100%;
+  height: 100%;
+  animation: gentleBreathe 4s infinite ease-in-out;
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.35));
+}
+
+.tree-withered {
+  animation: witheredShake 1.5s ease-in-out;
+  filter: grayscale(0.85) drop-shadow(0 4px 8px rgba(239, 68, 68, 0.35));
+}
+
+@keyframes gentleBreathe {
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.025) translateY(-2px);
+  }
+}
+
+@keyframes witheredShake {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  20% {
+    transform: rotate(-3deg);
+  }
+
+  40% {
+    transform: rotate(3deg);
+  }
+
+  60% {
+    transform: rotate(-2deg);
+  }
+
+  80% {
+    transform: rotate(1deg);
+  }
+
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+.timer-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 10px;
+  gap: 4px;
+  position: relative;
+  z-index: 2;
+}
+
+.time-countdown {
+  font-size: 2.3rem;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: 1px;
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.timer-status-badge {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--accent-mint);
+  background: rgba(148, 226, 213, 0.1);
+  padding: 4px 12px;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.wither-alert {
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: #fca5a5;
+  font-size: 0.78rem;
+  padding: 6px 12px;
+  border-radius: 8px;
+  text-align: center;
+  margin-top: 6px;
+  animation: fadeIn 0.3s;
+}
+

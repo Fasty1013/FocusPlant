@@ -1,0 +1,51 @@
+/* Focus Plant Pro - Content Blocker Overlay Styles */
+
+@keyframes fpBannerSlide {
+  from { transform: translate(-50%, -40px); opacity: 0; }
+  to { transform: translate(-50%, 0); opacity: 1; }
+}
+
+@keyframes fpPulseAlert {
+  0%, 100% { box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), 0 0 18px rgba(243, 139, 168, 0.35); }
+  50% { box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), 0 0 30px rgba(243, 139, 168, 0.65); }
+}
+
+@keyframes fpFadeIn {
+  from { opacity: 0; transform: scale(0.96) translateY(12px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes fpFloatTree {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes fpGlowPulse {
+  0%, 100% { filter: drop-shadow(0 8px 24px rgba(243, 139, 168, 0.35)); }
+  50% { filter: drop-shadow(0 12px 36px rgba(243, 139, 168, 0.65)); }
+}
+
+.fp-btn-primary {
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+.fp-btn-primary:hover {
+  transform: translateY(-2px) scale(1.02) !important;
+  box-shadow: 0 8px 28px rgba(16, 185, 129, 0.45) !important;
+}
+
+.fp-btn-danger {
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+.fp-btn-danger:hover {
+  transform: translateY(-2px) scale(1.02) !important;
+  box-shadow: 0 8px 28px rgba(243, 139, 168, 0.45) !important;
+}
+
+.fp-btn-secondary {
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+.fp-btn-secondary:hover {
+  background: rgba(69, 71, 90, 0.95) !important;
+  transform: translateY(-2px) !important;
+  color: #ffffff !important;
+}

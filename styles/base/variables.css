@@ -1,0 +1,39 @@
+/* Focus Plant Pro - Premium Dark Botanical Theme */
+:root {
+  --bg-primary: #181825;
+  --bg-secondary: #1e1e2e;
+  --bg-tertiary: #252538;
+  --bg-input: #11111b;
+  --border-color: #313244;
+  --border-hover: #45475a;
+
+  --accent-green: #10b981;
+  --accent-green-hover: #059669;
+  --accent-mint: #94e2d5;
+  --accent-pink: #f5c2e7;
+  --accent-yellow: #f9e2af;
+  --accent-amber: #f59e0b;
+  --accent-red: #ef4444;
+  --accent-red-hover: #dc2626;
+  --accent-blue: #89b4fa;
+  --accent-purple: #cba6f7;
+
+  --rarity-common: #a6adc8;
+  --rarity-uncommon: #a6e3a1;
+  --rarity-rare: #89dceb;
+  --rarity-epic: #cba6f7;
+  --rarity-legendary: #f9e2af;
+  --rarity-mythic: #f38ba8;
+
+  --text-main: #cdd6f4;
+  --text-sub: #bac2de;
+  --text-muted: #6c7086;
+  --text-dark: #11111b;
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.25);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
