@@ -122,7 +122,30 @@ const enLocale = {
       shareTelegram: "✈️ Telegram",
       shareCardCopied: "📋 Card copied to clipboard!",
       shareTelegramText: (treeName, mins) => `🌿 I just grew a magnificent "${treeName}" in Focus Plant! ⏱ ${mins} mins of mindful deep work. Grow your mindful digital forest with me! #FocusPlant #DeepWork`
-    };
+    ,
+  overlay: {
+    "badge": "⚠️ Focus Broken",
+    "title": "Your tree has withered! 🥀",
+    "openedSite": "You opened",
+    "duringFocus": "during an active focus session.",
+    "bannerDesc": "Your focus tree has withered due to visiting this site.",
+    "quote": "“Every momentary distraction steals your focus. Accept the lesson and plant a new tree!”",
+    "okBtn": "✓ OK, Understood",
+    "closeTab": "✖ Close Tab",
+    "goBack": "↩ Go back",
+    "switchToFullscreen": "📺 Full Screen",
+    "switchToBanner": "🪟 Compact View",
+    "minimize": "➖ Minimize",
+    "minimizedPill": "🥀 Tree withered",
+    "strictBadge": "🔒 STRICT MODE",
+    "strictTitle": "ACCESS BLOCKED 🔒",
+    "strictDesc": "In strict mode, visiting prohibited sites is blocked until the timer expires!",
+    "strictTimerLabel": "⏳ Time remaining until unlock:",
+    "strictNoOkNotice": "The 'OK' button is disabled! In strict mode, you cannot dismiss this window until focus ends.",
+    "strictUnlocked": "🎉 Time's up! Focus session successfully completed.",
+    "unblockBtn": "✓ Unlock Website"
+}
+};
 
 if (typeof window !== 'undefined') window.enLocale = enLocale;
 if (typeof globalThis !== 'undefined') globalThis.enLocale = enLocale;

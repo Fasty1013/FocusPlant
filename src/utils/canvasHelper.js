@@ -39,3 +39,4 @@ if (typeof globalThis !== "undefined") {
   globalThis.hexToRgba = hexToRgba;
   globalThis.roundRectPath = roundRectPath;
 }
+

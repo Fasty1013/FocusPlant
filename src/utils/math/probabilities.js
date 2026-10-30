@@ -59,3 +59,4 @@ if (typeof globalThis !== "undefined") {
   globalThis.getDropChances = calculateDropChances;
   globalThis.rollTreeByDuration = rollTreeByDuration;
 }
+

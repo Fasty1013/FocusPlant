@@ -58,3 +58,4 @@ if (typeof globalThis !== "undefined") {
   globalThis.formatLocalDate = formatLocalDate;
   globalThis.formatFullDateTime = formatFullDateTime;
 }
+

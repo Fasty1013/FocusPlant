@@ -79,3 +79,4 @@ if (typeof globalThis !== "undefined") {
   globalThis.RARITY_POOLS = RARITY_POOLS;
   globalThis.RARITY_NAMES = RARITY_NAMES;
 }
+

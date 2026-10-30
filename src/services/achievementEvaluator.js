@@ -83,3 +83,4 @@ if (typeof window !== "undefined") {
 if (typeof globalThis !== "undefined") {
   globalThis.evaluateAchievements = evaluateAchievements;
 }
+

@@ -1,40 +1,25 @@
 // Focus Plant Pro - Blocker & Website Restriction Controller
+(function() {
+  const ext = (typeof browser !== 'undefined' && browser.runtime) ? browser : chrome;
 
-function initBlockerTab() {
-  const ext = (typeof browser !== "undefined" && browser.runtime) ? browser : chrome;
-  const blockModeSelect = document.getElementById("blockModeSelect");
-  const alertStyleSelect = document.getElementById("alertStyle");
-  const siteInput = document.getElementById("siteInput");
-  const addSiteBtn = document.getElementById("addSiteBtn");
-  const chipBtns = document.querySelectorAll(".chip-btn");
+  function addSiteToList(rawDomain) {
+    if (!rawDomain) return;
+    const clean = (typeof cleanDomain === "function")
+      ? cleanDomain(rawDomain)
+      : rawDomain.toLowerCase().replace(/^https?:\/\//, '').replace(/^www\./, '').replace(/\/.*$/, '').trim();
 
-  if (blockModeSelect) {
-    blockModeSelect.addEventListener("change", (e) => {
-      ext.storage.local.set({ blockMode: e.target.value }, () => {
-        renderBlockerTab();
-      });
-    });
-  }
-
-  if (alertStyleSelect) {
-    alertStyleSelect.addEventListener("change", (e) => {
-      ext.storage.local.set({ alertStyle: e.target.value });
-    });
-  }
-
-  function addSite(site) {
-    if (!site) return;
-    const clean = (typeof cleanDomain === "function") ? cleanDomain(site) : site.trim().toLowerCase();
     if (!clean) return;
 
-    ext.storage.local.get(["blockMode", "blacklist", "whitelist"], (data) => {
+    const siteInput = document.getElementById("siteInput");
+
+    ext.storage.local.get(["blockMode", "blockedSites", "whiteListSites"], (data) => {
       const mode = data.blockMode || "blacklist";
-      const key = (mode === "whitelist") ? "whitelist" : "blacklist";
-      const list = Array.isArray(data[key]) ? [...data[key]] : [];
+      const list = mode === "blacklist" ? (data.blockedSites || []) : (data.whiteListSites || []);
 
       if (!list.includes(clean)) {
         list.push(clean);
-        ext.storage.local.set({ [key]: list }, () => {
+        const update = mode === "blacklist" ? { blockedSites: list } : { whiteListSites: list };
+        ext.storage.local.set(update, () => {
           if (siteInput) siteInput.value = "";
           renderBlockerTab();
         });
@@ -42,73 +27,93 @@ function initBlockerTab() {
     });
   }
 
-  if (addSiteBtn && siteInput) {
-    addSiteBtn.addEventListener("click", () => addSite(siteInput.value));
-    siteInput.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") addSite(siteInput.value);
+  function initBlockerTab() {
+    const blockModeSelect = document.getElementById("blockMode");
+    const alertStyleSelect = document.getElementById("alertStyle");
+    const siteInput = document.getElementById("siteInput");
+    const addSiteBtn = document.getElementById("addSiteBtn");
+    const chipBtns = document.querySelectorAll(".chip-btn");
+
+    if (blockModeSelect && !blockModeSelect._boundBlocker) {
+      blockModeSelect.addEventListener("change", (e) => {
+        ext.storage.local.set({ blockMode: e.target.value }, () => renderBlockerTab());
+      });
+      blockModeSelect._boundBlocker = true;
+    }
+
+    if (alertStyleSelect && !alertStyleSelect._boundBlocker) {
+      alertStyleSelect.addEventListener("change", (e) => {
+        ext.storage.local.set({ alertStyle: e.target.value });
+      });
+      alertStyleSelect._boundBlocker = true;
+    }
+
+    if (addSiteBtn && !addSiteBtn._boundBlocker) {
+      addSiteBtn.addEventListener("click", () => {
+        if (siteInput) addSiteToList(siteInput.value);
+      });
+      addSiteBtn._boundBlocker = true;
+    }
+
+    if (siteInput && !siteInput._boundBlocker) {
+      siteInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") addSiteToList(siteInput.value);
+      });
+      siteInput._boundBlocker = true;
+    }
+
+    chipBtns.forEach(btn => {
+      if (!btn._boundBlocker) {
+        btn.addEventListener("click", () => addSiteToList(btn.dataset.site));
+        btn._boundBlocker = true;
+      }
     });
   }
 
-  chipBtns.forEach(btn => {
-    btn.addEventListener("click", () => {
-      addSite(btn.dataset.site);
-    });
-  });
-}
+  function renderBlockerTab() {
+    const blockModeSelect = document.getElementById("blockMode");
+    const alertStyleSelect = document.getElementById("alertStyle");
+    const siteListContainer = document.getElementById("siteList");
+    const siteCount = document.getElementById("siteCount");
 
-function renderBlockerTab() {
-  const ext = (typeof browser !== "undefined" && browser.runtime) ? browser : chrome;
-  const blockModeSelect = document.getElementById("blockModeSelect");
-  const alertStyleSelect = document.getElementById("alertStyle");
-  const siteListContainer = document.getElementById("siteListContainer");
-  if (!siteListContainer) return;
+    ext.storage.local.get(["blockMode", "blockedSites", "whiteListSites", "alertStyle"], (data) => {
+      const mode = data.blockMode || "blacklist";
+      if (blockModeSelect) blockModeSelect.value = mode;
+      if (alertStyleSelect) alertStyleSelect.value = data.alertStyle || "fullscreen";
 
-  ext.storage.local.get(["blockMode", "alertStyle", "blacklist", "whitelist"], (data) => {
-    const mode = data.blockMode || "blacklist";
-    const alertStyle = data.alertStyle || "banner";
-    const blacklist = Array.isArray(data.blacklist) ? data.blacklist : [];
-    const whitelist = Array.isArray(data.whitelist) ? data.whitelist : [];
+      const list = mode === "blacklist" ? (data.blockedSites || []) : (data.whiteListSites || []);
+      if (siteCount) siteCount.textContent = `${list.length}`;
 
-    if (blockModeSelect) blockModeSelect.value = mode;
-    if (alertStyleSelect) alertStyleSelect.value = alertStyle;
+      if (siteListContainer) {
+        siteListContainer.innerHTML = "";
+        list.forEach((site, idx) => {
+          const li = document.createElement("li");
+          li.className = "site-item";
+          li.innerHTML = `
+            <span>${site}</span>
+            <button class="site-del-btn" title="Delete">✖</button>
+          `;
 
-    const activeList = (mode === "whitelist") ? whitelist : blacklist;
-    const storageKey = (mode === "whitelist") ? "whitelist" : "blacklist";
+          li.querySelector(".site-del-btn").addEventListener("click", () => {
+            list.splice(idx, 1);
+            const update = mode === "blacklist" ? { blockedSites: list } : { whiteListSites: list };
+            ext.storage.local.set(update, () => renderBlockerTab());
+          });
 
-    siteListContainer.innerHTML = "";
-
-    if (activeList.length === 0) {
-      siteListContainer.innerHTML = `<span style="font-size: 0.75rem; color: #6c7086; padding: 4px;">Список пуст</span>`;
-      return;
-    }
-
-    activeList.forEach(site => {
-      const tag = document.createElement("div");
-      tag.className = "site-item";
-      tag.innerHTML = `
-        <span class="site-name">${site}</span>
-        <button class="site-del-btn" data-site="${site}">✕</button>
-      `;
-      siteListContainer.appendChild(tag);
-    });
-
-    siteListContainer.querySelectorAll(".site-del-btn").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const targetSite = btn.dataset.site;
-        const updated = activeList.filter(s => s !== targetSite);
-        ext.storage.local.set({ [storageKey]: updated }, () => {
-          renderBlockerTab();
+          siteListContainer.appendChild(li);
         });
-      });
+      }
     });
-  });
-}
+  }
 
-if (typeof window !== "undefined") {
-  window.initBlockerTab = initBlockerTab;
-  window.renderBlockerTab = renderBlockerTab;
-}
-if (typeof globalThis !== "undefined") {
-  globalThis.initBlockerTab = initBlockerTab;
-  globalThis.renderBlockerTab = renderBlockerTab;
-}
+  if (typeof window !== "undefined") {
+    window.initBlockerTab = initBlockerTab;
+    window.renderBlockerTab = renderBlockerTab;
+    window.addSiteToList = addSiteToList;
+  }
+  if (typeof globalThis !== "undefined") {
+    globalThis.initBlockerTab = initBlockerTab;
+    globalThis.renderBlockerTab = renderBlockerTab;
+    globalThis.addSiteToList = addSiteToList;
+  }
+})();

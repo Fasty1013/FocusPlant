@@ -49,3 +49,4 @@ if (typeof globalThis !== "undefined") {
   globalThis.matchesSiteList = matchesSiteList;
   globalThis.checkDomainMatch = matchesSiteList;
 }
+

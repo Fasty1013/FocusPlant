@@ -34,3 +34,4 @@ if (typeof globalThis !== "undefined") {
   globalThis.gridToIsometric = gridToIsometric;
   globalThis.getDiamondPoints = getDiamondPoints;
 }
+

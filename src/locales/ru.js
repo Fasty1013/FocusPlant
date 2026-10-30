@@ -122,7 +122,30 @@ const ruLocale = {
       shareTelegram: "✈️ Telegram",
       shareCardCopied: "📋 Открытка скопирована в буфер обмена!",
       shareTelegramText: (treeName, mins) => `🌿 Я только что вырастил «${treeName}» в Focus Plant! ⏱ ${mins} мин глубокой концентрации без единого срыва. Взращивай свой сад вместе со мной! #FocusPlant #DeepWork`
-    };
+    ,
+  overlay: {
+    "badge": "⚠️ Фокус нарушен",
+    "title": "Ваше дерево завяло! 🥀",
+    "openedSite": "Вы открыли сайт",
+    "duringFocus": "во время активной сессии фокуса.",
+    "bannerDesc": "Ваше дерево погибло из-за отвлечения на этот сайт.",
+    "quote": "«Каждое секундное отвлечение губит плоды сосредоточенности. Примите этот урок и посадите новое дерево!»",
+    "okBtn": "✓ ОК, понятно",
+    "closeTab": "✖ Закрыть вкладку",
+    "goBack": "↩ Назад",
+    "switchToFullscreen": "📺 На весь экран",
+    "switchToBanner": "🪟 Компактный вид",
+    "minimize": "➖ Свернуть",
+    "minimizedPill": "🥀 Дерево завяло",
+    "strictBadge": "🔒 СТРОГИЙ РЕЖИМ",
+    "strictTitle": "ДОСТУП ЗАБЛОКИРОВАН 🔒",
+    "strictDesc": "В строгом режиме запрещено заходить на запрещенные сайты до окончания таймера!",
+    "strictTimerLabel": "⏳ До окончания концентрации осталось:",
+    "strictNoOkNotice": "Кнопка «ОК» отключена! В строгом режиме нельзя убрать это окно до конца таймера.",
+    "strictUnlocked": "🎉 Время вышло! Сессия концентрации успешно завершена.",
+    "unblockBtn": "✓ Разблокировать сайт"
+}
+};
 
 if (typeof window !== 'undefined') window.ruLocale = ruLocale;
 if (typeof globalThis !== 'undefined') globalThis.ruLocale = ruLocale;

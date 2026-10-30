@@ -1,189 +1,21 @@
 // Focus Plant Pro - Cross-Browser Background Service Worker & Script
 const ext = (typeof browser !== 'undefined' && browser.runtime) ? browser : chrome;
 
-const DEFAULT_BLOCKLIST = [
-  "youtube.com",
-  "instagram.com",
-  "facebook.com",
-  "tiktok.com",
-  "reddit.com",
-  "twitter.com",
-  "x.com",
-  "vk.com",
-  "netflix.com",
-  "twitch.tv"
-];
-
-const DEFAULT_WHITELIST = [
-  "wikipedia.org",
-  "github.com",
-  "stackoverflow.com",
-  "google.com"
-];
-
-const DEFAULT_QUESTS = [
-  { id: 1, desc: "Завершить 1 сессию фокуса", target: 1, current: 0, done: false, claimed: false, reward: 25 },
-  { id: 2, desc: "Сфокусироваться на 45 минут", target: 45, current: 0, done: false, claimed: false, reward: 40 },
-  { id: 3, desc: "Выполнить 2 задачи из списка", target: 2, current: 0, done: false, claimed: false, reward: 30 }
-];
-
-const DEFAULT_ACHIEVEMENTS = [
-  {
-    id: "night_owl",
-    icon: "🦉",
-    title: { ru: "Ночная сова", en: "Night Owl", uz: "Tungi boyqush", zh: "夜猫子" },
-    desc: {
-      ru: "Успешно вырастить дерево после 23:00",
-      en: "Successfully grow a tree after 23:00",
-      uz: "Soat 23:00 dan keyin muvaffaqiyatli daraxt o'stiring",
-      zh: "晚上 23:00 后成功种出一棵树"
-    },
-    target: 1,
-    current: 0,
-    unlocked: false,
-    claimed: false,
-    reward: 50
-  },
-  {
-    id: "marathon",
-    icon: "🏃",
-    title: { ru: "Марафонец", en: "Marathoner", uz: "Marafonchi", zh: "马拉松选手" },
-    desc: {
-      ru: "Непрерывный сеанс фокуса 90+ минут",
-      en: "Continuous focus session for 90+ minutes",
-      uz: "90+ daqiqalik uzluksiz diqqat seansi",
-      zh: "连续专注 90 分钟以上"
-    },
-    target: 1,
-    current: 0,
-    unlocked: false,
-    claimed: false,
-    reward: 100
-  },
-  {
-    id: "iron_will",
-    icon: "🛡️",
-    title: { ru: "Железная воля", en: "Iron Will", uz: "Temir iroda", zh: "钢铁意志" },
-    desc: {
-      ru: "Вырастить 5 деревьев подряд в Строгом режиме без срывов",
-      en: "Grow 5 trees in a row in Strict Mode without failure",
-      uz: "Qat'iy rejimda ketma-ket 5 ta daraxtni buzmasdan o'stiring",
-      zh: "在严格模式下连续种出 5 棵树且不违规"
-    },
-    target: 5,
-    current: 0,
-    unlocked: false,
-    claimed: false,
-    reward: 150
-  },
-  {
-    id: "mythic_botanist",
-    icon: "👑",
-    title: { ru: "Королевский ботаник", en: "Royal Botanist", uz: "Qirollik botanigi", zh: "皇家植物学家" },
-    desc: {
-      ru: "Выбить первое Мифическое дерево",
-      en: "Discover your first Mythic tree",
-      uz: "Birinchi Afsonaviy (Mifik) daraxtni qo'lga kiriting",
-      zh: "抽到第一棵神话级树木"
-    },
-    target: 1,
-    current: 0,
-    unlocked: false,
-    claimed: false,
-    reward: 200
-  },
-  {
-    id: "first_sprout",
-    icon: "🌱",
-    title: { ru: "Первый росток", en: "First Sprout", uz: "Birinchi nihol", zh: "破土萌芽" },
-    desc: {
-      ru: "Успешно вырастить своё первое дерево фокуса",
-      en: "Successfully grow your very first focus tree",
-      uz: "Birinchi diqqat daraxtingizni muvaffaqiyatli o'stiring",
-      zh: "成功种出第一棵专注树"
-    },
-    target: 1,
-    current: 0,
-    unlocked: false,
-    claimed: false,
-    reward: 25
-  },
-  {
-    id: "grove_master",
-    icon: "🌲",
-    title: { ru: "Мастер леса", en: "Grove Master", uz: "O'rmon ustasi", zh: "森林大师" },
-    desc: {
-      ru: "Собрать коллекцию из 10 уникальных видов деревьев",
-      en: "Collect 10 unique species of trees",
-      uz: "10 xil turdagi noyob daraxtlar to'plamini yiging",
-      zh: "收集 10 种不同品种的树木"
-    },
-    target: 10,
-    current: 0,
-    unlocked: false,
-    claimed: false,
-    reward: 100
+// Load modular constants, utilities and services
+if (typeof importScripts === "function") {
+  try {
+    importScripts(
+      "src/constants/app.constants.js",
+      "src/constants/economy.constants.js",
+      "src/constants/rarities.constants.js",
+      "src/constants/achievements.constants.js",
+      "src/utils/domain.js",
+      "src/utils/math/probabilities.js",
+      "src/services/achievementEvaluator.js"
+    );
+  } catch (e) {
+    console.warn("Background script importScripts warning:", e);
   }
-];
-
-// Tree Rarity Pools
-const RARITY_POOLS = {
-  common: ["oak", "birch"],
-  uncommon: ["pine", "apple", "orange_tree"],
-  rare: ["sakura", "bamboo", "jacaranda"],
-  epic: ["wisteria", "autumn_maple", "golden_ginkgo"],
-  legendary: ["world_tree", "crystal"],
-  mythic: ["mystic", "cosmic"]
-};
-
-const RARITY_NAMES = {
-  common: "⚪ Обычное",
-  uncommon: "🟢 Необычное",
-  rare: "🔵 Редкое",
-  epic: "🟣 Эпическое",
-  legendary: "🟡 Легендарное",
-  mythic: "✦ МИФИЧЕСКОЕ ✦"
-};
-
-// Calculate drop chances based on duration
-function getDropChances(minutes) {
-  const m = Math.max(5, Math.min(180, Number(minutes) || 25));
-
-  if (m <= 15) {
-    return { common: 75, uncommon: 22, rare: 3, epic: 0, legendary: 0, mythic: 0 };
-  } else if (m <= 25) {
-    return { common: 55, uncommon: 30, rare: 12, epic: 3, legendary: 0, mythic: 0 };
-  } else if (m <= 45) {
-    return { common: 35, uncommon: 32, rare: 22, epic: 9, legendary: 2, mythic: 0 };
-  } else if (m <= 60) {
-    return { common: 18, uncommon: 28, rare: 30, epic: 17, legendary: 6, mythic: 1 };
-  } else if (m <= 90) {
-    return { common: 8, uncommon: 20, rare: 32, epic: 26, legendary: 11, mythic: 3 };
-  } else {
-    return { common: 3, uncommon: 12, rare: 28, epic: 32, legendary: 18, mythic: 7 };
-  }
-}
-
-// Roll random tree based on duration
-function rollTreeByDuration(minutes) {
-  const chances = getDropChances(minutes);
-  const roll = Math.random() * 100;
-
-  let chosenRarity = "common";
-  let accum = 0;
-  const order = ["mythic", "legendary", "epic", "rare", "uncommon", "common"];
-  for (const r of order) {
-    accum += chances[r];
-    if (roll <= accum) {
-      chosenRarity = r;
-      break;
-    }
-  }
-
-  const pool = RARITY_POOLS[chosenRarity] || ["oak"];
-  const skin = pool[Math.floor(Math.random() * pool.length)] || "oak";
-
-  return { skin, rarity: chosenRarity };
 }
 
 // Cross-Browser Background Audio Manager (Keeps playing even when browser is minimized or popup is closed)
@@ -286,29 +118,14 @@ function showNotification(title, message) {
   }
 }
 
-// Check if a URL matches the site list
-function matchesSiteList(url, siteList) {
-  if (!url || !Array.isArray(siteList) || siteList.length === 0) return false;
-  try {
-    const parsed = new URL(url);
-    const hostname = parsed.hostname.toLowerCase();
-
-    return siteList.some(item => {
-      if (!item) return false;
-      const clean = item.toLowerCase()
-        .replace(/^https?:\/\//, '')
-        .replace(/^www\./, '')
-        .replace(/\/.*$/, '')
-        .trim();
-      if (!clean) return false;
-
-      return hostname === clean ||
-             hostname.endsWith('.' + clean) ||
-             parsed.href.toLowerCase().includes(clean);
-    });
-  } catch (e) {
-    return false;
-  }
+// URL site-list matching (provided by src/utils/domain.js)
+if (typeof matchesSiteList === "undefined") {
+  var matchesSiteList = (typeof globalThis !== "undefined" && globalThis.matchesSiteList)
+    ? globalThis.matchesSiteList
+    : function(url, list) {
+        if (!url || !Array.isArray(list)) return false;
+        return list.some(s => url.toLowerCase().includes(s.toLowerCase()));
+      };
 }
 
 // Initialize on install
@@ -564,68 +381,23 @@ function handleSessionComplete() {
       strictStreak = 0;
     }
 
-    // Achievements Evaluation
-    let storedAchievements = Array.isArray(data.achievements) ? [...data.achievements] : [];
-    DEFAULT_ACHIEVEMENTS.forEach(defAch => {
-      const existing = storedAchievements.find(a => a.id === defAch.id);
-      if (!existing) {
-        storedAchievements.push({ ...defAch });
-      }
-    });
-
-    const completionHour = new Date().getHours();
+    // Achievements Evaluation via modular service
+    let storedAchievements = [];
     let newlyUnlockedAch = null;
-
-    storedAchievements = storedAchievements.map(ach => {
-      if (ach.unlocked) return ach;
-
-      let shouldUnlock = false;
-      let newCurrent = ach.current || 0;
-
-      if (ach.id === "night_owl") {
-        if (isHealthy && (completionHour >= 23 || completionHour < 4)) {
-          shouldUnlock = true;
-          newCurrent = 1;
-        }
-      } else if (ach.id === "marathon") {
-        if (isHealthy && durationMin >= 90) {
-          shouldUnlock = true;
-          newCurrent = 1;
-        }
-      } else if (ach.id === "iron_will") {
-        newCurrent = strictStreak;
-        if (strictStreak >= 5) {
-          shouldUnlock = true;
-        }
-      } else if (ach.id === "mythic_botanist") {
-        if (isHealthy && rolledRarity === "mythic") {
-          shouldUnlock = true;
-          newCurrent = 1;
-        }
-      } else if (ach.id === "first_sprout") {
-        if (isHealthy) {
-          shouldUnlock = true;
-          newCurrent = 1;
-        }
-      } else if (ach.id === "grove_master") {
-        newCurrent = unlocked.length;
-        if (unlocked.length >= 10) {
-          shouldUnlock = true;
-        }
-      }
-
-      if (shouldUnlock) {
-        newlyUnlockedAch = ach;
-        return {
-          ...ach,
-          current: Math.max(newCurrent, ach.target),
-          unlocked: true,
-          unlockedDate: new Date().toISOString()
-        };
-      }
-
-      return { ...ach, current: newCurrent };
-    });
+    if (typeof evaluateAchievements === "function") {
+      const achResult = evaluateAchievements(data.achievements, {
+        isHealthy,
+        durationMin,
+        completionHour: new Date().getHours(),
+        strictStreak,
+        rolledRarity,
+        unlockedCount: unlocked.length
+      });
+      storedAchievements = achResult.updatedAchievements;
+      newlyUnlockedAch = achResult.newlyUnlockedAch;
+    } else {
+      storedAchievements = Array.isArray(data.achievements) ? [...data.achievements] : [];
+    }
 
     const lastDropInfo = {
       skin: rolledSkin,

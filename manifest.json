@@ -36,12 +36,33 @@
   },
   "background": {
     "service_worker": "background.js",
-    "scripts": ["sound.js", "background.js"]
+    "scripts": [
+      "src/constants/app.constants.js",
+      "src/constants/economy.constants.js",
+      "src/constants/rarities.constants.js",
+      "src/constants/achievements.constants.js",
+      "src/utils/domain.js",
+      "src/utils/math/probabilities.js",
+      "src/services/achievementEvaluator.js",
+      "src/audio/soundEngine.js",
+      "sound.js",
+      "background.js"
+    ]
   },
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["content.js"],
+      "css": ["content/overlay.css"],
+      "js": [
+        "src/constants/app.constants.js",
+        "src/utils/domain.js",
+        "src/locales/ru.js",
+        "src/locales/en.js",
+        "src/locales/uz.js",
+        "src/locales/ja.js",
+        "src/locales/i18nManager.js",
+        "content.js"
+      ],
       "run_at": "document_start"
     }
   ]

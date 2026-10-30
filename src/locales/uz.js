@@ -122,7 +122,30 @@ const uzLocale = {
       shareTelegram: "✈️ Telegram",
       shareCardCopied: "📋 Kartochka buferga nusxalandi!",
       shareTelegramText: (treeName, mins) => `🌿 Men hozirgina Focus Plant-da «${treeName}» o'stirdim! ⏱ ${mins} daqiqa chalg'imasdan diqqatni jamladim. Men bilan birga bog'ingizni gullating! #FocusPlant #DeepWork`
-    };
+    ,
+  overlay: {
+    "badge": "⚠️ Fokus buzildi",
+    "title": "Sizning daraxtingiz so'ldi! 🥀",
+    "openedSite": "Siz",
+    "duringFocus": "saytiga fokus vaqtida kirdingiz.",
+    "bannerDesc": "Ushbu saytga kirganingiz sababli daraxtingiz nobud bo'ldi.",
+    "quote": "«Har bir chalg'ish diqqat mevasini nobud qiladi. Saboq oling va yangi daraxt eking!»",
+    "okBtn": "✓ OK, tushundim",
+    "closeTab": "✖ Tabni yopish",
+    "goBack": "↩ Orqaga",
+    "switchToFullscreen": "📺 To'liq ekran",
+    "switchToBanner": "🪟 Ixcham ko'rinish",
+    "minimize": "➖ Yashirish",
+    "minimizedPill": "🥀 Daraxt so'ldi",
+    "strictBadge": "🔒 QAT'IY REJIM",
+    "strictTitle": "KIRISH TAQIQLANDI 🔒",
+    "strictDesc": "Qat'iy rejimda taymer tugaguncha taqiqlangan saytlarga kirish butunlay bloklangan!",
+    "strictTimerLabel": "⏳ Fokus tugashiga qoldi:",
+    "strictNoOkNotice": "'OK' tugmasi o'chirilgan! Qat'iy rejimda taymer tugaguncha bu oynani yopib bo'lmaydi.",
+    "strictUnlocked": "🎉 Vaqt tugadi! Fokus sessiyasi yakunlandi.",
+    "unblockBtn": "✓ Saytni ochish"
+}
+};
 
 if (typeof window !== 'undefined') window.uzLocale = uzLocale;
 if (typeof globalThis !== 'undefined') globalThis.uzLocale = uzLocale;

@@ -105,3 +105,4 @@ if (typeof window !== "undefined") {
 if (typeof globalThis !== "undefined") {
   globalThis.DEFAULT_ACHIEVEMENTS = DEFAULT_ACHIEVEMENTS;
 }
+

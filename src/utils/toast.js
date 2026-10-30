@@ -43,3 +43,4 @@ if (typeof window !== "undefined") {
 if (typeof globalThis !== "undefined") {
   globalThis.showToast = showToast;
 }
+

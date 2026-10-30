@@ -132,3 +132,4 @@ FocusPlant/
 ```bash
 python -c "import zipfile, os; files=['manifest.json','popup.html','popup.js','styles.css','trees.js','sound.js','i18n.js','weather.js','garden.js','shareCard.js','offscreen.html','offscreen.js','content.js','background.js']; dirs=['src','styles','content','background','offscreen','icons']; z=zipfile.ZipFile('FocusPlant.zip','w',zipfile.ZIP_DEFLATED); [z.write(f,f) for f in files if os.path.exists(f)]; [[z.write(os.path.join(r,fn),os.path.relpath(os.path.join(r,fn),'.')) for fn in fns] for d in dirs if os.path.exists(d) for r,_,fns in os.walk(d)]; print('Built FocusPlant.zip')"
 ```
+

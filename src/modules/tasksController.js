@@ -1,117 +1,126 @@
 // Focus Plant Pro - Tasks, Quests & Achievements Controller
+(function() {
+  const ext = (typeof browser !== 'undefined' && browser.runtime) ? browser : chrome;
 
-function initTasksTab() {
-  const ext = (typeof browser !== "undefined" && browser.runtime) ? browser : chrome;
-  const todoInput = document.getElementById("todoInput");
-  const addTodoBtn = document.getElementById("addTodoBtn");
+  function initTasksTab() {
+    const todoInput = document.getElementById("todoInput");
+    const addTodoBtn = document.getElementById("addTodoBtn");
 
-  function addTodo() {
-    if (!todoInput) return;
-    const text = todoInput.value.trim();
-    if (!text) return;
+    function handleAddTodo() {
+      if (!todoInput) return;
+      const text = todoInput.value.trim();
+      if (!text) return;
 
-    ext.storage.local.get(["todos"], (data) => {
-      const todos = Array.isArray(data.todos) ? data.todos : [];
-      todos.push({ id: Date.now(), text: text, done: false });
-      ext.storage.local.set({ todos: todos }, () => {
-        todoInput.value = "";
-        renderTasksTab();
-      });
-    });
-  }
+      ext.storage.local.get(["todos"], (data) => {
+        const todos = Array.isArray(data.todos) ? data.todos : [];
+        todos.push({ id: Date.now(), text, done: false, rewarded: false });
 
-  if (addTodoBtn) {
-    addTodoBtn.addEventListener("click", addTodo);
-  }
-  if (todoInput) {
-    todoInput.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") addTodo();
-    });
-  }
-}
-
-function renderTasksTab() {
-  const ext = (typeof browser !== "undefined" && browser.runtime) ? browser : chrome;
-  const questList = document.getElementById("questList");
-  const todoList = document.getElementById("todoList");
-  const coinsCount = document.getElementById("coinsCount");
-  const achievementsGrid = document.getElementById("achievementsGrid");
-  const achievementsCountBadge = document.getElementById("achievementsCountBadge");
-
-  ext.storage.local.get(["quests", "todos", "coins", "achievements", "unlockedSkins", "forest", "stats", "strictStreak"], (data) => {
-    const quests = Array.isArray(data.quests) ? data.quests : [];
-    const todos = Array.isArray(data.todos) ? data.todos : [];
-    const coins = data.coins || 0;
-    const lang = (typeof currentLang !== "undefined") ? currentLang : "ru";
-    const t = (typeof i18n !== "undefined" && i18n[lang]) ? i18n[lang] : {};
-
-    // 1. Daily Quests
-    if (questList) {
-      questList.innerHTML = "";
-      quests.forEach(q => {
-        const item = document.createElement("div");
-        item.className = "quest-item";
-        const progressPct = Math.min(100, Math.round((q.current / q.target) * 100));
-
-        let questDesc = q.desc;
-        if (q.id === 1 && t.quest1) questDesc = t.quest1;
-        if (q.id === 2 && t.quest2) questDesc = t.quest2;
-        if (q.id === 3 && t.quest3) questDesc = t.quest3;
-
-        item.innerHTML = `
-          <div class="quest-item-header">
-            <span>${questDesc} (${q.current}/${q.target})</span>
-            <span class="quest-reward">+${q.reward} 🪙</span>
-          </div>
-          <div class="quest-progress-bg">
-            <div class="quest-progress-bar" style="width: ${progressPct}%;"></div>
-          </div>
-          ${
-            q.done && !q.claimed
-              ? `<button class="quest-claim-btn" data-qid="${q.id}">${t.claimReward || "Забрать"} +${q.reward} 🪙</button>`
-              : q.claimed
-                ? `<span style="font-size: 0.7rem; color: #a6e3a1; align-self: flex-end;">${t.claimedReward || "✓ Получено"}</span>`
-                : ""
-          }
-        `;
-        questList.appendChild(item);
-      });
-
-      questList.querySelectorAll(".quest-claim-btn").forEach(btn => {
-        btn.addEventListener("click", () => {
-          const qid = parseInt(btn.dataset.qid, 10);
-          const quest = quests.find(q => q.id === qid);
-          if (!quest) return;
-
-          quest.claimed = true;
-          const newCoins = coins + quest.reward;
-
-          ext.storage.local.set({ quests: quests, coins: newCoins }, () => {
-            if (coinsCount) coinsCount.textContent = newCoins;
-            if (typeof soundManager !== "undefined" && soundManager.playCompleteChime) {
-              soundManager.playCompleteChime();
-            }
-            renderTasksTab();
-          });
+        ext.storage.local.set({ todos: todos }, () => {
+          todoInput.value = "";
+          renderTasksTab();
         });
       });
     }
 
-    // 2. Achievements & Medals
-    if (achievementsGrid) {
+    if (addTodoBtn && !addTodoBtn._boundTasks) {
+      addTodoBtn.addEventListener("click", handleAddTodo);
+      addTodoBtn._boundTasks = true;
+    }
+    if (todoInput && !todoInput._boundTasks) {
+      todoInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") handleAddTodo();
+      });
+      todoInput._boundTasks = true;
+    }
+  }
+
+  function renderTasksTab() {
+    const questList = document.getElementById("questList");
+    const todoList = document.getElementById("todoList");
+    const coinsCount = document.getElementById("coinsCount");
+    const achievementsGrid = document.getElementById("achievementsGrid");
+    const achievementsCountBadge = document.getElementById("achievementsCountBadge");
+
+    ext.storage.local.get([
+      "quests", "todos", "coins", "achievements", "unlockedSkins",
+      "forest", "stats", "strictStreak"
+    ], (data) => {
+      const quests = Array.isArray(data.quests) ? data.quests : [];
+      const todos = Array.isArray(data.todos) ? data.todos : [];
+      const coins = data.coins || 0;
+
+      const currentLang = (typeof window.currentLang !== 'undefined')
+        ? window.currentLang
+        : ((document.getElementById("langSelect") && document.getElementById("langSelect").value) || "ru");
+
+      const i18n = window.i18n || {};
+      const t = i18n[currentLang] || i18n.ru || {};
+
+      // 1. Quests Rendering
+      if (questList) {
+        questList.innerHTML = "";
+        quests.forEach(q => {
+          const item = document.createElement("div");
+          item.className = "quest-item";
+          const progressPct = Math.min(100, Math.round((q.current / q.target) * 100));
+
+          let questDesc = q.desc;
+          if (q.id === 1) questDesc = t.quest1 || q.desc;
+          if (q.id === 2) questDesc = t.quest2 || q.desc;
+          if (q.id === 3) questDesc = t.quest3 || q.desc;
+
+          item.innerHTML = `
+            <div class="quest-item-header">
+              <span>${questDesc} (${q.current}/${q.target})</span>
+              <span class="quest-reward">+${q.reward} 🪙</span>
+            </div>
+            <div class="quest-progress-bg">
+              <div class="quest-progress-bar" style="width: ${progressPct}%;"></div>
+            </div>
+            ${
+              q.done && !q.claimed
+                ? `<button class="quest-claim-btn" data-qid="${q.id}">${t.claimReward || "Забрать"} +${q.reward} 🪙</button>`
+                : q.claimed
+                  ? `<span style="font-size: 0.7rem; color: #a6e3a1; align-self: flex-end;">${t.claimedReward || "✓ Получено"}</span>`
+                  : ""
+            }
+          `;
+          questList.appendChild(item);
+        });
+
+        questList.querySelectorAll(".quest-claim-btn").forEach(btn => {
+          btn.addEventListener("click", () => {
+            const qid = parseInt(btn.dataset.qid, 10);
+            const quest = quests.find(q => q.id === qid);
+            if (!quest) return;
+
+            quest.claimed = true;
+            const newCoins = coins + quest.reward;
+
+            ext.storage.local.set({ quests: quests, coins: newCoins }, () => {
+              if (coinsCount) coinsCount.textContent = newCoins;
+              if (typeof soundManager !== "undefined" && soundManager.playCompleteChime) {
+                soundManager.playCompleteChime();
+              }
+              renderTasksTab();
+            });
+          });
+        });
+      }
+
+      // 2. Achievements & Medals Rendering
       let achievements = Array.isArray(data.achievements) ? [...data.achievements] : [];
+      const defaultAchievements = window.DEFAULT_ACHIEVEMENTS || [];
       const unlockedSkins = Array.isArray(data.unlockedSkins) ? data.unlockedSkins : ["oak"];
       const forest = Array.isArray(data.forest) ? data.forest : [];
       const strictStreak = data.strictStreak || 0;
-      const defaultAchievements = (typeof DEFAULT_ACHIEVEMENTS !== "undefined") ? DEFAULT_ACHIEVEMENTS : [];
 
       defaultAchievements.forEach(defAch => {
         const found = achievements.find(a => a.id === defAch.id);
         if (!found) achievements.push({ ...defAch });
       });
 
-      // Passive retroactive unlock checks
-      let hasUpdates = false;
+      let hasAchievementUpdates = false;
       achievements = achievements.map(ach => {
         let changed = false;
         let shouldUnlock = false;
@@ -137,138 +146,174 @@ function renderTasksTab() {
             currentVal = 1;
             changed = true;
           }
+        } else if (ach.id === "marathon") {
+          if (forest.some(t => t.duration >= 90 && t.status === "completed") && !ach.unlocked) {
+            shouldUnlock = true;
+            currentVal = 1;
+            changed = true;
+          }
         }
 
         if (shouldUnlock && !ach.unlocked) {
-          hasUpdates = true;
+          hasAchievementUpdates = true;
           return {
             ...ach,
             current: Math.max(currentVal, ach.target),
             unlocked: true,
-            unlockedDate: new Date().toISOString()
+            unlockedDate: ach.unlockedDate || new Date().toISOString()
           };
         }
 
-        if (changed && ach.current !== currentVal) {
-          hasUpdates = true;
+        if (changed && currentVal !== ach.current) {
+          hasAchievementUpdates = true;
           return { ...ach, current: currentVal };
         }
 
         return ach;
       });
 
-      if (hasUpdates) {
+      if (hasAchievementUpdates) {
         ext.storage.local.set({ achievements: achievements });
       }
 
-      const unlockedCount = achievements.filter(a => a.unlocked).length;
-      if (achievementsCountBadge) {
-        achievementsCountBadge.textContent = `${unlockedCount}/${achievements.length}`;
-      }
+      if (achievementsGrid) {
+        achievementsGrid.innerHTML = "";
+        let unlockedCount = 0;
 
-      achievementsGrid.innerHTML = "";
-      achievements.forEach(ach => {
-        const card = document.createElement("div");
-        const statusClass = ach.claimed ? "claimed" : ach.unlocked ? "unlocked" : "locked";
-        card.className = `achievement-badge-card ${statusClass}`;
+        achievements.forEach(ach => {
+          if (ach.unlocked) unlockedCount++;
+          const card = document.createElement("div");
+          const isClaimed = !!ach.claimed;
+          const isUnlocked = !!ach.unlocked;
 
-        const achTitle = (ach.title && (ach.title[lang] || ach.title.ru)) || ach.id;
-        const achDesc = (ach.desc && (ach.desc[lang] || ach.desc.ru)) || "";
-        const progressPct = Math.min(100, Math.round(((ach.current || 0) / ach.target) * 100));
+          let stateClass = "locked";
+          if (isClaimed) stateClass = "claimed";
+          else if (isUnlocked) stateClass = "unlocked";
 
-        card.innerHTML = `
-          <div class="achievement-badge-icon">
-            <span class="badge-emoji">${ach.icon || "🏆"}</span>
-          </div>
-          <div class="achievement-badge-details">
-            <div class="achievement-badge-title-row">
-              <span class="achievement-badge-title">${achTitle}</span>
-            </div>
-            <span class="achievement-badge-desc">${achDesc}</span>
-            <div class="achievement-badge-progress-wrap">
-              <div class="achievement-progress-bg">
-                <div class="achievement-progress-bar" style="width: ${progressPct}%;"></div>
+          card.className = `achievement-badge-card ${stateClass}`;
+
+          const titleStr = (ach.title && (ach.title[currentLang] || ach.title.ru)) || ach.id;
+          const descStr = (ach.desc && (ach.desc[currentLang] || ach.desc.ru)) || "";
+
+          let progressHtml = "";
+          if (ach.target > 1 && !isUnlocked) {
+            const pct = Math.min(100, Math.round(((ach.current || 0) / ach.target) * 100));
+            progressHtml = `
+              <div class="achievement-badge-progress-wrap">
+                <div class="achievement-progress-bg">
+                  <div class="achievement-progress-bar" style="width: ${pct}%;"></div>
+                </div>
+                <span class="achievement-progress-text">${ach.current || 0} / ${ach.target}</span>
               </div>
-              <span class="achievement-progress-text">${ach.current || 0}/${ach.target}</span>
+            `;
+          }
+
+          let actionHtml = "";
+          if (isClaimed) {
+            actionHtml = `<span class="achievement-claimed-pill">${t.claimedReward || "✓ Получено"}</span>`;
+          } else if (isUnlocked) {
+            actionHtml = `<button class="achievement-claim-btn" data-achid="${ach.id}">🎁 +${ach.reward} 🪙</button>`;
+          } else {
+            actionHtml = `<span class="achievement-locked-pill">🔒 +${ach.reward} 🪙</span>`;
+          }
+
+          card.innerHTML = `
+            <div class="achievement-badge-icon">${ach.icon}</div>
+            <div class="achievement-badge-details">
+              <div class="achievement-badge-title-row">
+                <span class="achievement-badge-title">${titleStr}</span>
+              </div>
+              <div class="achievement-badge-desc">${descStr}</div>
+              ${progressHtml}
             </div>
-          </div>
-          <div class="achievement-badge-action">
-            ${
-              ach.claimed
-                ? `<span class="achievement-claimed-pill">✓ ${t.claimedReward || "Получено"}</span>`
-                : ach.unlocked
-                  ? `<button class="achievement-claim-btn" data-achid="${ach.id}">+${ach.reward} 🪙</button>`
-                  : `<span class="achievement-locked-pill">🔒 +${ach.reward} 🪙</span>`
-            }
-          </div>
-        `;
-        achievementsGrid.appendChild(card);
-      });
+            <div class="achievement-badge-action">
+              ${actionHtml}
+            </div>
+          `;
 
-      achievementsGrid.querySelectorAll(".achievement-claim-btn").forEach(btn => {
-        btn.addEventListener("click", () => {
-          const achId = btn.dataset.achid;
-          const targetAch = achievements.find(a => a.id === achId);
-          if (!targetAch || !targetAch.unlocked || targetAch.claimed) return;
+          achievementsGrid.appendChild(card);
+        });
 
-          targetAch.claimed = true;
-          const rewardAmount = targetAch.reward || 50;
-          const newCoins = coins + rewardAmount;
+        if (achievementsCountBadge) {
+          achievementsCountBadge.textContent = `${unlockedCount} / ${achievements.length}`;
+        }
 
-          ext.storage.local.set({ achievements: achievements, coins: newCoins }, () => {
-            if (coinsCount) coinsCount.textContent = newCoins;
-            if (typeof soundManager !== "undefined" && soundManager.playCompleteChime) {
-              soundManager.playCompleteChime();
-            }
-            if (typeof showToast === "function") {
-              const toastMsg = t.achievementUnlockedToast
-                ? t.achievementUnlockedToast((targetAch.title[lang] || targetAch.title.ru), rewardAmount)
-                : `🏆 Достижение «${targetAch.title.ru}» получено! +${rewardAmount} 🪙`;
-              showToast(toastMsg);
-            }
-            renderTasksTab();
+        achievementsGrid.querySelectorAll(".achievement-claim-btn").forEach(btn => {
+          btn.addEventListener("click", () => {
+            const achId = btn.dataset.achid;
+            const targetAch = achievements.find(a => a.id === achId);
+            if (!targetAch || !targetAch.unlocked || targetAch.claimed) return;
+
+            targetAch.claimed = true;
+            const newCoins = coins + targetAch.reward;
+
+            ext.storage.local.set({ achievements: achievements, coins: newCoins }, () => {
+              if (coinsCount) coinsCount.textContent = newCoins;
+              if (typeof soundManager !== "undefined" && soundManager.playCoinSound) {
+                soundManager.playCoinSound();
+              }
+              const toastMsg = typeof t.achievementUnlockedToast === "function"
+                ? t.achievementUnlockedToast(targetAch.title[currentLang] || targetAch.title.ru, targetAch.reward)
+                : `🏆 Достижение «${targetAch.title.ru}» получено! +${targetAch.reward} 🪙`;
+              if (typeof window.showToast === "function") {
+                window.showToast(toastMsg);
+              }
+              renderTasksTab();
+            });
           });
         });
-      });
-    }
+      }
 
-    // 3. Todo List
-    if (todoList) {
-      todoList.innerHTML = "";
-      todos.forEach(item => {
-        const li = document.createElement("li");
-        li.className = `todo-item ${item.done ? "done" : ""}`;
+      // 3. Todos Rendering
+      if (todoList) {
+        todoList.innerHTML = "";
+        todos.forEach((todo, idx) => {
+          const li = document.createElement("li");
+          li.className = `todo-item ${todo.done ? "done" : ""}`;
+          li.innerHTML = `
+            <div class="todo-item-left">
+              <input type="checkbox" class="todo-checkbox" ${todo.done ? "checked" : ""}>
+              <span>${todo.text}</span>
+            </div>
+            <button class="todo-del-btn" title="Delete">✖</button>
+          `;
 
-        const span = document.createElement("span");
-        span.className = "todo-text";
-        span.textContent = item.text;
-        span.addEventListener("click", () => {
-          item.done = !item.done;
-          ext.storage.local.set({ todos: todos }, () => renderTasksTab());
+          li.querySelector(".todo-checkbox").addEventListener("change", (e) => {
+            const checked = e.target.checked;
+            todo.done = checked;
+
+            let updatedCoins = coins;
+            if (checked && !todo.rewarded) {
+              todo.rewarded = true;
+              updatedCoins += 5;
+              if (coinsCount) coinsCount.textContent = updatedCoins;
+              if (typeof soundManager !== "undefined" && soundManager.playCompleteChime) {
+                soundManager.playCompleteChime();
+              }
+            }
+
+            ext.storage.local.set({ todos: todos, coins: updatedCoins }, () => {
+              renderTasksTab();
+            });
+          });
+
+          li.querySelector(".todo-del-btn").addEventListener("click", () => {
+            todos.splice(idx, 1);
+            ext.storage.local.set({ todos: todos }, () => renderTasksTab());
+          });
+
+          todoList.appendChild(li);
         });
+      }
+    });
+  }
 
-        const delBtn = document.createElement("button");
-        delBtn.className = "todo-delete-btn";
-        delBtn.textContent = "✖";
-        delBtn.addEventListener("click", (e) => {
-          e.stopPropagation();
-          const filtered = todos.filter(t => t.id !== item.id);
-          ext.storage.local.set({ todos: filtered }, () => renderTasksTab());
-        });
-
-        li.appendChild(span);
-        li.appendChild(delBtn);
-        todoList.appendChild(li);
-      });
-    }
-  });
-}
-
-if (typeof window !== "undefined") {
-  window.initTasksTab = initTasksTab;
-  window.renderTasksTab = renderTasksTab;
-}
-if (typeof globalThis !== "undefined") {
-  globalThis.initTasksTab = initTasksTab;
-  globalThis.renderTasksTab = renderTasksTab;
-}
+  if (typeof window !== "undefined") {
+    window.initTasksTab = initTasksTab;
+    window.renderTasksTab = renderTasksTab;
+  }
+  if (typeof globalThis !== "undefined") {
+    globalThis.initTasksTab = initTasksTab;
+    globalThis.renderTasksTab = renderTasksTab;
+  }
+})();

@@ -1,5 +1,31 @@
 // Focus Plant Pro - Application Constants & Configuration
 
+const DEFAULT_BLOCKLIST = [
+  "youtube.com",
+  "instagram.com",
+  "facebook.com",
+  "tiktok.com",
+  "reddit.com",
+  "twitter.com",
+  "x.com",
+  "vk.com",
+  "netflix.com",
+  "twitch.tv"
+];
+
+const DEFAULT_WHITELIST = [
+  "wikipedia.org",
+  "github.com",
+  "stackoverflow.com",
+  "google.com"
+];
+
+const DEFAULT_QUESTS = [
+  { id: 1, desc: "Завершить 1 сессию фокуса", target: 1, current: 0, done: false, claimed: false, reward: 25 },
+  { id: 2, desc: "Сфокусироваться на 45 минут", target: 45, current: 0, done: false, claimed: false, reward: 40 },
+  { id: 3, desc: "Выполнить 2 задачи из списка", target: 2, current: 0, done: false, claimed: false, reward: 30 }
+];
+
 const APP_CONSTANTS = {
   TIMER: {
     DEFAULT_DURATION_SECONDS: 1500, // 25 minutes
@@ -67,7 +93,14 @@ const APP_CONSTANTS = {
 
 if (typeof window !== "undefined") {
   window.APP_CONSTANTS = APP_CONSTANTS;
+  window.DEFAULT_BLOCKLIST = DEFAULT_BLOCKLIST;
+  window.DEFAULT_WHITELIST = DEFAULT_WHITELIST;
+  window.DEFAULT_QUESTS = DEFAULT_QUESTS;
 }
 if (typeof globalThis !== "undefined") {
   globalThis.APP_CONSTANTS = APP_CONSTANTS;
+  globalThis.DEFAULT_BLOCKLIST = DEFAULT_BLOCKLIST;
+  globalThis.DEFAULT_WHITELIST = DEFAULT_WHITELIST;
+  globalThis.DEFAULT_QUESTS = DEFAULT_QUESTS;
 }
+

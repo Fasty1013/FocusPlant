@@ -45,3 +45,4 @@ if (typeof globalThis !== "undefined") {
   globalThis.getLanguage = getLanguage;
   globalThis.getTranslation = getTranslation;
 }
+

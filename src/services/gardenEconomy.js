@@ -57,3 +57,4 @@ if (typeof globalThis !== "undefined") {
   globalThis.getTreeSellPrice = getTreeSellPrice;
   globalThis.getForestDuplicatesSummary = getForestDuplicatesSummary;
 }
+

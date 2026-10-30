@@ -122,7 +122,30 @@ const jaLocale = {
       shareTelegram: "✈️ Telegram",
       shareCardCopied: "📋 クリップボードに画像をコピーしました！",
       shareTelegramText: (treeName, mins) => `🌿 Focus Plantで「${treeName}」を育てました！⏱ ${mins}分間のゾーン集中を達成。デジタルガーデンを一緒に育てましょう！ #FocusPlant #DeepWork`
-    };
+    ,
+  overlay: {
+    "badge": "⚠️ 集中が途切れました",
+    "title": "あなたの木が枯れてしまいました！🥀",
+    "openedSite": "集中モード中にサイト",
+    "duringFocus": "を開いてしまいました。",
+    "bannerDesc": "このサイトにアクセスしたため、木が息絶えてしまいました。",
+    "quote": "「一瞬の誘惑が集中を奪います。気持ちを切り替えて新しい木を育てましょう！」",
+    "okBtn": "✓ 了解",
+    "closeTab": "✖ タブを閉じる",
+    "goBack": "↩ 戻る",
+    "switchToFullscreen": "📺 全画面表示",
+    "switchToBanner": "🪟 コンパクト表示",
+    "minimize": "➖ 最小化",
+    "minimizedPill": "🥀 木が枯れました",
+    "strictBadge": "🔒 厳格モード",
+    "strictTitle": "アクセス制限中 🔒",
+    "strictDesc": "厳格モード中はタイマー終了まで禁止サイトへのアクセスが完全にブロックされます！",
+    "strictTimerLabel": "⏳ 集中終了まで残り時間：",
+    "strictNoOkNotice": "「了解」ボタンは無効です！厳格モード中はタイマー終了までこの画面を閉じられません。",
+    "strictUnlocked": "🎉 終了しました！集中セッションが正常に完了しました。",
+    "unblockBtn": "✓ サイトのブロック解除"
+}
+};
 
 if (typeof window !== 'undefined') window.jaLocale = jaLocale;
 if (typeof globalThis !== 'undefined') globalThis.jaLocale = jaLocale;

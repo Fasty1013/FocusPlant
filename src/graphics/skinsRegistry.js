@@ -185,3 +185,4 @@ if (typeof window !== "undefined") {
 if (typeof globalThis !== "undefined") {
   globalThis.TREE_SKINS = TREE_SKINS;
 }
+

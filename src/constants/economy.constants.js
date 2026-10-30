@@ -27,3 +27,4 @@ if (typeof window !== "undefined") {
 if (typeof globalThis !== "undefined") {
   globalThis.ECONOMY_CONSTANTS = ECONOMY_CONSTANTS;
 }
+

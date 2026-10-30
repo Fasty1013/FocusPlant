@@ -1,120 +1,118 @@
 // Focus Plant Pro - Shop & Tree Nursery Controller
+(function() {
+  const ext = (typeof browser !== 'undefined' && browser.runtime) ? browser : chrome;
 
-function initShopTab() {
-  // Event listeners for shop tab actions if any
-}
+  function renderShopTab() {
+    ext.storage.local.get(["coins", "unlockedSkins", "selectedSkin"], (data) => {
+      const skinsGrid = document.getElementById("skinsGrid");
+      const coinsCount = document.getElementById("coinsCount");
+      if (!skinsGrid) return;
 
-function renderShopTab() {
-  const ext = (typeof browser !== "undefined" && browser.runtime) ? browser : chrome;
-  const skinsGrid = document.getElementById("skinsGrid");
-  const coinsCount = document.getElementById("coinsCount");
-  if (!skinsGrid) return;
+      const coins = data.coins || 0;
+      const unlocked = Array.isArray(data.unlockedSkins) ? data.unlockedSkins : ["oak"];
+      const currentSelected = data.selectedSkin || "oak";
 
-  ext.storage.local.get(["coins", "unlockedSkins", "selectedSkin"], (data) => {
-    const coins = data.coins || 0;
-    const unlocked = Array.isArray(data.unlockedSkins) ? data.unlockedSkins : ["oak"];
-    const currentSkin = data.selectedSkin || "oak";
-    const lang = (typeof currentLang !== "undefined") ? currentLang : "ru";
-    const t = (typeof i18n !== "undefined" && i18n[lang]) ? i18n[lang] : {};
-    const skins = (typeof TREE_SKINS !== "undefined") ? TREE_SKINS : {};
-    const rarities = (typeof RARITIES !== "undefined") ? RARITIES : {};
+      const currentLang = (typeof window.currentLang !== 'undefined')
+        ? window.currentLang
+        : ((document.getElementById("langSelect") && document.getElementById("langSelect").value) || "ru");
 
-    skinsGrid.innerHTML = "";
+      const i18n = window.i18n || {};
+      const t = i18n[currentLang] || i18n.ru || {};
+      const skins = window.TREE_SKINS || {};
+      const rarities = window.RARITIES || {};
 
-    Object.values(skins).forEach(skin => {
-      const isUnlocked = unlocked.includes(skin.id);
-      const isEquipped = currentSkin === skin.id;
-      const rarityObj = rarities[skin.rarity] || {};
+      skinsGrid.innerHTML = "";
 
-      const card = document.createElement("div");
-      card.className = `skin-card ${isEquipped ? "equipped" : ""} ${isUnlocked ? "unlocked" : "locked"}`;
+      Object.values(skins).forEach(skin => {
+        const isOwned = unlocked.includes(skin.id);
+        const isEquipped = currentSelected === skin.id;
+        const rarityObj = rarities[skin.rarity] || rarities.common || {};
 
-      let treePreviewSvg = "";
-      if (typeof renderTreeSVG === "function") {
-        treePreviewSvg = renderTreeSVG(skin.id, 5, false);
-      }
+        const card = document.createElement("div");
+        card.className = `skin-card ${isEquipped ? "selected" : ""}`;
 
-      const skinName = (skin.name && (skin.name[lang] || skin.name.ru)) || skin.id;
-      const skinDesc = (skin.desc && (skin.desc[lang] || skin.desc.ru)) || "";
-      const rarityName = (rarityObj.name && (rarityObj.name[lang] || rarityObj.name.ru)) || skin.rarity;
+        const previewSvg = (typeof renderTreeSVG === "function") ? renderTreeSVG(skin.id, 5, false) : "";
+        const exclusiveBadge = skin.exclusiveShop
+          ? `<span class="skin-exclusive-badge">💎 ${t.exclusiveShopBadge || "ЭКСКЛЮЗИВ"}</span>`
+          : "";
 
-      card.innerHTML = `
-        <div class="skin-preview">
-          ${treePreviewSvg}
-        </div>
-        <div class="skin-details">
-          <div class="skin-header-row">
-            <h4 class="skin-name">${skinName}</h4>
-            <span class="skin-rarity-pill" style="color: ${rarityObj.color || '#94e2d5'}; border-color: ${rarityObj.border || 'transparent'}; background: ${rarityObj.bg || 'transparent'};">
-              ${rarityObj.stars || "★"} ${rarityName}
-            </span>
-            ${skin.exclusiveShop ? `<span class="skin-exclusive-badge" title="${t.exclusiveShopDesc || 'Эксклюзив магазина'}">💎 ${t.exclusiveShopBadge || 'ЭКСКЛЮЗИВ'}</span>` : ""}
+        const skinName = (skin.name && (skin.name[currentLang] || skin.name.ru)) || skin.id;
+        const skinDesc = (skin.desc && (skin.desc[currentLang] || skin.desc.ru)) || "";
+
+        card.innerHTML = `
+          <div class="skin-preview-box">${previewSvg}</div>
+          <div class="skin-details">
+            <div class="skin-name-row">
+              <span class="skin-name">${skinName} ${skin.emoji || ""}</span>
+            </div>
+            <div class="skin-tags-row">
+              <span class="skin-rarity-pill" style="background:${rarityObj.bg || 'transparent'};color:${rarityObj.color || '#94e2d5'};">${rarityObj.stars || "★"}</span>
+              ${exclusiveBadge}
+            </div>
+            <div class="skin-desc">${skinDesc}</div>
           </div>
-          <p class="skin-desc">${skinDesc}</p>
-        </div>
-        <div class="skin-action">
-          ${
-            isEquipped
-              ? `<button class="btn btn-sm btn-success equipped-btn" disabled>${t.equipped || "✓ Выбрано"}</button>`
-              : isUnlocked
-                ? `<button class="btn btn-sm btn-primary equip-btn" data-skin="${skin.id}">${t.equip || "Выбрать"}</button>`
-                : `<button class="btn btn-sm btn-warning buy-btn" data-skin="${skin.id}" data-price="${skin.price}">🪙 ${skin.price} ${t.buy || "Купить"}</button>`
-          }
-        </div>
-      `;
+          <div class="skin-action">
+            ${
+              isEquipped
+                ? `<button class="btn btn-sm btn-equipped" disabled>${t.equipped || "Выбрано"}</button>`
+                : isOwned
+                  ? `<button class="btn btn-sm btn-warning equip-btn" data-skin="${skin.id}">${t.equip || "Выбрать"}</button>`
+                  : `<button class="btn btn-sm btn-primary buy-btn" data-skin="${skin.id}" data-price="${skin.price}">🪙 ${skin.price} ${t.buy || "Купить"}</button>`
+            }
+          </div>
+        `;
 
-      skinsGrid.appendChild(card);
-    });
+        skinsGrid.appendChild(card);
+      });
 
-    skinsGrid.querySelectorAll(".equip-btn").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const skinId = btn.dataset.skin;
-        ext.storage.local.set({ selectedSkin: skinId }, () => {
-          renderShopTab();
-          if (typeof syncTimerFromStorage === "function") {
-            syncTimerFromStorage();
+      skinsGrid.querySelectorAll(".equip-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const skinId = btn.dataset.skin;
+          ext.storage.local.set({ selectedSkin: skinId }, () => {
+            renderShopTab();
+            if (typeof window.syncTimerFromStorage === "function") {
+              window.syncTimerFromStorage();
+            }
+          });
+        });
+      });
+
+      skinsGrid.querySelectorAll(".buy-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const skinId = btn.dataset.skin;
+          const price = parseInt(btn.dataset.price, 10);
+
+          if (coins < price) {
+            alert(t.notEnoughCoins || "Недостаточно монет для покупки этого скина!");
+            return;
           }
+
+          const newCoins = coins - price;
+          const newUnlocked = [...unlocked, skinId];
+
+          ext.storage.local.set({
+            coins: newCoins,
+            unlockedSkins: newUnlocked,
+            selectedSkin: skinId
+          }, () => {
+            if (coinsCount) coinsCount.textContent = newCoins;
+            if (typeof soundManager !== "undefined" && soundManager.playCompleteChime) {
+              soundManager.playCompleteChime();
+            }
+            renderShopTab();
+            if (typeof window.syncTimerFromStorage === "function") {
+              window.syncTimerFromStorage();
+            }
+          });
         });
       });
     });
+  }
 
-    skinsGrid.querySelectorAll(".buy-btn").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const skinId = btn.dataset.skin;
-        const price = parseInt(btn.dataset.price, 10);
-
-        if (coins < price) {
-          alert(t.notEnoughCoins || "Недостаточно монет для покупки этого скина!");
-          return;
-        }
-
-        const newCoins = coins - price;
-        const newUnlocked = [...unlocked, skinId];
-
-        ext.storage.local.set({
-          coins: newCoins,
-          unlockedSkins: newUnlocked,
-          selectedSkin: skinId
-        }, () => {
-          if (coinsCount) coinsCount.textContent = newCoins;
-          if (typeof soundManager !== "undefined" && soundManager.playCompleteChime) {
-            soundManager.playCompleteChime();
-          }
-          renderShopTab();
-          if (typeof syncTimerFromStorage === "function") {
-            syncTimerFromStorage();
-          }
-        });
-      });
-    });
-  });
-}
-
-if (typeof window !== "undefined") {
-  window.initShopTab = initShopTab;
-  window.renderShopTab = renderShopTab;
-}
-if (typeof globalThis !== "undefined") {
-  globalThis.initShopTab = initShopTab;
-  globalThis.renderShopTab = renderShopTab;
-}
+  if (typeof window !== "undefined") {
+    window.renderShopTab = renderShopTab;
+  }
+  if (typeof globalThis !== "undefined") {
+    globalThis.renderShopTab = renderShopTab;
+  }
+})();

@@ -2,7 +2,8 @@
 (function() {
   const ext = (typeof browser !== 'undefined' && browser.runtime) ? browser : chrome;
 
-  const I18N_OVERLAY = {
+  // Fallback translations if locale modules are not pre-injected
+  const FALLBACK_OVERLAY = {
     ru: {
       badge: "⚠️ Фокус нарушен",
       title: "Ваше дерево завяло! 🥀",
@@ -93,7 +94,20 @@
     }
   };
 
+  function getOverlayTranslations(lang = "ru") {
+    if (typeof window !== "undefined" && window.I18N_LOCALES && window.I18N_LOCALES[lang] && window.I18N_LOCALES[lang].overlay) {
+      return window.I18N_LOCALES[lang].overlay;
+    }
+    return FALLBACK_OVERLAY[lang] || FALLBACK_OVERLAY.ru;
+  }
+
   function checkDomainMatch(currentUrl, siteList) {
+    if (typeof matchesSiteList === "function") {
+      return matchesSiteList(currentUrl, siteList);
+    }
+    if (typeof window !== "undefined" && typeof window.matchesSiteList === "function") {
+      return window.matchesSiteList(currentUrl, siteList);
+    }
     if (!Array.isArray(siteList) || siteList.length === 0) return false;
     try {
       const currentHost = window.location.hostname.toLowerCase();
@@ -105,10 +119,7 @@
           .replace(/\/.*$/, '')
           .trim();
         if (!cleanSite) return false;
-
-        return currentHost === cleanSite ||
-               currentHost.endsWith('.' + cleanSite) ||
-               currentUrl.toLowerCase().includes(cleanSite);
+        return currentHost === cleanSite || currentHost.endsWith('.' + cleanSite) || currentUrl.toLowerCase().includes(cleanSite);
       });
     } catch (e) {
       return false;
@@ -117,8 +128,19 @@
 
   let hasBlockedCurrentPage = false;
   let activeElementContainer = null;
+  let strictTimerInterval = null;
 
-  // Withered SVG Tree HTML String (High Detail Botanical with Glowing Embers)
+  function ensureOverlayStylesheet() {
+    if (!document.getElementById("fp-overlay-style") && ext.runtime && ext.runtime.getURL) {
+      const link = document.createElement("link");
+      link.id = "fp-overlay-style";
+      link.rel = "stylesheet";
+      link.href = ext.runtime.getURL("content/overlay.css");
+      (document.head || document.documentElement).appendChild(link);
+    }
+  }
+
+  // Withered SVG Tree Icon (High Detail Botanical with Glowing Embers)
   function getWitheredSvg(size = 180) {
     return `
       <svg width="${size}" height="${size}" viewBox="0 0 240 240" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -139,31 +161,18 @@
             <stop offset="100%" stop-color="#181825"/>
           </linearGradient>
         </defs>
-        <!-- Atmospheric Aura -->
         <circle cx="120" cy="120" r="100" fill="url(#fpWitherGlow)"/>
-
-        <!-- Ground Mound with Stone Details -->
         <ellipse cx="120" cy="206" rx="85" ry="15" fill="url(#fpMoundGrad)"/>
         <ellipse cx="120" cy="206" rx="70" ry="9" fill="#11111b" opacity="0.8"/>
         <path d="M72 206L94 203M146 208L168 205M108 207L126 209" stroke="#585b70" stroke-width="2.5" stroke-linecap="round"/>
-
-        <!-- Trunk & Bare Branches -->
         <path d="M116 206 C114 172 102 146 110 118 C115 98 117 78 120 68" stroke="url(#fpTrunkGrad)" stroke-width="16" stroke-linecap="round"/>
         <path d="M124 206 C122 172 110 146 118 118 C123 98 125 78 128 68" stroke="#45475a" stroke-width="7" stroke-linecap="round"/>
-
-        <!-- Left Main Branch -->
         <path d="M110 118 C95 106 78 108 65 94 C58 86 54 74 48 64" stroke="url(#fpTrunkGrad)" stroke-width="8" stroke-linecap="round"/>
         <path d="M78 108 C74 92 60 88 52 78" stroke="url(#fpTrunkGrad)" stroke-width="5" stroke-linecap="round"/>
-
-        <!-- Right Main Branch -->
         <path d="M120 106 C138 98 162 103 174 88 C182 78 186 66 192 54" stroke="url(#fpTrunkGrad)" stroke-width="8" stroke-linecap="round"/>
         <path d="M150 100 C162 88 178 83 186 70" stroke="url(#fpTrunkGrad)" stroke-width="5" stroke-linecap="round"/>
-
-        <!-- Snapped Top Twigs -->
         <path d="M118 84 C108 67 110 51 105 39" stroke="url(#fpTrunkGrad)" stroke-width="5" stroke-linecap="round"/>
         <path d="M120 68 C130 52 138 43 144 30" stroke="url(#fpTrunkGrad)" stroke-width="5" stroke-linecap="round"/>
-
-        <!-- Fallen Leaves & Glowing Embers on Ground -->
         <circle cx="65" cy="202" r="3.5" fill="#a6adc8"/>
         <circle cx="172" cy="204" r="4.5" fill="#a6adc8"/>
         <path d="M88 203 C90 199 96 200 94 204 C92 206 86 205 88 203Z" fill="#f38ba8" opacity="0.9"/>
@@ -175,142 +184,37 @@
     `;
   }
 
-  // 1. RENDER COMPACT FLOATING GLASS BANNER ("не мешает и виднее")
+  // 1. RENDER COMPACT FLOATING GLASS BANNER
   function renderCompactBanner(blockedDomain, lang = "ru") {
+    ensureOverlayStylesheet();
     if (activeElementContainer) activeElementContainer.remove();
 
-    const t = I18N_OVERLAY[lang] || I18N_OVERLAY.ru;
+    const t = getOverlayTranslations(lang);
 
     const bannerWrap = document.createElement("div");
     bannerWrap.id = "focusplant-floating-banner-wrap";
-    bannerWrap.style.cssText = `
-      position: fixed !important;
-      top: 16px !important;
-      left: 50% !important;
-      transform: translateX(-50%) !important;
-      z-index: 2147483647 !important;
-      width: 92% !important;
-      max-width: 660px !important;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
-      animation: fpBannerSlide 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
-    `;
 
     bannerWrap.innerHTML = `
-      <style>
-        @keyframes fpBannerSlide {
-          from { transform: translate(-50%, -40px); opacity: 0; }
-          to { transform: translate(-50%, 0); opacity: 1; }
-        }
-        @keyframes fpPulseAlert {
-          0%, 100% { box-shadow: 0 10px 30px rgba(0,0,0,0.7), 0 0 18px rgba(243, 139, 168, 0.35); }
-          50% { box-shadow: 0 10px 30px rgba(0,0,0,0.7), 0 0 30px rgba(243, 139, 168, 0.65); }
-        }
-      </style>
-      <div id="focusplant-banner" style="
-        background: rgba(24, 24, 37, 0.94);
-        backdrop-filter: blur(16px);
-        -webkit-backdrop-filter: blur(16px);
-        border: 1.5px solid #f38ba8;
-        border-radius: 18px;
-        padding: 12px 16px;
-        display: flex;
-        align-items: center;
-        gap: 14px;
-        color: #cdd6f4;
-        animation: fpPulseAlert 3s infinite ease-in-out;
-        box-sizing: border-box;
-      ">
-        <!-- Mini SVG Avatar -->
-        <div style="flex-shrink: 0; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.4));">
+      <div id="focusplant-banner">
+        <div class="fp-banner-avatar">
           ${getWitheredSvg(48)}
         </div>
-
-        <!-- Text Info -->
-        <div style="flex: 1; display: flex; flex-direction: column; gap: 2px;">
-          <div style="display: flex; align-items: center; gap: 8px;">
-            <span style="
-              font-size: 0.68rem;
-              font-weight: 800;
-              background: rgba(243, 139, 168, 0.2);
-              color: #f38ba8;
-              border: 1px solid rgba(243, 139, 168, 0.5);
-              padding: 2px 6px;
-              border-radius: 10px;
-              text-transform: uppercase;
-              letter-spacing: 0.5px;
-            ">
-              ${t.badge}
-            </span>
-            <span style="font-size: 0.95rem; font-weight: 800; color: #f38ba8;">
-              ${t.title}
-            </span>
+        <div class="fp-banner-info">
+          <div class="fp-banner-header-row">
+            <span class="fp-banner-badge">${t.badge}</span>
+            <span class="fp-banner-title">${t.title}</span>
           </div>
-          <div style="font-size: 0.8rem; color: #bac2de; line-height: 1.3;">
-            ${t.openedSite} <b style="color: #f38ba8;">${blockedDomain || location.hostname}</b>. ${t.bannerDesc}
+          <div class="fp-banner-desc">
+            ${t.openedSite} <b class="fp-domain-tag">${blockedDomain || location.hostname}</b>. ${t.bannerDesc}
           </div>
         </div>
-
-        <!-- Action Buttons -->
-        <div style="display: flex; align-items: center; gap: 8px; flex-shrink: 0;">
-          <button id="fp-banner-close-tab" style="
-            background: linear-gradient(135deg, #f38ba8 0%, #eba0ac 100%);
-            color: #11111b;
-            border: none;
-            border-radius: 10px;
-            padding: 8px 12px;
-            font-size: 0.78rem;
-            font-weight: 700;
-            cursor: pointer;
-            box-shadow: 0 2px 8px rgba(243, 139, 168, 0.3);
-          ">
-            ${t.closeTab}
-          </button>
-
-          <button id="fp-banner-to-fullscreen" title="${t.switchToFullscreen}" style="
-            background: #313244;
-            color: #cdd6f4;
-            border: 1px solid #45475a;
-            border-radius: 10px;
-            padding: 8px 10px;
-            font-size: 0.78rem;
-            font-weight: 600;
-            cursor: pointer;
-          ">
-            ${t.switchToFullscreen}
-          </button>
-
-          <button id="fp-banner-minimize" title="${t.minimize}" style="
-            background: none;
-            border: none;
-            color: #a6adc8;
-            font-size: 1rem;
-            cursor: pointer;
-            padding: 4px 6px;
-          ">
-            ✖
-          </button>
+        <div class="fp-banner-actions">
+          <button id="fp-banner-close-tab" class="fp-btn-danger">${t.closeTab}</button>
+          <button id="fp-banner-to-fullscreen" class="fp-btn-secondary" title="${t.switchToFullscreen}">${t.switchToFullscreen}</button>
+          <button id="fp-banner-minimize" class="fp-btn-ghost" title="${t.minimize}">✖</button>
         </div>
       </div>
-
-      <!-- Minimized Corner Pill (Hidden by default) -->
-      <div id="focusplant-minimized-pill" style="
-        display: none;
-        position: fixed;
-        top: 14px;
-        right: 14px;
-        background: rgba(24, 24, 37, 0.92);
-        backdrop-filter: blur(12px);
-        border: 1.5px solid #f38ba8;
-        border-radius: 20px;
-        padding: 6px 14px;
-        color: #f38ba8;
-        font-size: 0.8rem;
-        font-weight: 700;
-        cursor: pointer;
-        box-shadow: 0 4px 16px rgba(0,0,0,0.5);
-        align-items: center;
-        gap: 6px;
-      ">
+      <div id="focusplant-minimized-pill" style="display: none;">
         <span>${t.minimizedPill}</span>
         <small style="font-size: 0.65rem; color: #a6adc8;">(нажмите)</small>
       </div>
@@ -319,19 +223,14 @@
     document.documentElement.appendChild(bannerWrap);
     activeElementContainer = bannerWrap;
 
-    // Attach listeners
     const closeBtn = document.getElementById("fp-banner-close-tab");
     if (closeBtn) {
-      closeBtn.addEventListener("click", () => {
-        ext.runtime.sendMessage({ action: "CLOSE_TAB" });
-      });
+      closeBtn.addEventListener("click", () => ext.runtime.sendMessage({ action: "CLOSE_TAB" }));
     }
 
     const toFullscreenBtn = document.getElementById("fp-banner-to-fullscreen");
     if (toFullscreenBtn) {
-      toFullscreenBtn.addEventListener("click", () => {
-        renderFullscreenOverlay(blockedDomain, lang);
-      });
+      toFullscreenBtn.addEventListener("click", () => renderFullscreenOverlay(blockedDomain, lang));
     }
 
     const minBtn = document.getElementById("fp-banner-minimize");
@@ -350,10 +249,9 @@
     }
   }
 
-  let strictTimerInterval = null;
-
-  // 2. RENDER FULLSCREEN OVERLAY (Crisp, High-Quality Aesthetic Presentation)
+  // 2. RENDER FULLSCREEN OVERLAY
   function renderFullscreenOverlay(blockedDomain, lang = "ru", isStrict = false, sessionEndTime = 0) {
+    ensureOverlayStylesheet();
     if (activeElementContainer) activeElementContainer.remove();
     if (strictTimerInterval) {
       clearInterval(strictTimerInterval);
@@ -365,397 +263,75 @@
       document.querySelectorAll('video, audio').forEach(el => { try { el.pause(); } catch(e){} });
     } catch (e) {}
 
-    const t = I18N_OVERLAY[lang] || I18N_OVERLAY.ru;
-
+    const t = getOverlayTranslations(lang);
     const overlay = document.createElement("div");
     overlay.id = "focusplant-fullscreen-overlay";
-    overlay.style.cssText = `
-      position: fixed !important;
-      top: 0 !important;
-      left: 0 !important;
-      width: 100vw !important;
-      height: 100vh !important;
-      background: radial-gradient(ellipse at 50% 25%, #252438 0%, #161622 55%, #0d0d15 100%) !important;
-      color: #cdd6f4 !important;
-      display: flex !important;
-      flex-direction: column !important;
-      align-items: center !important;
-      justify-content: center !important;
-      z-index: 2147483647 !important;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
-      -webkit-font-smoothing: antialiased !important;
-      -moz-osx-font-smoothing: grayscale !important;
-      text-rendering: optimizeLegibility !important;
-      text-align: center !important;
-      padding: 30px 20px !important;
-      box-sizing: border-box !important;
-      overflow-y: auto !important;
-    `;
 
     document.documentElement.style.background = "#0d0d15";
     document.documentElement.style.overflow = "hidden";
     if (document.body) document.body.style.overflow = "hidden";
 
-    const commonStyles = `
-      <style>
-        @keyframes fpFadeIn {
-          from { opacity: 0; transform: scale(0.96) translateY(12px); }
-          to { opacity: 1; transform: scale(1) translateY(0); }
-        }
-        @keyframes fpFloatTree {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-8px); }
-        }
-        @keyframes fpGlowPulse {
-          0%, 100% { filter: drop-shadow(0 8px 24px rgba(243, 139, 168, 0.35)); }
-          50% { filter: drop-shadow(0 12px 36px rgba(243, 139, 168, 0.65)); }
-        }
-        .fp-btn-primary {
-          transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
-        }
-        .fp-btn-primary:hover {
-          transform: translateY(-2px) scale(1.02) !important;
-          box-shadow: 0 8px 28px rgba(16, 185, 129, 0.45) !important;
-        }
-        .fp-btn-danger {
-          transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
-        }
-        .fp-btn-danger:hover {
-          transform: translateY(-2px) scale(1.02) !important;
-          box-shadow: 0 8px 28px rgba(243, 139, 168, 0.45) !important;
-        }
-        .fp-btn-secondary {
-          transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
-        }
-        .fp-btn-secondary:hover {
-          background: rgba(69, 71, 90, 0.95) !important;
-          transform: translateY(-2px) !important;
-          color: #ffffff !important;
-        }
-      </style>
-    `;
-
     if (isStrict) {
-      // -------------------------------------------------------------
-      // STRICT MODE: NO "OK" BUTTON, IMPENETRABLE LOCK WITH COUNTDOWN
-      // -------------------------------------------------------------
       overlay.innerHTML = `
-        ${commonStyles}
-        <div style="
-          background: rgba(24, 24, 37, 0.94);
-          backdrop-filter: blur(32px) saturate(180%);
-          -webkit-backdrop-filter: blur(32px) saturate(180%);
-          border: 1.5px solid rgba(243, 139, 168, 0.45);
-          border-radius: 32px;
-          padding: 44px 38px;
-          max-width: 680px;
-          width: 92%;
-          box-shadow: 0 30px 90px rgba(0, 0, 0, 0.85), 0 0 50px rgba(243, 139, 168, 0.2);
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          animation: fpFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-          box-sizing: border-box;
-        ">
-          <!-- Withered Tree with Soft Float Animation -->
-          <div style="margin-bottom: 20px; animation: fpFloatTree 5s ease-in-out infinite;">
+        <div class="fp-fullscreen-card fp-strict-card">
+          <div class="fp-tree-float-box">
             ${getWitheredSvg(185)}
           </div>
-
-          <!-- Strict Badge Capsule -->
-          <div style="
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 22px;
-            background: rgba(243, 139, 168, 0.18);
-            border: 1.5px solid rgba(243, 139, 168, 0.5);
-            border-radius: 30px;
-            color: #f38ba8;
-            font-size: 0.95rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            margin-bottom: 16px;
-            box-shadow: 0 0 20px rgba(243, 139, 168, 0.25);
-          ">
+          <div class="fp-strict-badge-capsule">
             <span>🔒</span> ${t.strictBadge}
           </div>
-
-          <!-- Title with Gradient Glow -->
-          <h1 style="
-            font-size: 2.5rem;
-            margin: 0 0 14px 0;
-            font-weight: 900;
-            letter-spacing: -0.5px;
-            line-height: 1.25;
-            background: linear-gradient(135deg, #ffffff 15%, #f5c2e7 60%, #f38ba8 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 4px 20px rgba(243, 139, 168, 0.25);
-          ">
+          <h1 class="fp-strict-title">
             ${t.strictTitle}
           </h1>
-
-          <!-- Description & Blocked Site Pill -->
-          <p style="
-            font-size: 1.2rem;
-            margin: 0 0 22px 0;
-            color: #cdd6f4;
-            line-height: 1.6;
-            max-width: 560px;
-            font-weight: 500;
-          ">
-            ${t.openedSite} <span style="
-              color: #f5c2e7;
-              font-weight: 800;
-              background: rgba(243, 139, 168, 0.22);
-              border: 1.5px solid rgba(243, 139, 168, 0.5);
-              padding: 4px 14px;
-              border-radius: 10px;
-              font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-            ">${blockedDomain || location.hostname}</span>.<br>
+          <p class="fp-strict-desc">
+            ${t.openedSite} <span class="fp-domain-tag">${blockedDomain || location.hostname}</span>.<br>
             ${t.strictDesc}
           </p>
-
-          <!-- Live Chronometer HUD Box -->
-          <div id="fp-strict-timer-box" style="
-            background: linear-gradient(180deg, rgba(20, 20, 32, 0.95) 0%, rgba(14, 14, 23, 0.95) 100%);
-            border: 1.5px solid rgba(243, 139, 168, 0.35);
-            border-radius: 22px;
-            padding: 20px 32px;
-            width: 100%;
-            max-width: 520px;
-            margin-bottom: 20px;
-            box-sizing: border-box;
-            box-shadow: inset 0 2px 12px rgba(0,0,0,0.5), 0 8px 30px rgba(243, 139, 168, 0.15);
-          ">
-            <span style="
-              font-size: 0.9rem;
-              color: #a6adc8;
-              display: block;
-              margin-bottom: 8px;
-              text-transform: uppercase;
-              letter-spacing: 1.5px;
-              font-weight: 700;
-            ">${t.strictTimerLabel}</span>
-            <div id="fp-strict-timer" style="
-              font-size: 4.2rem;
-              font-weight: 900;
-              font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
-              font-variant-numeric: tabular-nums;
-              font-feature-settings: 'tnum' 1;
-              color: #f38ba8;
-              letter-spacing: 6px;
-              text-shadow: 0 0 28px rgba(243, 139, 168, 0.7), 0 0 50px rgba(243, 139, 168, 0.35);
-            ">--:--</div>
+          <div id="fp-strict-timer-box" class="fp-strict-timer-hud">
+            <span class="fp-strict-timer-label">${t.strictTimerLabel}</span>
+            <div id="fp-strict-timer" class="fp-strict-timer-digits">--:--</div>
           </div>
-
-          <!-- Strict Notice Pill (No OK Button) -->
-          <div style="
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            background: rgba(243, 139, 168, 0.1);
-            border: 1.5px solid rgba(243, 139, 168, 0.3);
-            padding: 12px 20px;
-            border-radius: 14px;
-            color: #f9e2af;
-            font-size: 1rem;
-            font-weight: 600;
-            margin-bottom: 26px;
-            width: 100%;
-            max-width: 520px;
-            box-sizing: border-box;
-          ">
+          <div class="fp-strict-notice-banner">
             <span style="font-size: 1.15rem;">🚫</span> ${t.strictNoOkNotice}
           </div>
-
-          <!-- Actions: Only Close Tab or Go Back -->
           <div style="display: flex; gap: 14px; width: 100%; max-width: 520px;">
-            <button id="fp-fs-close-tab" class="fp-btn-danger" style="
-              flex: 1;
-              padding: 15px 22px;
-              background: linear-gradient(135deg, #f38ba8 0%, #e06c88 100%);
-              color: #11111b;
-              border: none;
-              border-radius: 16px;
-              font-weight: 800;
-              font-size: 1.05rem;
-              cursor: pointer;
-              box-shadow: 0 4px 18px rgba(243, 139, 168, 0.35);
-              font-family: inherit;
-            ">
+            <button id="fp-fs-close-tab" class="fp-btn-danger" style="flex: 1; padding: 15px 22px; font-size: 1.05rem;">
               ${t.closeTab}
             </button>
-
-            <button id="fp-fs-back" class="fp-btn-secondary" style="
-              flex: 1;
-              padding: 15px 22px;
-              background: rgba(49, 50, 68, 0.85);
-              color: #cdd6f4;
-              border: 1.5px solid rgba(69, 71, 90, 0.85);
-              border-radius: 16px;
-              font-weight: 700;
-              font-size: 1.05rem;
-              cursor: pointer;
-              font-family: inherit;
-            ">
+            <button id="fp-fs-back" class="fp-btn-secondary" style="flex: 1; padding: 15px 22px; font-size: 1.05rem;">
               ${t.goBack}
             </button>
           </div>
         </div>
       `;
     } else {
-      // -------------------------------------------------------------
-      // REGULAR MODE: WITH "OK" BUTTON TO DISMISS NOTIFICATION
-      // -------------------------------------------------------------
       overlay.innerHTML = `
-        ${commonStyles}
-        <div style="
-          background: rgba(24, 24, 37, 0.94);
-          backdrop-filter: blur(32px) saturate(180%);
-          -webkit-backdrop-filter: blur(32px) saturate(180%);
-          border: 1.5px solid rgba(243, 139, 168, 0.45);
-          border-radius: 32px;
-          padding: 44px 38px;
-          max-width: 680px;
-          width: 92%;
-          box-shadow: 0 30px 90px rgba(0, 0, 0, 0.85), 0 0 50px rgba(243, 139, 168, 0.2);
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          animation: fpFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-          box-sizing: border-box;
-        ">
-          <!-- Withered Tree with Soft Float Animation -->
-          <div style="margin-bottom: 20px; animation: fpFloatTree 5s ease-in-out infinite;">
+        <div class="fp-fullscreen-card">
+          <div class="fp-tree-float-box">
             ${getWitheredSvg(190)}
           </div>
-
-          <!-- Alert Badge -->
-          <div style="
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 22px;
-            background: rgba(243, 139, 168, 0.18);
-            border: 1.5px solid rgba(243, 139, 168, 0.5);
-            border-radius: 30px;
-            color: #f38ba8;
-            font-size: 0.95rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            margin-bottom: 16px;
-          ">
+          <div class="fp-overlay-badge">
             <span>⚠️</span> ${t.badge}
           </div>
-
-          <!-- Title with Gradient Glow -->
-          <h1 style="
-            font-size: 2.6rem;
-            margin: 0 0 14px 0;
-            font-weight: 900;
-            letter-spacing: -0.5px;
-            line-height: 1.25;
-            background: linear-gradient(135deg, #ffffff 15%, #f5c2e7 60%, #f38ba8 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 4px 20px rgba(243, 139, 168, 0.25);
-          ">
+          <h1 class="fp-overlay-title">
             ${t.title}
           </h1>
-
-          <!-- Info text -->
-          <p style="
-            font-size: 1.25rem;
-            margin: 0 0 20px 0;
-            color: #cdd6f4;
-            line-height: 1.6;
-            max-width: 560px;
-            font-weight: 500;
-          ">
-            ${t.openedSite} <span style="
-              color: #f5c2e7;
-              font-weight: 800;
-              background: rgba(243, 139, 168, 0.22);
-              border: 1.5px solid rgba(243, 139, 168, 0.5);
-              padding: 4px 14px;
-              border-radius: 10px;
-              font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-            ">${blockedDomain || location.hostname}</span> ${t.duringFocus}
+          <p class="fp-overlay-desc">
+            ${t.openedSite} <span class="fp-domain-tag">${blockedDomain || location.hostname}</span> ${t.duringFocus}
           </p>
-
-          <!-- Philosophical quote -->
-          <div style="
-            font-style: italic;
-            font-size: 1.05rem;
-            color: #bac2de;
-            background: #181825;
-            border-left: 4px solid #f38ba8;
-            padding: 16px 22px;
-            border-radius: 0 14px 14px 0;
-            margin-bottom: 28px;
-            text-align: left;
-            width: 100%;
-            max-width: 520px;
-            box-sizing: border-box;
-            line-height: 1.6;
-          ">
+          <div class="fp-overlay-quote">
             ${t.quote}
           </div>
-
-          <!-- PRIMARY ACTION: PROMINENT "OK" BUTTON TO REMOVE NOTIFICATION -->
           <div style="width: 100%; max-width: 520px; margin-bottom: 14px;">
-            <button id="fp-fs-dismiss-ok" class="fp-btn-primary" style="
-              width: 100%;
-              padding: 16px 28px;
-              background: linear-gradient(135deg, #a6e3a1 0%, #10b981 100%);
-              color: #11111b;
-              border: none;
-              border-radius: 18px;
-              font-weight: 800;
-              font-size: 1.2rem;
-              letter-spacing: 0.5px;
-              cursor: pointer;
-              box-shadow: 0 6px 24px rgba(16, 185, 129, 0.4);
-              font-family: inherit;
-            ">
+            <button id="fp-fs-dismiss-ok" class="fp-btn-primary" style="width: 100%; padding: 16px 28px; font-size: 1.2rem;">
               ${t.okBtn}
             </button>
           </div>
-
-          <!-- SECONDARY ACTIONS: Close Tab or Go Back -->
           <div style="display: flex; gap: 14px; width: 100%; max-width: 520px;">
-            <button id="fp-fs-close-tab" class="fp-btn-danger" style="
-              flex: 1;
-              padding: 14px 20px;
-              background: rgba(49, 50, 68, 0.85);
-              color: #f38ba8;
-              border: 1.5px solid rgba(243, 139, 168, 0.45);
-              border-radius: 16px;
-              font-weight: 700;
-              font-size: 1.05rem;
-              cursor: pointer;
-              font-family: inherit;
-            ">
+            <button id="fp-fs-close-tab" class="fp-btn-danger" style="flex: 1; padding: 14px 20px; font-size: 1.05rem;">
               ${t.closeTab}
             </button>
-
-            <button id="fp-fs-back" class="fp-btn-secondary" style="
-              flex: 1;
-              padding: 14px 20px;
-              background: rgba(49, 50, 68, 0.85);
-              color: #cdd6f4;
-              border: 1.5px solid rgba(69, 71, 90, 0.85);
-              border-radius: 16px;
-              font-weight: 700;
-              font-size: 1.05rem;
-              cursor: pointer;
-              font-family: inherit;
-            ">
+            <button id="fp-fs-back" class="fp-btn-secondary" style="flex: 1; padding: 14px 20px; font-size: 1.05rem;">
               ${t.goBack}
             </button>
           </div>
@@ -766,7 +342,6 @@
     document.documentElement.appendChild(overlay);
     activeElementContainer = overlay;
 
-    // Attach "OK" dismiss button (available in normal mode)
     const okBtn = document.getElementById("fp-fs-dismiss-ok");
     if (okBtn) {
       okBtn.addEventListener("click", () => {
@@ -777,15 +352,11 @@
       });
     }
 
-    // Attach Close Tab button
     const closeBtn = document.getElementById("fp-fs-close-tab");
     if (closeBtn) {
-      closeBtn.addEventListener("click", () => {
-        ext.runtime.sendMessage({ action: "CLOSE_TAB" });
-      });
+      closeBtn.addEventListener("click", () => ext.runtime.sendMessage({ action: "CLOSE_TAB" }));
     }
 
-    // Attach Go Back button
     const backBtn = document.getElementById("fp-fs-back");
     if (backBtn) {
       backBtn.addEventListener("click", () => {
@@ -797,7 +368,6 @@
       });
     }
 
-    // Live countdown timer for Strict Mode
     if (isStrict && sessionEndTime) {
       const updateStrictCountdown = () => {
         const timerEl = document.getElementById("fp-strict-timer");
@@ -815,17 +385,7 @@
           if (box) {
             box.innerHTML = `
               <div style="color: #a6e3a1; font-weight: 700; font-size: 1rem; margin-bottom: 10px;">${t.strictUnlocked}</div>
-              <button id="fp-strict-unblock-btn" class="fp-btn-primary" style="
-                background: linear-gradient(135deg, #a6e3a1 0%, #10b981 100%);
-                color: #11111b;
-                border: none;
-                border-radius: 14px;
-                padding: 12px 22px;
-                font-weight: 800;
-                font-size: 0.95rem;
-                cursor: pointer;
-                box-shadow: 0 4px 16px rgba(16, 185, 129, 0.35);
-              ">${t.unblockBtn}</button>
+              <button id="fp-strict-unblock-btn" class="fp-btn-primary" style="padding: 12px 22px;">${t.unblockBtn}</button>
             `;
             const unblockBtn = document.getElementById("fp-strict-unblock-btn");
             if (unblockBtn) {
@@ -845,7 +405,6 @@
     }
   }
 
-  // Choose renderer based on user preference: Always show fullscreen blocker immediately
   function showWarning(domain, style = "fullscreen", lang = "ru", isStrict = false, sessionEndTime = 0) {
     if (hasBlockedCurrentPage && activeElementContainer) return;
     hasBlockedCurrentPage = true;
@@ -855,7 +414,6 @@
       activeElementContainer = null;
     }
 
-    // ALWAYS show the prominent fullscreen overlay immediately on blocked sites
     renderFullscreenOverlay(domain, lang, isStrict, sessionEndTime);
   }
 
@@ -866,7 +424,6 @@
     ], (data) => {
       const isRunning = data.timerState === "running" || data.isTimerRunning === true;
       if (!isRunning) {
-        // If timer is not running, clean up any active strict overlay
         if (activeElementContainer && data.timerState !== "withered") {
           activeElementContainer.remove();
           activeElementContainer = null;
